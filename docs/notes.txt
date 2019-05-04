@@ -1,0 +1,38 @@
+Predefined Routes
+  - Name
+  - Description
+  - Starting Location
+  - Finishing Location
+  - Can be same as the start, like a loop
+  - Series of zero or more waypoints
+  - Contains other routes (Composite Pattern)
+  - Let a route be an ArrayList of points and subroutes
+
+Points
+  - Latitude (-90, 90)
+  - Longitude (-180, 180)
+  - Altitude (-inf, inf)
+
+Input
+  - Subroutes can be declared before and after use
+  - Therefore, may need a reference to update it?
+  - Have a map of routes, where the value can contain other value in the
+    same map
+
+Classes
+  - RouteNode <Abstract>
+  - Route <Composite>
+      - Must have name and description
+      - ArrayList of RouteNodes, which in turn can contain a Route or
+        Point
+  - Point <Must end on a point>
+      - Description is optional, due to end point
+
+
+Need a strategy pattern(?) for adding a new route/point to a route due
+to three possible paths:
+ 1. End is a point and adding a new point
+ 2. End is a point and adding a new route
+ 3. End is a route and adding a new route
+
+Maybe a factory might be better??
