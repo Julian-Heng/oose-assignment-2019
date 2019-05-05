@@ -12,6 +12,9 @@ public class Point implements RouteNode
         this.latitude = latitude;
         this.longitude = longitude;
         this.altitude = altitude;
+
+        // Description is optional, thus will be set using the
+        // setDescription() method
         this.description = "";
     }
 
@@ -35,6 +38,8 @@ public class Point implements RouteNode
         return altitude;
     }
 
+    // Implementing methods in RouteNode
+
     @Override
     public Point getStart()
     {
@@ -48,6 +53,12 @@ public class Point implements RouteNode
     }
 
     @Override
+    public String getName()
+    {
+        return description;
+    }
+
+    @Override
     public String getDescription()
     {
         return description;
@@ -57,5 +68,13 @@ public class Point implements RouteNode
     public int getSize()
     {
         return 1;
+    }
+
+    public String toString()
+    {
+        return String.format("%.2f, %.2f, %.2f: %s", latitude,
+                                                     longitude,
+                                                     altitude,
+                                                     description);
     }
 }

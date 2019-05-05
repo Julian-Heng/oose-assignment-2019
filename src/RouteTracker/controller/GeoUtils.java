@@ -3,10 +3,11 @@ import java.lang.Math;
 
 public class GeoUtils
 {
+    private static final int RADIUS = 6371000;
+
     public double calcDistance(double lat1, double long1,
                                double lat2, double long2)
     {
-        int radius = 6371000;
         double lat1r = Math.toRadians(lat1);
         double long1r = Math.toRadians(long1);
         double lat2r = Math.toRadians(lat2);
@@ -15,6 +16,6 @@ public class GeoUtils
 
         return Math.acos((Math.sin(lat1r) * Math.sin(lat2r)) +
                          (Math.cos(lat1r) * Math.cos(lat2r) *
-                          Math.cos(longAbs))) * radius;
+                          Math.cos(longAbs))) * RADIUS;
     }
 }

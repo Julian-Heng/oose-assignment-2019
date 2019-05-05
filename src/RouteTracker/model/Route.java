@@ -1,7 +1,10 @@
 package RouteTracker.model;
 
 import java.util.List;
+import java.util.Map;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import RouteTracker.controller.GeoUtils;
 
@@ -9,35 +12,28 @@ public class Route implements RouteNode
 {
     private String name;
     private String description;
+
+    // Mutable ArrayList
     private List<RouteNode> route;
 
-    private static final double TOLERANCE = 0.000006;
+    // Routes can be mutable, but the name (key) cannot be mutable
+    private Map<String,Route> subRoutes;
 
     public Route(String name, String description)
     {
         this.name = name;
         this.description = description;
+
         route = new ArrayList<>();
+        subRoutes = new HashMap<>();
     }
 
-    /*
-    public void add(RouteNode n)
-    {
-        if (n instanceof Route)
-        {
-            RouteNode last = this.getEnd();
-        }
-
-        route.add(n);
-    }
-    */
-
-    /*
     public void add(RouteNode n)
     {
         route.add(n);
     }
 
+    /*
     public void addRoute(Route r, RouteNode n) throws RouteAddException
     {
         Point thisLast = getEnd();
@@ -73,6 +69,7 @@ public class Route implements RouteNode
     }
     */
 
+    @Override
     public String getName()
     {
         return name;
@@ -87,7 +84,7 @@ public class Route implements RouteNode
     @Override
     public Point getStart()
     {
-        return route.get(0).getStart().getStart();
+        return route.get(0).getStart();
     }
 
     @Override
@@ -99,6 +96,25 @@ public class Route implements RouteNode
     @Override
     public int getSize()
     {
-        return route.size();
+        int size = 0;
+
+        for (RouteNode n : route)
+        {
+            size += n.getSize();
+        }
+
+        return size;
+    }
+
+    public String toString()
+    {
+        String str = name + ": " + description + "\n{\n";
+
+        for (RouteNode n : route)
+        {
+            str += "    " + n.toString().replaceAll("\n", "\n    ") + "\n";
+        }
+
+        return str + "}";
     }
 }
