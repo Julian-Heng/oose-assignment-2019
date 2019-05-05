@@ -35,21 +35,21 @@ public class RouteParser
     {
         Map<String,Route> routes = new HashMap<>();
         Set<String> inProgress = new HashSet<>();
-        int index = 0;
+        Map<String,Integer> routeTable;
+        Route route;
 
-        for (String line : contents)
+        routeTable = makeIndexes();
+
+        for (Map.Entry<String,Integer> entry : routeTable.entrySet())
         {
-            if (! line.isEmpty() &&
-                Character.isLetter(line.charAt(0)))
-            {
-                String[] split = line.split(" ");
-                if (! routes.containsKey(split[0]))
-                {
-                    routes.put(split[0], makeRoute(routes, inProgress, index));
-                }
-            }
+            String[] split = contents.get(entry.getValue()).split(" ");
 
-            index++;
+            if (! routes.containsKey(split[0]))
+            {
+                route = makeRoute(routes, inProgress,
+                                  routeTable, entry.getValue());
+                routes.put(split[0], route);
+            }
         }
 
         return routes;
@@ -58,17 +58,23 @@ public class RouteParser
     // Route factory
     public Route makeRoute(Map<String,Route> routes,
                            Set<String> inProgress,
+                           Map<String,Integer> routeTable,
                            int start) throws RouteParserException
     {
         Route newRoute = null;
 
-        ListIterator<String> iter = contents.listIterator(start + 1);
+        ListIterator<String> iter;
         String[] split;
         String line;
-        boolean valid = true;
+        boolean checkDistance;
+        boolean endNode;
 
         String name;
         String description;
+
+        iter = contents.listIterator(start + 1);
+        checkDistance = false;
+        endNode = false;
 
         split = contents.get(start).split(" ", 2);
         name = split[0];
@@ -79,67 +85,94 @@ public class RouteParser
 
         try
         {
-            while (iter.hasNext() && valid)
+            while (iter.hasNext() && ! endNode)
             {
                 line = iter.next();
-                if (! line.isEmpty())
+
+                // Skip if empty
+                if (line.isEmpty())
                 {
-                    split = line.split(",", 4);
+                    continue;
+                }
 
-                    // Is a sub-route
-                    if (split.length > 3 && split[3].charAt(0) == '*')
+                split = line.split(",", 4);
+
+                // Is a sub-route
+                if (split.length > 3 && split[3].charAt(0) == '*')
+                {
+                    String subRouteName;
+                    Route subRoute;
+
+                    subRouteName = split[3].substring(1, split[3].length());
+
+                    // Recursion check
+                    if (inProgress.contains(subRouteName))
                     {
-                        String subRouteName;
-                        Route subRoute;
+                        throw new RouteParserException(
+                            "Sub-route is attempting to add a route that " +
+                            "depends on itself"
+                        );
+                    }
+                    // Check if sub-route already exists in the route map
+                    else if (routes.containsKey(subRouteName))
+                    {
+                        subRoute = routes.get(subRouteName);
+                    }
+                    else
+                    {
+                        // Start recursion
+                        subRoute = makeRoute(routes,
+                                             inProgress,
+                                             routeTable,
+                                             routeTable.get(subRouteName));
+                        routes.put(subRouteName, subRoute);
+                    }
 
-                        subRouteName = split[3].substring(1, split[3].length());
-
-                        // Recursion check
-                        if (subRouteName.equals(name))
+                    newRoute.add(subRoute);
+                }
+                // Is a regular point
+                else if (split.length > 3)
+                {
+                    newRoute.add(makePoint(split));
+                }
+                else if (split.length == 3)
+                {
+                    newRoute.add(makePoint(split));
+                    endNode = true;
+                }
+                // Uh oh, something's wrong
+                else
+                {
+                    // Check if it's a route declaration
+                    if (split.length == 1)
+                    {
+                        split = line.split(" ", 2);
+                        if (split.length == 2)
                         {
                             throw new RouteParserException(
-                                "Sub-route is attempting to add itself"
+                                "Error parsing line: " + line +
+                                "\nMissing terminating line?"
                             );
                         }
-                        else if (inProgress.contains(subRouteName))
-                        {
-                            throw new RouteParserException(
-                                "Sub-route is attempting to add a route " +
-                                "that depends on itself"
-                            );
-                        }
-                        // Check if sub-route already exists in the route map
-                        else if (routes.containsKey(subRouteName))
-                        {
-                            subRoute = routes.get(subRouteName);
-                        }
-                        else
-                        {
-                            // Start recursion
-                            subRoute = makeRoute(routes,
-                                                 inProgress,
-                                                 getRouteIndex(subRouteName));
-                            routes.put(subRouteName, subRoute);
-                        }
+                    }
 
-                        newRoute.add(subRoute);
-                    }
-                    // Is a regular point
-                    else if (split.length > 3)
-                    {
-                        newRoute.add(makePoint(split));
-                    }
-                    else if (split.length == 3)
-                    {
-                        newRoute.add(makePoint(split));
-                        valid = false;
-                    }
+                    // Exhausted all checks
+                    throw new RouteParserException(
+                        "Unknown error parsing line: " + line
+                    );
                 }
             }
         }
         catch (RouteParserException e)
         {
             throw new RouteParserException(e.getMessage());
+        }
+
+        if (! endNode)
+        {
+            throw new RouteParserException(
+                "Route " + name + " does not have a terminating line"
+            );
         }
 
         inProgress.remove(name);
@@ -189,26 +222,73 @@ public class RouteParser
         return newPoint;
     }
 
-    public int getRouteIndex(String name)
+    // Makes a map of route and sub-route declaration along with the
+    // location in the file contents so that we can have O(1) access
+    // to the location of the declaration
+    //
+    // Throws RouteParserException when detects duplicate route declarations
+    // and missing sub-route declarations
+    public Map<String,Integer> makeIndexes() throws RouteParserException
     {
-        int index = 0;
+        Map<String,Integer> routeTable = new HashMap<>();
+        Set<String> subRouteSet = new HashSet<>();
+        Set<String> nameSet;
+        int count = 0;
+
         for (String line : contents)
         {
-            if (line.startsWith(name))
+            if (! line.isEmpty())
             {
-                break;
-            }
-            else
-            {
-                index++;
-            }
-        }
-        return index;
-    }
+                if (Character.isLetter(line.charAt(0)))
+                {
+                    String[] split = line.split(" ", 2);
 
-    public List<String> getContents()
-    {
-        return contents;
+                    if (routeTable.containsKey(split[0]))
+                    {
+                        throw new RouteParserException(
+                            "Duplicate route: " + split[0]
+                        );
+                    }
+
+                    routeTable.put(split[0], new Integer(count));
+                }
+                else
+                {
+                    String[] split = line.split(",", 4);
+
+                    if (split.length > 3 && split[3].charAt(0) == '*')
+                    {
+                        subRouteSet.add(
+                            split[3].substring(1, split[3].length())
+                        );
+                    }
+                }
+            }
+
+            count++;
+        }
+
+        nameSet = new HashSet<>(routeTable.keySet());
+
+        if (! nameSet.containsAll(subRouteSet))
+        {
+            Set<String> missingSet = new HashSet<>(subRouteSet);
+            String errMsg = "";
+
+            for (String name : missingSet)
+            {
+                if (! nameSet.contains(name))
+                {
+                    errMsg += "\n    " + name;
+                }
+            }
+
+            throw new RouteParserException(
+                "Sub-route(s) declaration not found:" + errMsg
+            );
+        }
+
+        return routeTable;
     }
 
     private boolean doubleRange(double num, double low, double high)
