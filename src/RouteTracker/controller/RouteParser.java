@@ -61,7 +61,11 @@ public class RouteParser
                            Map<String,Integer> routeTable,
                            int start) throws RouteParserException
     {
+        GeoUtils util = new GeoUtils();
+
         Route newRoute = null;
+        Route subRoute = null;
+        Point p1, p2;
 
         ListIterator<String> iter;
         String[] split;
@@ -72,13 +76,28 @@ public class RouteParser
         String name;
         String description;
 
+        String subRouteName;
+        double distance;
+
         iter = contents.listIterator(start + 1);
         checkDistance = false;
         endNode = false;
 
         split = contents.get(start).split(" ", 2);
-        name = split[0];
-        description = split[1];
+
+        if (split.length == 1)
+        {
+            throw new RouteParserException(
+                "Error while parsing route " + split[0] +
+                "\n" + (start + 1) + ": " + contents.get(start) +
+                "\nMissing description for route"
+            );
+        }
+        else
+        {
+            name = split[0];
+            description = split[1];
+        }
 
         inProgress.add(name);
         newRoute = new Route(name, description);
@@ -100,16 +119,16 @@ public class RouteParser
                 // Is a sub-route
                 if (split.length > 3 && split[3].charAt(0) == '*')
                 {
-                    String subRouteName;
-                    Route subRoute;
-
+                    p1 = makePoint(split);
                     subRouteName = split[3].substring(1, split[3].length());
 
                     // Recursion check
                     if (inProgress.contains(subRouteName))
                     {
                         throw new RouteParserException(
-                            "Sub-route is attempting to add a route that " +
+                            "Error while parsing route " + name +
+                            "\n" + formattedLineNo(line) +
+                            "\nSub-route is attempting to add a route that " +
                             "depends on itself"
                         );
                     }
@@ -121,24 +140,19 @@ public class RouteParser
                     else
                     {
                         // Start recursion
-                        subRoute = makeRoute(routes,
-                                             inProgress,
-                                             routeTable,
+                        subRoute = makeRoute(routes, inProgress, routeTable,
                                              routeTable.get(subRouteName));
                         routes.put(subRouteName, subRoute);
                     }
 
-                    newRoute.add(subRoute);
+                    // Set flag to check the distance for the next point
+                    checkDistance = true;
                 }
                 // Is a regular point
-                else if (split.length > 3)
+                else if (split.length >= 3)
                 {
-                    newRoute.add(makePoint(split));
-                }
-                else if (split.length == 3)
-                {
-                    newRoute.add(makePoint(split));
-                    endNode = true;
+                    p1 = makePoint(split);
+                    endNode = split.length == 3;
                 }
                 // Uh oh, something's wrong
                 else
@@ -147,10 +161,11 @@ public class RouteParser
                     if (split.length == 1)
                     {
                         split = line.split(" ", 2);
-                        if (split.length == 2)
+                        if (routeTable.containsKey(split[0]))
                         {
                             throw new RouteParserException(
-                                "Error parsing line: " + line +
+                                "Error while parsing route " + name +
+                                "\n" + formattedLineNo(line) +
                                 "\nMissing terminating line?"
                             );
                         }
@@ -158,8 +173,17 @@ public class RouteParser
 
                     // Exhausted all checks
                     throw new RouteParserException(
-                        "Unknown error parsing line: " + line
+                        "Unknown error while parsing route " + name +
+                        "\n" + formattedLineNo(line)
                     );
+                }
+
+                newRoute.add(p1);
+
+                if (subRoute != null)
+                {
+                    newRoute.add(subRoute);
+                    subRoute = null;
                 }
             }
         }
@@ -171,7 +195,8 @@ public class RouteParser
         if (! endNode)
         {
             throw new RouteParserException(
-                "Route " + name + " does not have a terminating line"
+                "Error while parsing route " + name +
+                "\nMissing terminating line"
             );
         }
 
@@ -211,7 +236,7 @@ public class RouteParser
         }
         catch (NumberFormatException e)
         {
-            String errMsg = "Invalid coordinates format: " +
+            String errMsg = "Invalid coordinates, format error " +
                                 info[0] + ", " +
                                 info[1] + ", " +
                                 info[2];
@@ -289,6 +314,11 @@ public class RouteParser
         }
 
         return routeTable;
+    }
+
+    private String formattedLineNo(String line)
+    {
+        return String.format("%d: %s", contents.indexOf(line) + 1, line);
     }
 
     private boolean doubleRange(double num, double low, double high)

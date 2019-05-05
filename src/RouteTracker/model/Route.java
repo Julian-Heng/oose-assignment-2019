@@ -12,6 +12,8 @@ public class Route implements RouteNode
 {
     private String name;
     private String description;
+    private Point start;
+    private Point end;
 
     // Mutable ArrayList
     private List<RouteNode> route;
@@ -30,44 +32,14 @@ public class Route implements RouteNode
 
     public void add(RouteNode n)
     {
+        if (route.isEmpty())
+        {
+            start = n.getStart();
+        }
+
+        end = n.getEnd();
         route.add(n);
     }
-
-    /*
-    public void addRoute(Route r, RouteNode n) throws RouteAddException
-    {
-        Point thisLast = getEnd();
-        Point nextFirst = r.getStart();
-
-        double thisLat = thisLast.getLatitude();
-        double thisLong = thisLast.getLongitude();
-        double thisAlt = thisLast.getAltitude();
-
-        double nextLat = nextFirst.getLatitude();
-        double nextLong = nextFirst.getLongitude();
-        double nextAlt = nextFirst.getAltitude();
-
-        double distance = new GeoUtils().calcDistance(thisLat, thisLong,
-                                                      nextLat, nextLong);
-
-        if (Math.abs(distance - 10) > TOLERANCE)
-        {
-            throw new RouteAddException(
-                "Subroute's starting point is not within 10m horizontally"
-            );
-        }
-        else if (Math.abs(thisAlt - nextAlt) < TOLERANCE)
-        {
-            throw new RouteAddException(
-                "Subroute's starting point is not within 2m vertically"
-            );
-        }
-        else
-        {
-            route.add(r);
-        }
-    }
-    */
 
     @Override
     public String getName()
@@ -84,13 +56,13 @@ public class Route implements RouteNode
     @Override
     public Point getStart()
     {
-        return route.get(0).getStart();
+        return start;
     }
 
     @Override
     public Point getEnd()
     {
-        return route.get(route.size() - 1).getEnd();
+        return end;
     }
 
     @Override

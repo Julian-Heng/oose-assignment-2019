@@ -17,7 +17,7 @@ public class FileIO
 
             while ((line = reader.readLine()) != null)
             {
-                contents.add(line.replaceAll("\\s+", " ").trim());
+                contents.add(line);
             }
         }
         catch (IOException e)

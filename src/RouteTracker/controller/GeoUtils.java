@@ -1,9 +1,17 @@
 package RouteTracker.controller;
+
 import java.lang.Math;
+import RouteTracker.model.*;
 
 public class GeoUtils
 {
     private static final int RADIUS = 6371000;
+
+    public double calcDistance(Point p1, Point p2)
+    {
+        return calcDistance(p1.getLatitude(), p1.getLongitude(),
+                            p2.getLatitude(), p2.getLatitude());
+    }
 
     public double calcDistance(double lat1, double long1,
                                double lat2, double long2)
