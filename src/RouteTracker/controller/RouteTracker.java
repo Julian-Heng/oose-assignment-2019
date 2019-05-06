@@ -10,7 +10,12 @@ public class RouteTracker
     {
         GeoUtils util;
         RouteParser parser;
+
+        RouteFactory routeMaker;
+        PointFactory pointMaker;
+
         Map<String,Route> routes;
+        List<String> contents;
 
         if (args.length > 0)
         {
@@ -19,8 +24,16 @@ public class RouteTracker
 
             try
             {
-                parser.readFile(args[0]);
-                routes = parser.parseRoutes();
+                parser.readData(args[0]);
+                pointMaker = new PointFactory(parser,
+                                              util,
+                                              parser.getContents());
+
+                routeMaker = new RouteFactory(parser,
+                                              parser.getContents(),
+                                              pointMaker);
+
+                routes = routeMaker.makeRoutes();
 
                 for (Map.Entry<String,Route> r: routes.entrySet())
                 {
