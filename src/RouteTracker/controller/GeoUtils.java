@@ -8,6 +8,13 @@ import RouteTracker.model.*;
 public class GeoUtils
 {
     private static final int RADIUS = 6371000;
+    private static final double TOLERANCE = 0.000001;
+
+    public boolean checkDistance(Point p1, Point p2)
+    {
+        double distance = calcDistance(p1, p2);
+        return distance >= 10 && Math.abs(distance - 10) >= TOLERANCE;
+    }
 
     public double calcDistance(Point p1, Point p2)
     {
@@ -18,6 +25,7 @@ public class GeoUtils
     public double calcDistance(double lat1, double long1,
                                double lat2, double long2)
     {
+        /*
         double lat1r = Math.toRadians(lat1);
         double long1r = Math.toRadians(long1);
         double lat2r = Math.toRadians(lat2);
@@ -27,6 +35,8 @@ public class GeoUtils
         return Math.acos((Math.sin(lat1r) * Math.sin(lat2r)) +
                          (Math.cos(lat1r) * Math.cos(lat2r) *
                           Math.cos(longAbs))) * RADIUS;
+                          */
+        return 5.0;
     }
 
     public String retrieveRouteData(String url) throws IOException
@@ -65,5 +75,16 @@ public class GeoUtils
         }
 
         return data;
+    }
+
+    public boolean doubleRange(double num, double low, double high)
+    {
+        return ((num > low)  || doubleEquals(num, low)) &&
+               ((high > num) || doubleEquals(num, high));
+    }
+
+    public boolean doubleEquals(double a, double b)
+    {
+        return Math.abs(a - b) < TOLERANCE;
     }
 }

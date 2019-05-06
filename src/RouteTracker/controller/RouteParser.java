@@ -9,7 +9,6 @@ public class RouteParser
 {
     private GeoUtils util;
     private List<String> contents;
-    private static final double TOLERANCE = 0.0000001;
 
     public RouteParser(GeoUtils util)
     {
@@ -75,7 +74,6 @@ public class RouteParser
         String description;
 
         String subRouteName;
-        double distance;
 
         iter = contents.listIterator(start + 1);
         checkDistance = false;
@@ -144,9 +142,6 @@ public class RouteParser
                                              routeTable.get(subRouteName));
                         routes.put(subRouteName, subRoute);
                     }
-
-                    // Set flag to check the distance for the next point
-                    checkDistance = true;
                 }
                 // Is a regular point
                 else if (split.length >= 3)
@@ -178,13 +173,50 @@ public class RouteParser
                     );
                 }
 
+                if (checkDistance)
+                {
+                    p2 = newRoute.getEnd();
+
+                    if (util.checkDistance(p1, p2))
+                    {
+                        throw new RouteParserException(
+                            "Error while parsing route " + name +
+                            "\n" + formattedLineNo(line) +
+                            "\nDistance between sub-route and last point is " +
+                            "too far away"
+                        );
+                    }
+
+                    p2 = null;
+                    checkDistance = false;
+                }
+
                 newRoute.add(p1);
 
                 if (subRoute != null)
                 {
+                    // Set flag to check the distance for the next point
+                    checkDistance = true;
+
+                    p1 = newRoute.getEnd();
+                    p2 = subRoute.getStart();
+
+                    if (util.checkDistance(p1, p2))
+                    {
+                        throw new RouteParserException(
+                            "Error while parsing route " + name +
+                            "\n" + formattedLineNo(line) +
+                            "\nDistance between sub-route and last point is " +
+                            "too far away"
+                        );
+                    }
+
                     newRoute.add(subRoute);
                     subRoute = null;
+                    p2 = null;
                 }
+
+                p1 = null;
             }
         }
         catch (RouteParserException e)
@@ -200,6 +232,7 @@ public class RouteParser
             );
         }
 
+        // Unset in progress flag
         inProgress.remove(name);
 
         return newRoute;
@@ -217,8 +250,8 @@ public class RouteParser
             longitude = Double.parseDouble(info[1]);
             altitude = Double.parseDouble(info[2]);
 
-            if (! doubleRange(latitude, -90.0, 90.0) ||
-                ! doubleRange(longitude, -180.0, 180.0))
+            if (! util.doubleRange(latitude, -90.0, 90.0) ||
+                ! util.doubleRange(longitude, -180.0, 180.0))
             {
                 String errMsg = "Invalid coordinates, out of range: " +
                                     info[0] + ", " +
@@ -319,11 +352,5 @@ public class RouteParser
     private String formattedLineNo(String line)
     {
         return String.format("%d: %s", contents.indexOf(line) + 1, line);
-    }
-
-    private boolean doubleRange(double num, double low, double high)
-    {
-        return ((num > low)  || Math.abs(num - low)  < TOLERANCE) &&
-               ((high > num) || Math.abs(num - high) < TOLERANCE);
     }
 }
