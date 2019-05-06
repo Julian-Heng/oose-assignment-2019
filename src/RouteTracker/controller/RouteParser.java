@@ -77,31 +77,31 @@ public class RouteParser
             }
             else if (isRoute(line))
             {
-                String[] split = parseRoute(line);
+                String[] routeInfo = parseRoute(line);
 
-                if (routeTable.containsKey(split[0]))
+                if (routeTable.containsKey(routeInfo[0]))
                 {
                     throw new RouteParserException(
-                        "Duplicate route: " + split[0]
+                        "Duplicate route: " + routeInfo[0]
                     );
                 }
-                else if (split[1].isEmpty())
+                else if (routeInfo[1].isEmpty())
                 {
                     throw new RouteParserException(
-                        "Error while parsing route " + split[0] +
+                        "Error while parsing route " + routeInfo[0] +
                         "\n" + (count + 1) + ": " + line +
                         "\nMissing description for route"
                     );
                 }
 
-                routeTable.put(split[0], new Integer(count));
+                routeTable.put(routeInfo[0], new Integer(count));
             }
             else if (isPoint(line))
             {
                 if (isSubRoute(line))
                 {
-                    String[] split = parsePoint(line);
-                    subRouteSet.add(split[3].substring(1));
+                    String[] pointInfo = parsePoint(line);
+                    subRouteSet.add(pointInfo[3].substring(1));
                 }
             }
             else
