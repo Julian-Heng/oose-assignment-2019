@@ -1,6 +1,6 @@
-A A
-    0,0,0,*B
-    0,0,0,*C
-    0,0,0,*D
-    0,0,0,*E
+routeA A
+    0,0,0,*routeB
+    0,0,0,*routeC
+    0,0,0,*routeD
+    0,0,0,*routeE
     1,1,1

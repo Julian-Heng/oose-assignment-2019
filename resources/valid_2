@@ -1,4 +1,4 @@
-A A
+routeA A
     0,0,0,asdf
 
 
@@ -23,15 +23,15 @@ A A
     2,2,2,asdf
     3,3,3
 
-B B
-    0,0,0,*C
-    3,3,3,*A
+routeB B
+    0,0,0,*routeC
+    3,3,3,*routeA
     1,1,1
 
-C C
+routeC C
     0,0,0,asdf
 
     1,1,1
 
-D D
+routeD D
     0,0,0

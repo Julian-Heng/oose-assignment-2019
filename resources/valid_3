@@ -1,16 +1,16 @@
-A A
-    0,0,0,*B
+routeA A
+    0,0,0,*routeB
     3,3,3
 
-B B
-    0,0,0,*C
+routeB B
+    0,0,0,*routeC
     1,1,1
 
-C C
+routeC C
     0,0,0,asdf
     10,10,10,huh
-    5,5,5,*D
+    5,5,5,*routeD
     1,1,1
 
-D D
+routeD D
     0,0,0

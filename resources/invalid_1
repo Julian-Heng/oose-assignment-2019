@@ -1,7 +1,7 @@
-A A
-    0, 0, 0,*B
+routeA A
+    0, 0, 0,*routeB
     1, 1, 1
 
-B B
-    0, 0, 0,*A
+routeB B
+    0, 0, 0,*routeA
     1, 1, 1
