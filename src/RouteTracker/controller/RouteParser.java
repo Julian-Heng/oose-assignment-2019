@@ -7,23 +7,23 @@ import RouteTracker.model.*;
 
 public class RouteParser
 {
-    private String filename;
+    private GeoUtils util;
     private List<String> contents;
     private static final double TOLERANCE = 0.0000001;
 
-    public RouteParser(String filename)
+    public RouteParser(GeoUtils util)
     {
-        this.filename = filename;
+        this.util = util;
         this.contents = new ArrayList<>();
     }
 
-    public void readFile() throws RouteParserException
+    public void readFile(String url) throws RouteParserException
     {
-        FileIO file = new FileIO();
-
         try
         {
-            contents = file.readFile(filename);
+            contents = new ArrayList<>(
+                Arrays.asList(util.retrieveRouteData(url).split("\n"))
+            );
         }
         catch (IOException e)
         {
@@ -61,8 +61,6 @@ public class RouteParser
                            Map<String,Integer> routeTable,
                            int start) throws RouteParserException
     {
-        GeoUtils util = new GeoUtils();
-
         Route newRoute = null;
         Route subRoute = null;
         Point p1, p2;
@@ -85,6 +83,7 @@ public class RouteParser
 
         split = contents.get(start).split(" ", 2);
 
+        // Validating route declaration
         if (split.length == 1)
         {
             throw new RouteParserException(
@@ -99,6 +98,7 @@ public class RouteParser
             description = split[1];
         }
 
+        // Flag route as in progress
         inProgress.add(name);
         newRoute = new Route(name, description);
 

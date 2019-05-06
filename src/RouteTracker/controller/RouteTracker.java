@@ -8,16 +8,18 @@ public class RouteTracker
 {
     public static void main(String[] args)
     {
+        GeoUtils util;
         RouteParser parser;
         Map<String,Route> routes;
 
         if (args.length > 0)
         {
-            parser = new RouteParser(args[0]);
+            util = new GeoUtils();
+            parser = new RouteParser(util);
 
             try
             {
-                parser.readFile();
+                parser.readFile(args[0]);
                 routes = parser.parseRoutes();
 
                 for (Map.Entry<String,Route> r: routes.entrySet())
