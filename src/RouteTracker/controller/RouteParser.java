@@ -238,14 +238,13 @@ public class RouteParser
 
     public boolean validateDistance(Point p1, Point p2)
     {
-        double distance = getDistance(p1, p2);
-        return 10 > distance || Double.compare(distance, 10) == 0;
+        return Double.compare(getDistance(p1, p2), 10) <= 0;
     }
 
     public boolean doubleRange(double num, double low, double high)
     {
-        return ((num > low)  || Double.compare(num, low) == 0) &&
-               ((high > num) || Double.compare(num, high) == 0);
+        return Double.compare(num, low) >= 0 &&
+               Double.compare(high, num) >= 0;
     }
 
     public List<String> getContents()
