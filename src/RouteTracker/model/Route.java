@@ -15,6 +15,11 @@ public class Route implements RouteNode
     private Point start;
     private Point end;
 
+    private double distance;
+    private double posAlt;
+    private double negAlt;
+    private double deltaAlt;
+
     // Mutable ArrayList
     private List<RouteNode> route;
 
@@ -25,6 +30,14 @@ public class Route implements RouteNode
     {
         this.name = name;
         this.description = description;
+
+        this.start = null;
+        this.end = null;
+
+        this.distance = 0.0;
+        this.posAlt = 0.0;
+        this.negAlt = 0.0;
+        this.deltaAlt = 0.0;
 
         route = new ArrayList<>();
         subRoutes = new HashMap<>();
@@ -39,6 +52,25 @@ public class Route implements RouteNode
 
         end = n.getEnd();
         route.add(n);
+    }
+
+    public void updateDistance(double distance)
+    {
+        this.distance += distance;
+    }
+
+    public void updateAltitude(double deltaAlt)
+    {
+        if (Double.compare(deltaAlt, 0.0) < 0)
+        {
+            negAlt += Math.abs(deltaAlt);
+        }
+        else
+        {
+            posAlt += Math.abs(deltaAlt);
+        }
+
+        this.deltaAlt = posAlt - negAlt;
     }
 
     @Override
@@ -80,7 +112,10 @@ public class Route implements RouteNode
 
     public String toString()
     {
-        String str = name + ": " + description + "\n{\n";
+        String str = String.format("%s [%.2fm, %.2fm, +%.2fm, -%.2fm]: %s\n{\n",
+                                   name, distance,
+                                   deltaAlt, posAlt, negAlt,
+                                   description);
 
         for (RouteNode n : route)
         {

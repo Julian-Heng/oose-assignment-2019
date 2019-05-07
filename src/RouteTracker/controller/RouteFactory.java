@@ -111,8 +111,8 @@ public class RouteFactory
                     {
                         String subRouteName;
 
-                        p1 = pointMaker.makePoint(line);
-                        subRouteName = p1.getName().substring(1);
+                        p2 = pointMaker.makePoint(line);
+                        subRouteName = p2.getName().substring(1);
 
                         // Recursion check
                         if (inProgress.contains(subRouteName))
@@ -139,7 +139,7 @@ public class RouteFactory
                     }
                     else if (parser.isPoint(line))
                     {
-                        p1 = pointMaker.makePoint(line);
+                        p2 = pointMaker.makePoint(line);
                         endPoint = parser.isEndPoint(line);
                     }
                     // Uh oh, something's wrong
@@ -163,10 +163,10 @@ public class RouteFactory
                         );
                     }
 
+                    p1 = newRoute.getEnd();
+
                     if (checkDistance)
                     {
-                        p2 = newRoute.getEnd();
-
                         if (! parser.validateDistance(p1, p2))
                         {
                             throw new RouteParserException(
@@ -177,11 +177,17 @@ public class RouteFactory
                             );
                         }
 
-                        p2 = null;
                         checkDistance = false;
                     }
 
-                    newRoute.add(p1);
+                    newRoute.add(p2);
+
+                    // Check if p2 is the first point in the route
+                    if (p1 != null)
+                    {
+                        newRoute.updateDistance(parser.getDistance(p1, p2));
+                        newRoute.updateAltitude(p1.getAltitude() - p2.getAltitude());
+                    }
 
                     if (subRoute != null)
                     {
@@ -202,6 +208,9 @@ public class RouteFactory
                         }
 
                         newRoute.add(subRoute);
+                        newRoute.updateDistance(parser.getDistance(p1, p2));
+                        newRoute.updateAltitude(p2.getAltitude() - p1.getAltitude());
+
                         subRoute = null;
                         p2 = null;
                     }

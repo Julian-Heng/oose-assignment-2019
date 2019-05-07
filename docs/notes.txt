@@ -43,3 +43,9 @@ a dependency graph(?) then make the routes accordingly. Alternate plan is
 to construct all the routes, without any nodes, then add the points into
 the routes, then perform a check to see if the starting and ending of the
 route and subroutes are within 10m horizontally and 2m vertically
+
+
+Finish making models and factories
+Next steps:
+  1. Do A.3
+  2. Begin making menu/ui

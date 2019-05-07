@@ -12,7 +12,7 @@ public class RouteParser
     private List<String> contents;
 
     // Regex patterns
-    private static final
+    private static
     Pattern routeMatch = Pattern.compile(
         "(?=^[a-z]+[A-Z][A-Za-z]*)((^\\w+)\\s+([^\\s]+.*))"
     );
@@ -29,7 +29,7 @@ public class RouteParser
     // Group 7: ,*theStroll
     // Group 8: theStroll
 
-    private static final
+    private static
     Pattern pointMatch = Pattern.compile(
         "([-]?(\\d+.)?\\d+),\\s*" + // Latitude
         "([-]?(\\d+.)?\\d+),\\s*" + // Longitude
@@ -228,21 +228,24 @@ public class RouteParser
         return match.find() && match.group(7) == null;
     }
 
-    public boolean validateDistance(Point p1, Point p2) throws
-                                                         RouteParserException
+    public double getDistance(Point p1, Point p2)
     {
-        double distance = util.calcMetresDistance(p1.getLatitude(),
-                                                  p1.getLongitude(),
-                                                  p2.getLatitude(),
-                                                  p2.getLongitude());
+        return util.calcMetresDistance(p1.getLatitude(),
+                                       p1.getLongitude(),
+                                       p2.getLatitude(),
+                                       p2.getLongitude());
+    }
 
-        return distance < 10 || Math.abs(distance - 10) < 0.0000001;
+    public boolean validateDistance(Point p1, Point p2)
+    {
+        double distance = getDistance(p1, p2);
+        return 10 > distance || Double.compare(distance, 10) == 0;
     }
 
     public boolean doubleRange(double num, double low, double high)
     {
-        return ((num > low)  || Math.abs(num - low) < 0.0000001) &&
-               ((high > num) || Math.abs(high - num) < 0.0000001);
+        return ((num > low)  || Double.compare(num, low) == 0) &&
+               ((high > num) || Double.compare(num, high) == 0);
     }
 
     public List<String> getContents()

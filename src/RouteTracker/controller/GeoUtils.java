@@ -8,23 +8,19 @@ import RouteTracker.model.*;
 public class GeoUtils
 {
     private static final int RADIUS = 6371000;
-    private static final double TOLERANCE = 0.000001;
 
     public double calcMetresDistance(double lat1, double long1,
                                      double lat2, double long2)
     {
-        /*
         double lat1r = Math.toRadians(lat1);
-        double long1r = Math.toRadians(long1);
         double lat2r = Math.toRadians(lat2);
-        double long2r = Math.toRadians(long2);
-        double longAbs = Math.toRadians(Math.abs(long1 - long2));
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLong = Math.toRadians(long2 - long1);
 
-        return Math.acos((Math.sin(lat1r) * Math.sin(lat2r)) +
-                         (Math.cos(lat1r) * Math.cos(lat2r) *
-                          Math.cos(longAbs))) * RADIUS;
-                          */
-        return 5.0;
+        double a = Math.pow(Math.sin(dLat / 2), 2) +
+                   Math.cos(lat1r) * Math.cos(lat2r) *
+                   Math.pow(Math.sin(dLong / 2), 2);
+        return RADIUS * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
     }
 
     public String retrieveRouteData(String url) throws IOException
