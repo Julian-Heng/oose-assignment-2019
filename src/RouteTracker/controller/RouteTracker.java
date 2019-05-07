@@ -40,7 +40,7 @@ public class RouteTracker
                     System.out.println(r.getValue().toString() + "\n");
                 }
             }
-            catch (RouteParserException e)
+            catch (RouteParserException | RouteFactoryException e)
             {
                 System.out.println(e.getMessage());
             }

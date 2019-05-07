@@ -20,25 +20,39 @@ public class RouteFactory
         this.pointMaker = pointMaker;
     }
 
-    public Map<String,Route> makeRoutes() throws RouteParserException
+    public Map<String,Route> makeRoutes() throws RouteFactoryException
     {
         Map<String,Route> routes = new HashMap<>();
         Set<String> inProgress = new HashSet<>();
         Map<String,Integer> routeTable;
+
         Route route;
+        String routeName = "";
+        String line = "";
 
-        routeTable = parser.makeIndex();
 
-        for (Map.Entry<String,Integer> entry : routeTable.entrySet())
+        try
         {
-            String routeName = parser.parseRouteName(contents.get(entry.getValue()));
+            routeTable = parser.makeIndex();
 
-            if (! routes.containsKey(routeName))
+            for (Map.Entry<String,Integer> entry : routeTable.entrySet())
             {
-                route = makeRoute(routes, inProgress,
-                                  routeTable, entry.getValue());
-                routes.put(routeName, route);
+                line = contents.get(entry.getValue());
+                routeName = parser.parseRouteName(line);
+
+                if (! routes.containsKey(routeName))
+                {
+                    route = makeRoute(routes, inProgress,
+                                      routeTable, entry.getValue());
+                    routes.put(routeName, route);
+                }
             }
+        }
+        catch (RouteParserException e)
+        {
+            throw new RouteFactoryException(
+                e.getMessage() + "\n" + formattedLineNo(line)
+            );
         }
 
         return routes;
@@ -47,7 +61,7 @@ public class RouteFactory
     public Route makeRoute(Map<String,Route> routes,
                            Set<String> inProgress,
                            Map<String,Integer> routeTable,
-                           int start) throws RouteParserException
+                           int start) throws RouteFactoryException
     {
         Route newRoute = null;
         Route subRoute = null;
@@ -68,8 +82,18 @@ public class RouteFactory
         endPoint = false;
 
         line = contents.get(start);
-        name = parser.parseRouteName(line);
-        description = parser.parseRouteDescription(line);
+
+        try
+        {
+            name = parser.parseRouteName(line);
+            description = parser.parseRouteDescription(line);
+        }
+        catch (RouteParserException e)
+        {
+            throw new RouteFactoryException(
+                e.getMessage() + "\n" + formattedLineNo(line)
+            );
+        }
 
         // Flag route as in progress
         inProgress.add(name);
@@ -81,121 +105,119 @@ public class RouteFactory
             {
                 line = iter.next();
 
-                if (line.isEmpty())
+                if (! line.isEmpty())
                 {
-                    continue;
-                }
-
-                if (parser.isSubRoute(line))
-                {
-                    String subRouteName;
-
-                    p1 = pointMaker.makePoint(line);
-                    subRouteName = p1.getName().substring(1);
-
-                    // Recursion check
-                    if (inProgress.contains(subRouteName))
+                    if (parser.isSubRoute(line))
                     {
-                        throw new RouteParserException(
-                            "Error while parsing route " + name +
-                            "\n" + parser.formattedLineNo(line) +
-                            "\nSub-route is attempting to add a route that " +
-                            "depends on itself"
-                        );
+                        String subRouteName;
+
+                        p1 = pointMaker.makePoint(line);
+                        subRouteName = p1.getName().substring(1);
+
+                        // Recursion check
+                        if (inProgress.contains(subRouteName))
+                        {
+                            throw new RouteParserException(
+                                "Error while parsing route " + name +
+                                "\n" + formattedLineNo(line) +
+                                "\nSub-route is attempting to add a route that " +
+                                "depends on itself"
+                            );
+                        }
+                        // Check if sub-route already exists in the route map
+                        else if (routes.containsKey(subRouteName))
+                        {
+                            subRoute = routes.get(subRouteName);
+                        }
+                        else
+                        {
+                            // Start recursion
+                            subRoute = makeRoute(routes, inProgress, routeTable,
+                                                 routeTable.get(subRouteName));
+                            routes.put(subRouteName, subRoute);
+                        }
                     }
-                    // Check if sub-route already exists in the route map
-                    else if (routes.containsKey(subRouteName))
+                    else if (parser.isPoint(line))
                     {
-                        subRoute = routes.get(subRouteName);
+                        p1 = pointMaker.makePoint(line);
+                        endPoint = parser.isEndPoint(line);
                     }
+                    // Uh oh, something's wrong
                     else
                     {
-                        // Start recursion
-                        subRoute = makeRoute(routes, inProgress, routeTable,
-                                             routeTable.get(subRouteName));
-                        routes.put(subRouteName, subRoute);
-                    }
-                }
-                else if (parser.isPoint(line))
-                {
-                    p1 = pointMaker.makePoint(line);
-                    endPoint = parser.isEndPoint(line);
-                }
-                // Uh oh, something's wrong
-                else
-                {
-                    // Check if it's a route declaration
-                    if (parser.isRoute(line) &&
-                        routeTable.containsKey(parser.parseRouteName(line)))
-                    {
+                        // Check if it's a route declaration
+                        if (parser.isRoute(line) &&
+                            routeTable.containsKey(parser.parseRouteName(line)))
+                        {
+                            throw new RouteParserException(
+                                "Error while parsing route " + name +
+                                "\n" + formattedLineNo(line) +
+                                "\nMissing terminating line?"
+                            );
+                        }
+
+                        // Exhausted all checks
                         throw new RouteParserException(
-                            "Error while parsing route " + name +
-                            "\n" + parser.formattedLineNo(line) +
-                            "\nMissing terminating line?"
+                            "Unknown error while parsing route " + name +
+                            "\n" + formattedLineNo(line)
                         );
                     }
 
-                    // Exhausted all checks
-                    throw new RouteParserException(
-                        "Unknown error while parsing route " + name +
-                        "\n" + parser.formattedLineNo(line)
-                    );
-                }
-
-                if (checkDistance)
-                {
-                    p2 = newRoute.getEnd();
-
-                    if (! parser.validateDistance(p1, p2))
+                    if (checkDistance)
                     {
-                        throw new RouteParserException(
-                            "Error while parsing route " + name +
-                            "\n" + parser.formattedLineNo(line) +
-                            "\nDistance between last point and sub-route is " +
-                            "too far away"
-                        );
+                        p2 = newRoute.getEnd();
+
+                        if (! parser.validateDistance(p1, p2))
+                        {
+                            throw new RouteParserException(
+                                "Error while parsing route " + name +
+                                "\n" + formattedLineNo(line) +
+                                "\nDistance between last point and sub-route is " +
+                                "too far away"
+                            );
+                        }
+
+                        p2 = null;
+                        checkDistance = false;
                     }
 
-                    p2 = null;
-                    checkDistance = false;
-                }
+                    newRoute.add(p1);
 
-                newRoute.add(p1);
-
-                if (subRoute != null)
-                {
-                    // Set flag to check the distance for the next point
-                    checkDistance = true;
-
-                    p1 = newRoute.getEnd();
-                    p2 = subRoute.getStart();
-
-                    if (! parser.validateDistance(p1, p2))
+                    if (subRoute != null)
                     {
-                        throw new RouteParserException(
-                            "Error while parsing route " + name +
-                            "\n" + parser.formattedLineNo(line) +
-                            "\nDistance between last point and sub-route is " +
-                            "too far away"
-                        );
+                        // Set flag to check the distance for the next point
+                        checkDistance = true;
+
+                        p1 = newRoute.getEnd();
+                        p2 = subRoute.getStart();
+
+                        if (! parser.validateDistance(p1, p2))
+                        {
+                            throw new RouteParserException(
+                                "Error while parsing route " + name +
+                                "\n" + formattedLineNo(line) +
+                                "\nDistance between last point and sub-route is " +
+                                "too far away"
+                            );
+                        }
+
+                        newRoute.add(subRoute);
+                        subRoute = null;
+                        p2 = null;
                     }
 
-                    newRoute.add(subRoute);
-                    subRoute = null;
-                    p2 = null;
+                    p1 = null;
                 }
-
-                p1 = null;
             }
         }
-        catch (RouteParserException e)
+        catch (RouteParserException | PointFactoryException e)
         {
-            throw new RouteParserException(e.getMessage());
+            throw new RouteFactoryException(e.getMessage());
         }
 
         if (! endPoint)
         {
-            throw new RouteParserException(
+            throw new RouteFactoryException(
                 "Error while parsing route " + name +
                 "\nMissing terminating line"
             );
@@ -205,5 +227,10 @@ public class RouteFactory
         inProgress.remove(name);
 
         return newRoute;
+    }
+
+    private String formattedLineNo(String line)
+    {
+        return (contents.indexOf(line) + 1) + ": " + line;
     }
 }

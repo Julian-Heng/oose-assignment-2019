@@ -20,16 +20,16 @@ public class PointFactory
         this.contents = contents;
     }
 
-    public Point makePoint(String line) throws RouteParserException
+    public Point makePoint(String line) throws PointFactoryException
     {
-        String[] info;
+        String[] info = null;
         Point newPoint = null;
         double latitude, longitude, altitude;
 
-        info = parser.parsePoint(line);
-
         try
         {
+            info = parser.parsePoint(line);
+
             latitude = Double.parseDouble(info[0]);
             longitude = Double.parseDouble(info[1]);
             altitude = Double.parseDouble(info[2]);
@@ -58,13 +58,21 @@ public class PointFactory
                                 info[1] + ", " +
                                 info[2];
 
-            throw new RouteParserException(errMsg);
+            throw new PointFactoryException(errMsg);
         }
-        catch (Exception e)
+        catch (RouteParserException e)
         {
-            throw new RouteParserException("Unknown error: " + e.getMessage());
+            throw new PointFactoryException(
+                "Error while parsing point: " +
+                "\n" + formattedLineNo(line)
+            );
         }
 
         return newPoint;
+    }
+
+    private String formattedLineNo(String line)
+    {
+        return (contents.indexOf(line) + 1) + ": " + line;
     }
 }

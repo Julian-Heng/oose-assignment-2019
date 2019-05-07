@@ -156,8 +156,7 @@ public class RouteParser
         else
         {
             throw new RouteParserException(
-                "Error while parsing line, can't parse route name:" +
-                "\n" + formattedLineNo(line)
+                "Error while parsing line, can't parse route name"
             );
         }
 
@@ -176,8 +175,7 @@ public class RouteParser
         else
         {
             throw new RouteParserException(
-                "Error while parsing line, can't parse route description:" +
-                "\n" + formattedLineNo(line)
+                "Error while parsing line, can't parse route description"
             );
         }
 
@@ -199,8 +197,7 @@ public class RouteParser
         else
         {
             throw new RouteParserException(
-                "Error while parsing line, can't parse point:" +
-                "\n" + formattedLineNo(line)
+                "Error while parsing line, can't parse point"
             );
         }
 
@@ -246,11 +243,6 @@ public class RouteParser
     {
         return ((num > low)  || Math.abs(num - low) < 0.0000001) &&
                ((high > num) || Math.abs(high - num) < 0.0000001);
-    }
-
-    public String formattedLineNo(String line)
-    {
-        return String.format("%d: %s", contents.indexOf(line) + 1, line);
     }
 
     public List<String> getContents()
