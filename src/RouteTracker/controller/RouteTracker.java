@@ -14,6 +14,7 @@ public class RouteTracker
             try
             {
                 parser.readData(args[0]);
+                parser.validate();
                 for (String line : parser.getContents())
                 {
                     if (parser.isRoute(line))

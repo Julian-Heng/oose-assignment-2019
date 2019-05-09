@@ -10,8 +10,15 @@ public class RouteParser
 {
     private GeoUtils util;
     private List<String> contents;
+    private Map<String,List<String>> routeTable;
 
     // Regex patterns
+
+    // mainRoute Since I was young
+    // Group 1: mainRoute Since I was young
+    // Group 2: mainRoute
+    // Group 3: Since I was young
+
     private static
     Pattern routeMatch = Pattern.compile(
         "(?=^[a-z]+[A-Z][A-Za-z]*)((^\\w+)\\s+([^\\s]+.*))"
@@ -40,7 +47,8 @@ public class RouteParser
     public RouteParser(GeoUtils util)
     {
         this.util = util;
-        this.contents = new ArrayList<>();
+        contents = new ArrayList<>();
+        routeTable = new HashMap<>();
     }
 
     public void readData(String url) throws RouteParserException
@@ -54,6 +62,63 @@ public class RouteParser
         catch (IOException e)
         {
             throw new RouteParserException(e.getMessage());
+        }
+    }
+
+    public void validate() throws RouteParserException
+    {
+        Set<String> routeSet, subRouteSet;
+        routeSet = new HashSet<>();
+        subRouteSet = new HashSet<>();
+
+        for (String line : contents)
+        {
+            if (line.trim().isEmpty())
+            {
+            }
+            else if (isRoute(line))
+            {
+                String[] routeLine = parseRoute(line);
+                if (routeSet.contains(routeLine[0]))
+                {
+                    throw new RouteParserException(
+                        "Invalid line: " + line
+                    );
+                }
+
+                routeSet.add(routeLine[0]);
+            }
+            else if (isPoint(line))
+            {
+                if (isSubRoute(line))
+                {
+                    subRouteSet.add(parsePointDescription(line).substring(1));
+                }
+            }
+            else
+            {
+                throw new RouteParserException(
+                    "Invalid line: " + line
+                );
+            }
+        }
+
+        if (! routeSet.containsAll(subRouteSet))
+        {
+            Set<String> missingSet = new HashSet<>(subRouteSet);
+            String errMsg = "";
+
+            for (String name : missingSet)
+            {
+                if (! routeSet.contains(name))
+                {
+                    errMsg += "\n    " + name;
+                }
+            }
+
+            throw new RouteParserException(
+                "Sub-route(s) declaration not found:" + errMsg
+            );
         }
     }
 
