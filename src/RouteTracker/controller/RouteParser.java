@@ -12,6 +12,7 @@ public class RouteParser
     private GeoUtils util;
     private List<String> contents;
     private Map<List<String>,List<List<String>>> routeTable;
+    private Map<String,List<String>> routeNameTable;
 
     // Regex patterns
 
@@ -50,6 +51,7 @@ public class RouteParser
         this.util = util;
         contents = new ArrayList<>();
         routeTable = new HashMap<>();
+        routeNameTable = new HashMap<>();
     }
 
     public void readData(String url) throws RouteParserException
@@ -82,6 +84,7 @@ public class RouteParser
 
         // Empty the routeTable
         routeTable = new HashMap<>();
+        routeNameTable = new HashMap<>();
 
         // Sets for validation
         routeSet = new HashSet<>();
@@ -190,11 +193,20 @@ public class RouteParser
                 "Sub-route(s) declaration not found:" + errMsg
             );
         }
+
+        // Begin making the routeNameTable for looking up route's
+        // description using the route name
+        routeTable.forEach((k, v)->routeNameTable.put(k.get(0), k));
     }
 
     public Map<List<String>,List<List<String>>> getRouteTable()
     {
         return routeTable;
+    }
+
+    public Map<String,List<String>> getRouteNameTable()
+    {
+        return routeNameTable;
     }
 
     public List<String> parseRoute(String line) throws RouteParserException

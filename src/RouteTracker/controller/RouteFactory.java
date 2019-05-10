@@ -22,35 +22,27 @@ public class RouteFactory
     public Map<String,Route> make() throws RouteFactoryException
     {
         Map<List<String>,List<List<String>>> routeTable;
+        Map<String,List<String>> routeNameTable;
         Set<String> inProgress = new HashSet<>();
         Map<String,Route> routes = new HashMap<>();
 
         routeTable = parser.getRouteTable();
+        routeNameTable = parser.getRouteNameTable();
 
-        /*
-        try
+        for (Map.Entry<List<String>,List<List<String>>> e : routeTable.entrySet())
         {
-        */
-            for (Map.Entry<List<String>,List<List<String>>> e : routeTable.entrySet())
+            Route r;
+            List<String> route = e.getKey();
+            List<List<String>> points = e.getValue();
+            String routeName = route.get(0);
+
+            if (! routes.containsKey(route.get(0)))
             {
-                Route r;
-                List<String> route = e.getKey();
-                List<List<String>> points = e.getValue();
-                String routeName = route.get(0);
-
-                if (! routes.containsKey(route.get(0)))
-                {
-                    r = makeRoute(route, routes, routeTable, inProgress);
-                    routes.put(route.get(0), r);
-                }
+                r = makeRoute(route, routes, routeTable,
+                              routeNameTable, inProgress);
+                routes.put(route.get(0), r);
             }
-        /*
         }
-        catch (RouteParserException e)
-        {
-            throw new RouteFactoryException(e.getMessage());
-        }
-        */
 
         return routes;
     }
@@ -58,6 +50,7 @@ public class RouteFactory
     private Route makeRoute(List<String> route,
                            Map<String,Route> routes,
                            Map<List<String>,List<List<String>>> routeTable,
+                           Map<String,List<String>> routeNameTable,
                            Set<String> inProgress) throws RouteFactoryException
     {
         Route r;
@@ -102,19 +95,10 @@ public class RouteFactory
                     }
                     else
                     {
-                        List<String> subRouteInfo = null;
-                        // Need to make a separate map...
-                        for (List<String> routeEntry : routeTable.keySet())
-                        {
-                            if (routeEntry.get(0).equals(subName))
-                            {
-                                subRouteInfo = routeEntry;
-                                break;
-                            }
-                        }
-
+                        List<String> subRouteInfo = routeNameTable.get(subName);
                         subRoute = makeRoute(subRouteInfo, routes,
-                                             routeTable, inProgress);
+                                             routeTable, routeNameTable,
+                                             inProgress);
                         routes.put(subName, subRoute);
                         p2 = subRoute;
                     }
