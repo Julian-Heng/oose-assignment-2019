@@ -8,6 +8,8 @@ public interface PointNode
     double getLatitude();
     double getLongitude();
     double getAltitude();
+    double getDistance();
+    double getDeltaAltitude();
 
     PointNode getStartNode();
     PointNode getEndNode();

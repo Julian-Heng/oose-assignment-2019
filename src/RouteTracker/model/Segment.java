@@ -2,6 +2,7 @@ package RouteTracker.model;
 
 import java.util.*;
 import RouteTracker.model.*;
+import RouteTracker.controller.GeoUtils;
 
 public class Segment implements PointNode
 {
@@ -44,6 +45,22 @@ public class Segment implements PointNode
     public double getAltitude()
     {
         return getStartNode().getAltitude();
+    }
+
+    @Override
+    public double getDistance()
+    {
+        GeoUtils utils = new GeoUtils();
+        return utils.calcMetresDistance(start.getLatitude(),
+                                        start.getLongitude(),
+                                        end.getLatitude(),
+                                        end.getLongitude());
+    }
+
+    @Override
+    public double getDeltaAltitude()
+    {
+        return getEndNode().getAltitude() - getStartNode().getAltitude();
     }
 
     @Override

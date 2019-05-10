@@ -46,6 +46,17 @@ public class Point implements PointNode
     }
 
     @Override
+    public double getDistance()
+    {
+        return 0.0;
+    }
+
+    public double getDeltaAltitude()
+    {
+        return 0.0;
+    }
+
+    @Override
     public PointNode getStartNode()
     {
         return this;

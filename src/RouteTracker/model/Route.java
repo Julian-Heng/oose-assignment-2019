@@ -5,21 +5,35 @@ import RouteTracker.model.*;
 
 public class Route implements PointNode
 {
-    String name;
-    String desc;
+    private String name;
+    private String desc;
+
     private List<PointNode> points;
     private List<Segment> segments;
+
+    private double distance;
+    private double posAlt;
+    private double negAlt;
+    private double deltaAlt;
 
     public Route(String name, String desc)
     {
         this.name = name;
         this.desc = desc;
+
         points = new ArrayList<>();
         segments = new ArrayList<>();
+
+        distance = 0.0;
+        posAlt = 0.0;
+        negAlt = 0.0;
+        deltaAlt = 0.0;
     }
 
     public void add(Segment s)
     {
+        double tmpDeltaAlt;
+
         // Add segment to the segment list
         segments.add(s);
 
@@ -34,6 +48,19 @@ public class Route implements PointNode
         }
 
         add(s.getEndNode());
+
+        distance += s.getDistance();
+        tmpDeltaAlt = s.getDeltaAltitude();
+        deltaAlt += tmpDeltaAlt;
+
+        if (Double.compare(tmpDeltaAlt, 0) >= 0)
+        {
+            posAlt += Math.abs(tmpDeltaAlt);
+        }
+        else
+        {
+            negAlt += Math.abs(tmpDeltaAlt);
+        }
     }
 
     // An edge-case for when a route only has one point, thus unable
@@ -41,6 +68,17 @@ public class Route implements PointNode
     public void add(PointNode n)
     {
         points.add(n);
+    }
+
+    // Route specific getters
+    public double getPositiveAltitude()
+    {
+        return posAlt;
+    }
+
+    public double getNegativeAltitude()
+    {
+        return negAlt;
     }
 
     @Override
@@ -74,6 +112,18 @@ public class Route implements PointNode
     }
 
     @Override
+    public double getDistance()
+    {
+        return distance;
+    }
+
+    @Override
+    public double getDeltaAltitude()
+    {
+        return deltaAlt;
+    }
+
+    @Override
     public PointNode getStartNode()
     {
         return points.get(0);
@@ -100,8 +150,13 @@ public class Route implements PointNode
     public String toString()
     {
         Iterator<Segment> iter = segments.iterator();
-        String str = String.format("%s: %s\n{\n", name, desc);
+        String str;
         String segDesc;
+
+        str = name + " [";
+        str += String.format("%.2fm, %.2fm, +%.2fm, -%.2fm]: ",
+                             distance, deltaAlt, posAlt, negAlt);
+        str += desc + "\n{\n";
 
         for (PointNode n : points)
         {

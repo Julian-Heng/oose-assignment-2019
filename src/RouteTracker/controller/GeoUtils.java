@@ -10,17 +10,29 @@ public class GeoUtils
     public double calcMetresDistance(double lat1, double long1,
                                      double lat2, double long2)
     {
-        // Haversine formula
-        // Source: https://www.movable-type.co.uk/scripts/latlong.html
-        double lat1r = Math.toRadians(lat1);
-        double lat2r = Math.toRadians(lat2);
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLong = Math.toRadians(long2 - long1);
+        double result;
 
-        double a = Math.pow(Math.sin(dLat / 2), 2) +
-                   Math.cos(lat1r) * Math.cos(lat2r) *
-                   Math.pow(Math.sin(dLong / 2), 2);
-        return RADIUS * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+        if (Double.compare(lat1, lat2) == 0 &&
+            Double.compare(long1, long2) == 0)
+        {
+            result = 0.0;
+        }
+        else
+        {
+            // Haversine formula
+            // Source: https://www.movable-type.co.uk/scripts/latlong.html
+            double lat1r = Math.toRadians(lat1);
+            double lat2r = Math.toRadians(lat2);
+            double deltaLat = Math.toRadians(lat2 - lat1);
+            double deltaLong = Math.toRadians(long2 - long1);
+
+            double a = Math.pow(Math.sin(deltaLat / 2), 2) +
+                       Math.cos(lat1r) * Math.cos(lat2r) *
+                       Math.pow(Math.sin(deltaLong / 2), 2);
+            result = (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))) * RADIUS;
+        }
+
+        return result;
     }
 
     public String retrieveRouteData(String url) throws IOException
