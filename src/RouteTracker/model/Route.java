@@ -30,10 +30,17 @@ public class Route implements PointNode
         // and the start of the next segment is the same point
         if (points.isEmpty())
         {
-            points.add(s.getStartNode());
+            add(s.getStartNode());
         }
 
-        points.add(s.getEndNode());
+        add(s.getEndNode());
+    }
+
+    // An edge-case for when a route only has one point, thus unable
+    // to create a segment
+    public void add(PointNode n)
+    {
+        points.add(n);
     }
 
     @Override
@@ -74,11 +81,19 @@ public class Route implements PointNode
 
     public String toString()
     {
+        Iterator<Segment> iter = segments.iterator();
         String str = String.format("%s: %s\n{\n", name, desc);
+        String segDesc;
 
         for (PointNode n : points)
         {
-            str += "    " + n.toString().replaceAll("\n", "\n    ") + "\n";
+            str += "    " + n.toString().replaceAll("\n", "\n    ");
+            if (iter.hasNext())
+            {
+                str += ": " + iter.next().getDescription();
+            }
+
+            str += "\n";
         }
 
         return str + "}";

@@ -53,6 +53,8 @@ public class Point implements PointNode
 
     public String toString()
     {
-        return coords.toString();
+        return coords.get("Latitude") + ", " +
+               coords.get("Longitude") + ", " +
+               coords.get("Altitude");
     }
 }

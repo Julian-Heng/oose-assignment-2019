@@ -74,6 +74,11 @@ public class RouteFactory
 
         if (inProgress.contains(routeName))
         {
+            throw new RouteFactoryException(
+                "Error while parsing route " + routeName +
+                "\nSub-route is attempting to add a route that " +
+                "depends on itself"
+            );
         }
         else
         {
@@ -81,15 +86,6 @@ public class RouteFactory
         }
 
         r = new Route(routeName, routeDesc);
-
-        /*
-        System.out.println(routeName + ": " + routeDesc);
-        for (List<String> point : points)
-        {
-            System.out.println(point);
-        }
-        System.out.println();
-        */
 
         try
         {
@@ -130,8 +126,15 @@ public class RouteFactory
 
                 if (p1 != null)
                 {
+                    // Add checks for subroute distances
                     s = new Segment(p1, p2, segDesc1);
                     r.add(s);
+                }
+                // Edge case for routes with only one point
+                else if (points.size() == 1)
+                {
+                    r.add(p2);
+                    break;
                 }
 
                 p1 = p2;
