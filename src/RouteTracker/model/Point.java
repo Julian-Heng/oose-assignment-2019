@@ -28,6 +28,24 @@ public class Point implements PointNode
     }
 
     @Override
+    public double getLatitude()
+    {
+        return coords.get("Latitude");
+    }
+
+    @Override
+    public double getLongitude()
+    {
+        return coords.get("Longitude");
+    }
+
+    @Override
+    public double getAltitude()
+    {
+        return coords.get("Altitude");
+    }
+
+    @Override
     public PointNode getStartNode()
     {
         return this;

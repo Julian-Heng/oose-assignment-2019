@@ -56,6 +56,24 @@ public class Route implements PointNode
     }
 
     @Override
+    public double getLatitude()
+    {
+        return getStartNode().getLatitude();
+    }
+
+    @Override
+    public double getLongitude()
+    {
+        return getStartNode().getLongitude();
+    }
+
+    @Override
+    public double getAltitude()
+    {
+        return getStartNode().getAltitude();
+    }
+
+    @Override
     public PointNode getStartNode()
     {
         return points.get(0);
