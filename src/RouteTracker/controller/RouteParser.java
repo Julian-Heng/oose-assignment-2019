@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.regex.*;
 
 import RouteTracker.model.*;
+import RouteTracker.model.exception.*;
 
 public class RouteParser
 {

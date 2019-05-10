@@ -2,6 +2,7 @@ package RouteTracker.controller;
 
 import java.util.*;
 import RouteTracker.model.*;
+import RouteTracker.model.exception.*;
 
 public class PointFactory
 {

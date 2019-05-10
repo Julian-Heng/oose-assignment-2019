@@ -1,4 +1,4 @@
-package RouteTracker.model;
+package RouteTracker.model.exception;
 
 public class RouteParserException extends Exception
 {
