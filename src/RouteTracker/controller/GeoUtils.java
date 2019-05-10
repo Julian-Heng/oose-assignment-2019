@@ -3,8 +3,6 @@ package RouteTracker.controller;
 import java.lang.Math;
 import java.io.*;
 
-import RouteTracker.model.*;
-
 public class GeoUtils
 {
     private static final int RADIUS = 6371000;
@@ -12,6 +10,8 @@ public class GeoUtils
     public double calcMetresDistance(double lat1, double long1,
                                      double lat2, double long2)
     {
+        // Haversine formula
+        // Source: https://www.movable-type.co.uk/scripts/latlong.html
         double lat1r = Math.toRadians(lat1);
         double lat2r = Math.toRadians(lat2);
         double dLat = Math.toRadians(lat2 - lat1);
