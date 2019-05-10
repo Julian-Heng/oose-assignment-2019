@@ -120,6 +120,8 @@ public class RouteParser
 
                     if (! line.trim().isEmpty())
                     {
+                        // We should not be expecting a route declaration
+                        // Hence missing terminating line
                         if (isRoute(line))
                         {
                             throw new RouteParserException(
@@ -137,6 +139,7 @@ public class RouteParser
                                 );
                             }
                         }
+                        // Anything that did not match
                         else
                         {
                             throw new RouteParserException(
@@ -156,6 +159,7 @@ public class RouteParser
                     }
                 }
 
+                // Check if there's a missing terminating line
                 if (! isEnd)
                 {
                     throw new RouteParserException(
@@ -198,7 +202,7 @@ public class RouteParser
         // Begin making the routeNameTable for looking up route's
         // description using the route name
         //
-        // Useful for finding routes for sub-routes
+        // Useful for finding routes an their description for sub-routes
         routeTable.forEach((k, v)->routeNameTable.put(k.get(0), k));
     }
 
