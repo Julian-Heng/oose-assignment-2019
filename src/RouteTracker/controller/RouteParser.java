@@ -10,7 +10,7 @@ public class RouteParser
 {
     private GeoUtils util;
     private List<String> contents;
-    private Map<String,List<String>> routeTable;
+    private Map<List<String>,List<List<String>>> routeTable;
 
     // Regex patterns
 
@@ -65,35 +65,101 @@ public class RouteParser
         }
     }
 
-    public void validate() throws RouteParserException
+    // Makes a map of route and it's points and sub-routes declaration
+    // so that we can have O(1) access to the entire route
+    //
+    // Throws RouteParserException when detects duplicate route declarations
+    // and missing sub-route declarations
+    //
+    // Does not detect if the coordinates are valid, that is handled in the
+    // factories
+    public void makeIndex() throws RouteParserException
     {
         Set<String> routeSet, subRouteSet;
+        Iterator<String> iter = contents.iterator();
+        String line;
+
+        // Empty the routeTable
+        routeTable = new HashMap<>();
+
+        // Sets for validation
         routeSet = new HashSet<>();
         subRouteSet = new HashSet<>();
 
-        for (String line : contents)
+        while (iter.hasNext())
         {
+            line = iter.next();
+
             if (line.trim().isEmpty())
             {
+                // Skip empty/newline lines
             }
             else if (isRoute(line))
             {
-                String[] routeLine = parseRoute(line);
-                if (routeSet.contains(routeLine[0]))
+                boolean isEnd = false;
+                List<String> routeInfo = parseRoute(line);
+                List<List<String>> routeEntry = new ArrayList<>();
+
+                if (routeTable.containsKey(routeInfo))
                 {
                     throw new RouteParserException(
-                        "Invalid line: " + line
+                        "Invalid line: " + line +
+                        "\nDuplicate route name"
                     );
                 }
 
-                routeSet.add(routeLine[0]);
-            }
-            else if (isPoint(line))
-            {
-                if (isSubRoute(line))
+                while (iter.hasNext() && ! isEnd)
                 {
-                    subRouteSet.add(parsePointDescription(line).substring(1));
+                    List<String> pointEntry = new ArrayList<>();
+                    line = iter.next();
+                    isEnd = isEndPoint(line);
+
+                    if (! line.trim().isEmpty())
+                    {
+                        if (isRoute(line))
+                        {
+                            throw new RouteParserException(
+                                "Invalid line: " + line +
+                                "\nMissing terminating line"
+                            );
+                        }
+                        else if (isPoint(line))
+                        {
+                            pointEntry = parsePoint(line);
+                            if (isSubRoute(line))
+                            {
+                                String subName = pointEntry.get(3).substring(1);
+                                subRouteSet.add(subName);
+                            }
+                        }
+                        else
+                        {
+                            throw new RouteParserException(
+                                "Invalid line: " + line
+                            );
+                        }
+
+                        if (pointEntry.isEmpty())
+                        {
+                            throw new RouteParserException(
+                                "Invalid line: " + line +
+                                "\nNo points in route"
+                            );
+                        }
+
+                        routeEntry.add(pointEntry);
+                    }
                 }
+
+                if (! isEnd)
+                {
+                    throw new RouteParserException(
+                        "Invalid line: " + line +
+                        "\nMissing terminating line"
+                    );
+                }
+
+                routeTable.put(routeInfo, routeEntry);
             }
             else
             {
@@ -103,6 +169,12 @@ public class RouteParser
             }
         }
 
+        // Get all the names of the routes into a set
+        routeTable.forEach((k, v)->routeSet.add(k.get(0)));
+
+        // routeSet is a super-set of subRouteSet Therefore, all of
+        // subRouteSet should be in routeSet If not, then there's a route with
+        // a sub-route that does not exist
         if (! routeSet.containsAll(subRouteSet))
         {
             Set<String> missingSet = new HashSet<>(subRouteSet);
@@ -110,10 +182,7 @@ public class RouteParser
 
             for (String name : missingSet)
             {
-                if (! routeSet.contains(name))
-                {
-                    errMsg += "\n    " + name;
-                }
+                errMsg += ! routeSet.contains(name) ? "\n    " + name : "";
             }
 
             throw new RouteParserException(
@@ -122,97 +191,26 @@ public class RouteParser
         }
     }
 
-    /*
-    // Makes a map of route and sub-route declaration along with the
-    // location in the file contents so that we can have O(1) access
-    // to the location of the declaration
-    //
-    // Throws RouteParserException when detects duplicate route declarations
-    // and missing sub-route declarations
-    public Map<String,Integer> makeIndex() throws RouteParserException
-    {
-        Map<String,Integer> routeTable = new HashMap<>();
-        Set<String> subRouteSet = new HashSet<>();
-        Set<String> nameSet;
-        int count = 0;
-
-        for (String line : contents)
-        {
-            if (line.trim().isEmpty())
-            {
-            }
-            else if (isRoute(line))
-            {
-                String[] routeInfo = parseRoute(line);
-
-                if (routeTable.containsKey(routeInfo[0]))
-                {
-                    throw new RouteParserException(
-                        "Duplicate route: " + routeInfo[0]
-                    );
-                }
-                else if (routeInfo[1].isEmpty())
-                {
-                    throw new RouteParserException(
-                        "Error while parsing route " + routeInfo[0] +
-                        "\n" + (count + 1) + ": " + line +
-                        "\nMissing description for route"
-                    );
-                }
-
-                routeTable.put(routeInfo[0], new Integer(count));
-            }
-            else if (isPoint(line))
-            {
-                if (isSubRoute(line))
-                {
-                    String[] pointInfo = parsePoint(line);
-                    subRouteSet.add(pointInfo[3].substring(1));
-                }
-            }
-            else
-            {
-                throw new RouteParserException(
-                    "Syntax error on line " + (count + 1) +
-                    ": " + line
-                );
-            }
-
-            count++;
-        }
-
-        nameSet = new HashSet<>(routeTable.keySet());
-
-        if (! nameSet.containsAll(subRouteSet))
-        {
-            Set<String> missingSet = new HashSet<>(subRouteSet);
-            String errMsg = "";
-
-            for (String name : missingSet)
-            {
-                if (! nameSet.contains(name))
-                {
-                    errMsg += "\n    " + name;
-                }
-            }
-
-            throw new RouteParserException(
-                "Sub-route(s) declaration not found:" + errMsg
-            );
-        }
-
-        return routeTable;
-    }
-    */
-
-    public String[] parseRoute(String line) throws RouteParserException
+    public List<String> parseRoute(String line) throws RouteParserException
     {
         String[] result = {
             parseRouteName(line),
             parseRouteDescription(line)
         };
 
-        return result;
+        return Arrays.asList(result);
+    }
+
+    public List<String> parsePoint(String line) throws RouteParserException
+    {
+        String[] result = {
+            parsePointLatitude(line),
+            parsePointLongitude(line),
+            parsePointAltitude(line),
+            parsePointDescription(line)
+        };
+
+        return Arrays.asList(result);
     }
 
     public String parseRouteName(String line) throws RouteParserException
@@ -249,18 +247,6 @@ public class RouteParser
                 "Error while parsing line, can't parse route description"
             );
         }
-
-        return result;
-    }
-
-    public String[] parsePoint(String line) throws RouteParserException
-    {
-        String[] result = {
-            parsePointLatitude(line),
-            parsePointLongitude(line),
-            parsePointAltitude(line),
-            parsePointDescription(line)
-        };
 
         return result;
     }
@@ -364,21 +350,6 @@ public class RouteParser
         Matcher match = pointMatch.matcher(line.trim());
         return match.find() && match.group(7) == null;
     }
-
-    /*
-    public double getDistance(Point p1, Point p2)
-    {
-        return util.calcMetresDistance(p1.getLatitude(),
-                                       p1.getLongitude(),
-                                       p2.getLatitude(),
-                                       p2.getLongitude());
-    }
-
-    public boolean validateDistance(Point p1, Point p2)
-    {
-        return Double.compare(getDistance(p1, p2), 10) <= 0;
-    }
-    */
 
     public boolean doubleRange(double num, double low, double high)
     {

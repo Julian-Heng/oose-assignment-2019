@@ -14,18 +14,7 @@ public class RouteTracker
             try
             {
                 parser.readData(args[0]);
-                parser.validate();
-                for (String line : parser.getContents())
-                {
-                    if (parser.isRoute(line))
-                    {
-                        System.out.println(Arrays.toString(parser.parseRoute(line)));
-                    }
-                    else if (parser.isPoint(line))
-                    {
-                        System.out.println(Arrays.toString(parser.parsePoint(line)));
-                    }
-                }
+                parser.makeIndex();
             }
             catch (Exception e)
             {
