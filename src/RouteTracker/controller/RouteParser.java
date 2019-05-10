@@ -192,6 +192,11 @@ public class RouteParser
         }
     }
 
+    public Map<List<String>,List<List<String>>> getRouteTable()
+    {
+        return routeTable;
+    }
+
     public List<String> parseRoute(String line) throws RouteParserException
     {
         String[] result = {

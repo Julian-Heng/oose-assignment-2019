@@ -51,4 +51,10 @@ public class Segment implements PointNode
     {
         return end.getEndPoint();
     }
+
+    @Override
+    public String toString()
+    {
+        return desc + "\n" + start.toString() + "\n" + end.toString();
+    }
 }

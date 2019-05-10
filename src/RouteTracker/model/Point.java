@@ -9,10 +9,10 @@ public class Point implements PointNode
 
     public Point(double latitude, double longitude, double altitude)
     {
-        coords = new HashMap<>();
-        coords.put("Lat", new Double(latitude));
-        coords.put("Long", new Double(longitude));
-        coords.put("Alt", new Double(altitude));
+        coords = new LinkedHashMap<>();
+        coords.put("Latitude", new Double(latitude));
+        coords.put("Longitude", new Double(longitude));
+        coords.put("Altitude", new Double(altitude));
     }
 
     @Override
@@ -49,5 +49,10 @@ public class Point implements PointNode
     public Point getEndPoint()
     {
         return this;
+    }
+
+    public String toString()
+    {
+        return coords.toString();
     }
 }

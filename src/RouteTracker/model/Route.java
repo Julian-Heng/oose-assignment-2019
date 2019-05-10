@@ -71,4 +71,17 @@ public class Route implements PointNode
     {
         return getEndNode().getEndPoint();
     }
+
+    public String toString()
+    {
+        String str = String.format("%s: %s\n{\n", name, desc);
+
+        for (PointNode n : points)
+        {
+            str += "    " + n.toString().replaceAll("\n", "\n    ") + "\n";
+        }
+
+        return str + "}";
+
+    }
 }

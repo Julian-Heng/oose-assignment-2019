@@ -29,7 +29,7 @@ public class RouteTracker
                 routes = routeMaker.make();
 
                 routes.forEach((k, v)->{
-                    System.out.println(v.toString());
+                    System.out.println(v.toString() + "\n");
                 });
             }
             catch (Exception e)
