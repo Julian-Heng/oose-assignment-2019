@@ -1,5 +1,5 @@
 routeA A
-    0,0,0,asdf
+    3,3,3,asdf
 
 
 
@@ -21,7 +21,8 @@ routeA A
 
     1,1,1,asdf
     2,2,2,asdf
-    3,3,3
+    3,3,3,asdf
+    1,1,1
 
 routeB B
     0,0,0,*routeC
@@ -31,7 +32,8 @@ routeB B
 routeC C
     0,0,0,asdf
 
-    1,1,1
+    1,1,1,asdf
+    2.99999,2.99999,2.99999
 
 routeD D
     0,0,0
