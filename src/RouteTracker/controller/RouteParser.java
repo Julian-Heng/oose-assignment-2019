@@ -132,8 +132,9 @@ public class RouteParser
                             pointEntry = parsePoint(line);
                             if (isSubRoute(line))
                             {
-                                String subName = pointEntry.get(3).substring(1);
-                                subRouteSet.add(subName);
+                                subRouteSet.add(
+                                    pointEntry.get(3).substring(1)
+                                );
                             }
                         }
                         else
@@ -196,6 +197,8 @@ public class RouteParser
 
         // Begin making the routeNameTable for looking up route's
         // description using the route name
+        //
+        // Useful for finding routes for sub-routes
         routeTable.forEach((k, v)->routeNameTable.put(k.get(0), k));
     }
 

@@ -29,18 +29,15 @@ public class RouteFactory
         routeTable = parser.getRouteTable();
         routeNameTable = parser.getRouteNameTable();
 
-        for (Map.Entry<List<String>,List<List<String>>> e : routeTable.entrySet())
+        for (List<String> route : routeTable.keySet())
         {
-            Route r;
-            List<String> route = e.getKey();
-            List<List<String>> points = e.getValue();
-            String routeName = route.get(0);
-
             if (! routes.containsKey(route.get(0)))
             {
-                r = makeRoute(route, routes, routeTable,
-                              routeNameTable, inProgress);
-                routes.put(route.get(0), r);
+                routes.put(
+                    route.get(0),
+                    makeRoute(route, routes, routeTable,
+                              routeNameTable, inProgress)
+                );
             }
         }
 
@@ -54,7 +51,7 @@ public class RouteFactory
                            Set<String> inProgress) throws RouteFactoryException
     {
         Route r;
-        Segment s;
+        Route subRoute = null;
         PointNode p1 = null;
         PointNode p2 = null;
 
@@ -65,11 +62,14 @@ public class RouteFactory
         String segDesc1 = "";
         String segDesc2 = "";
 
+        boolean distanceCheckFlag = false;
+
+        // Recursion check
         if (inProgress.contains(routeName))
         {
             throw new RouteFactoryException(
-                "Error while parsing route " + routeName +
-                "\nSub-route is attempting to add a route that " +
+                "Error while parsing route " + routeName + "\n" +
+                "Sub-route is attempting to add a route that " +
                 "depends on itself"
             );
         }
@@ -84,45 +84,88 @@ public class RouteFactory
         {
             for (List<String> point : points)
             {
+                // Keep references from the previous iteration
+                p1 = p2;
+                segDesc1 = segDesc2;
                 segDesc2 = point.get(3);
+                p2 = pointMaker.make(point);
+
+                // The distanceCheckFlag flag is set after encountering a
+                // sub-route. Because the sub-route point in the main route can
+                // be very close to the actual route's starting point, we would
+                // have to perform a check to see if it is close or exact.
+                // Thus, we can assume that p1 is the sub-route added from the
+                // previous iteration and p2 is the next point from the main
+                // route that is exactly the same or very close to the end of
+                // the sub-route. Hence, the getEndPoint() and getStartPoint()
+                // method calls.
+                if (distanceCheckFlag)
+                {
+                    if (! checkDistance(p1, p2))
+                    {
+                        throw new RouteFactoryException(
+                            "Error while parsing route " +
+                            routeName + "\nDistance betwwen last point " +
+                            "and sub-route is too far away"
+                        );
+                    }
+
+                    distanceCheckFlag = false;
+                }
+
+                // Point is a sub route
                 if (! segDesc2.isEmpty() && segDesc2.charAt(0) == '*')
                 {
                     String subName = segDesc2.substring(1);
-                    Route subRoute;
-                    if (routes.containsKey(subName))
+                    distanceCheckFlag = true;
+
+                    if (! routes.containsKey(subName))
                     {
-                        p2 = routes.get(subName);
+                        // Recursion
+                        routes.put(
+                            subName,
+                            makeRoute(routeNameTable.get(subName),
+                                      routes, routeTable,
+                                      routeNameTable, inProgress)
+                        );
                     }
-                    else
+
+                    subRoute = routes.get(subName);
+
+                    // Check if first iteration
+                    if (p1 != null)
                     {
-                        List<String> subRouteInfo = routeNameTable.get(subName);
-                        subRoute = makeRoute(subRouteInfo, routes,
-                                             routeTable, routeNameTable,
-                                             inProgress);
-                        routes.put(subName, subRoute);
-                        p2 = subRoute;
+                        r.add(new Segment(p1, p2, segDesc1));
                     }
+
+                    p1 = p2;
+                    p2 = subRoute;
+
+                    if (! checkDistance(p1, p2))
+                    {
+                        throw new RouteFactoryException(
+                            "Error while parsing route " +
+                            routeName + "\nDistance betwwen last point " +
+                            "and sub-route is too far away"
+                        );
+                    }
+
+                    r.add(new Segment(p1, p2, segDesc2));
+                    distanceCheckFlag = true;
                 }
                 else
                 {
-                    p2 = pointMaker.make(point);
+                    // Check if first iteration
+                    if (p1 != null)
+                    {
+                        r.add(new Segment(p1, p2, segDesc1));
+                    }
+                    // Edge case for routes with only one point
+                    else if (points.size() == 1)
+                    {
+                        r.add(p2);
+                    }
                 }
-
-                if (p1 != null)
-                {
-                    // Add checks for subroute distances
-                    s = new Segment(p1, p2, segDesc1);
-                    r.add(s);
-                }
-                // Edge case for routes with only one point
-                else if (points.size() == 1)
-                {
-                    r.add(p2);
-                    break;
-                }
-
-                p1 = p2;
-                segDesc1 = segDesc2;
             }
         }
         catch (PointFactoryException e)
@@ -131,5 +174,21 @@ public class RouteFactory
         }
 
         return r;
+    }
+
+    private boolean checkDistance(PointNode n1, PointNode n2)
+    {
+        double distance;
+
+        // Check distance between main route's sub-route and
+        // sub-route's starting point
+        distance = utils.calcMetresDistance(
+            n1.getEndPoint().getLatitude(),
+            n1.getEndPoint().getLongitude(),
+            n2.getStartPoint().getLatitude(),
+            n2.getStartPoint().getLongitude()
+        );
+
+        return Double.compare(distance, 10) <= 0;
     }
 }
