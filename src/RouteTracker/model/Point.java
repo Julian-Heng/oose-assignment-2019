@@ -16,70 +16,17 @@ public class Point implements PointNode
         this.altitude = altitude;
     }
 
-    @Override
-    public String getName()
-    {
-        return "";
-    }
-
-    @Override
-    public String getDescription()
-    {
-        return "";
-    }
-
-    @Override
-    public double getLatitude()
-    {
-        return latitude;
-    }
-
-    @Override
-    public double getLongitude()
-    {
-        return longitude;
-    }
-
-    @Override
-    public double getAltitude()
-    {
-        return altitude;
-    }
-
-    @Override
-    public double getDistance()
-    {
-        return 0.0;
-    }
-
-    public double getDeltaAltitude()
-    {
-        return 0.0;
-    }
-
-    @Override
-    public PointNode getStartNode()
-    {
-        return this;
-    }
-
-    @Override
-    public PointNode getEndNode()
-    {
-        return this;
-    }
-
-    @Override
-    public Point getStartPoint()
-    {
-        return this;
-    }
-
-    @Override
-    public Point getEndPoint()
-    {
-        return this;
-    }
+    @Override public String getName() { return ""; }
+    @Override public String getDescription() { return ""; }
+    @Override public double getLatitude() { return latitude; }
+    @Override public double getLongitude() { return longitude; }
+    @Override public double getAltitude() { return altitude; }
+    @Override public double getDistance() { return 0.0; }
+    @Override public double getDeltaAltitude() { return 0.0; }
+    @Override public PointNode getStartNode() { return this; }
+    @Override public PointNode getEndNode() { return this; }
+    @Override public Point getStartPoint() { return this; }
+    @Override public Point getEndPoint() { return this; }
 
     public String toString()
     {

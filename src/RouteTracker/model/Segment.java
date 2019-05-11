@@ -17,17 +17,8 @@ public class Segment implements PointNode
         this.desc = desc;
     }
 
-    @Override
-    public String getName()
-    {
-        return "";
-    }
-
-    @Override
-    public String getDescription()
-    {
-        return desc;
-    }
+    @Override public String getName() { return ""; }
+    @Override public String getDescription() { return desc; }
 
     @Override
     public double getLatitude()
@@ -63,29 +54,10 @@ public class Segment implements PointNode
         return getEndNode().getAltitude() - getStartNode().getAltitude();
     }
 
-    @Override
-    public PointNode getStartNode()
-    {
-        return start;
-    }
-
-    @Override
-    public PointNode getEndNode()
-    {
-        return end;
-    }
-
-    @Override
-    public Point getStartPoint()
-    {
-        return start.getStartPoint();
-    }
-
-    @Override
-    public Point getEndPoint()
-    {
-        return end.getEndPoint();
-    }
+    @Override public PointNode getStartNode() { return start; }
+    @Override public PointNode getEndNode() { return end; }
+    @Override public Point getStartPoint() { return start.getStartPoint(); }
+    @Override public Point getEndPoint() { return end.getEndPoint(); }
 
     @Override
     public String toString()

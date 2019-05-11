@@ -65,33 +65,14 @@ public class Route implements PointNode
 
     // An edge-case for when a route only has one point, thus unable
     // to create a segment
-    public void add(PointNode n)
-    {
-        points.add(n);
-    }
+    public void add(PointNode n) { points.add(n); }
 
     // Route specific getters
-    public double getPositiveAltitude()
-    {
-        return posAlt;
-    }
+    public double getPositiveAltitude() { return posAlt; }
+    public double getNegativeAltitude() { return negAlt; }
 
-    public double getNegativeAltitude()
-    {
-        return negAlt;
-    }
-
-    @Override
-    public String getName()
-    {
-        return name;
-    }
-
-    @Override
-    public String getDescription()
-    {
-        return desc;
-    }
+    @Override public String getName() { return name; }
+    @Override public String getDescription() { return desc; }
 
     @Override
     public double getLatitude()
@@ -111,23 +92,9 @@ public class Route implements PointNode
         return getStartNode().getAltitude();
     }
 
-    @Override
-    public double getDistance()
-    {
-        return distance;
-    }
-
-    @Override
-    public double getDeltaAltitude()
-    {
-        return deltaAlt;
-    }
-
-    @Override
-    public PointNode getStartNode()
-    {
-        return points.get(0);
-    }
+    @Override public double getDistance() { return distance; }
+    @Override public double getDeltaAltitude() { return deltaAlt; }
+    @Override public PointNode getStartNode() { return points.get(0); }
 
     @Override
     public PointNode getEndNode()
