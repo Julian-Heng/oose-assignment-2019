@@ -29,6 +29,7 @@ public class Menu
         Option o;
         String input = "";
 
+        // Return false immediately because user selects exit
         if (opt == exit)
         {
             return false;
@@ -36,11 +37,14 @@ public class Menu
 
         if ((o = options.get(opt)) != null)
         {
+            long start, end;
+
             if (o.getRequireInput())
             {
                 input = ui.readString("%s: ", o.getPrompt());
             }
 
+            start = System.nanoTime();
             try
             {
                 o.doOption(input);
@@ -49,6 +53,9 @@ public class Menu
             {
                 ui.printError("%s\n\n", e.getMessage());
             }
+            end = System.nanoTime();
+
+            ui.print("Took %1.3fms\n", (double)(end - start) / 1000000);
         }
         else
         {
