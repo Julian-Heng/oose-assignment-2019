@@ -1,10 +1,13 @@
 package RouteTracker.view;
 
 import java.util.*;
+import RouteTracker.controller.*;
+import RouteTracker.model.*;
+import RouteTracker.model.exception.*;
 
 public class Menu
 {
-    private Map<Integer,Object> options;
+    private Map<Integer,Option> options;
     private int exit;
     private UserInterface ui;
 
@@ -15,11 +18,46 @@ public class Menu
         this.ui = ui;
     }
 
-    public void addOption(Object o)
+    public void addOption(Option o)
     {
-        options.put(exit, o);
+        options.put(o.getLabel(), o);
         exit++;
     }
+
+    public boolean executeOption(int opt)
+    {
+        Option o;
+        String input = "";
+
+        if (opt == exit)
+        {
+            return false;
+        }
+
+        if ((o = options.get(opt)) != null)
+        {
+            if (o.getRequireInput())
+            {
+                input = ui.readString("%s: ", o.getPrompt());
+            }
+
+            try
+            {
+                o.doOption(input);
+            }
+            catch (NullPointerException | OptionException e)
+            {
+                ui.printError("%s\n\n", e.getMessage());
+            }
+        }
+        else
+        {
+            ui.printError("Option not found\n");
+        }
+
+        return true;
+    }
+
 
     public String toString()
     {
@@ -27,9 +65,9 @@ public class Menu
         String fmt = "    (%d) %s\n";
         int count = 1;
 
-        for (Object o : options.values())
+        for (Option o : options.values())
         {
-            out += String.format(fmt, count++, o.toString());
+            out += String.format(fmt, count++, o.getMenuString());
         }
 
         out += String.format(fmt, count, "Quit\n");

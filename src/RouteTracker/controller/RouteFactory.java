@@ -19,13 +19,14 @@ public class RouteFactory
         this.utils = utils;
     }
 
-    public Map<String,Route> make() throws RouteFactoryException
+    public void make(Map<String,Route> routes) throws RouteFactoryException
     {
         Map<List<String>,List<List<String>>> routeTable;
         Map<String,List<String>> routeNameTable;
         Set<String> inProgress = new HashSet<>();
-        Map<String,Route> routes = new HashMap<>();
 
+        // Use clear method because we do not want to lose object reference
+        routes.clear();
         routeTable = parser.getRouteTable();
         routeNameTable = parser.getRouteNameTable();
 
@@ -40,8 +41,6 @@ public class RouteFactory
                 );
             }
         }
-
-        return routes;
     }
 
     private Route makeRoute(List<String> route,
