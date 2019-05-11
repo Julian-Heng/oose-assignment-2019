@@ -9,5 +9,5 @@ public interface Option
     String getMenuString();
     String getPrompt();
     boolean getRequireInput();
-    public void doOption(String s) throws OptionException;
+    public String doOption(String s) throws OptionException;
 }

@@ -20,6 +20,7 @@ public class ConsoleUI implements UserInterface
     @Override
     public int readInteger(String fmt, Object... args)
     {
+        String strInput = "";
         int userInput = -1;
         boolean inputValid = false;
 
@@ -27,12 +28,16 @@ public class ConsoleUI implements UserInterface
         {
             try
             {
-                userInput = Integer.parseInt(readString(fmt, args));
+                strInput = readString(fmt, args);
+                userInput = Integer.parseInt(strInput);
                 inputValid = true;
             }
             catch (NumberFormatException e)
             {
-                printError("Enter a number\n");
+                if (! strInput.isEmpty())
+                {
+                    printError("Enter a number\n");
+                }
             }
         }
 

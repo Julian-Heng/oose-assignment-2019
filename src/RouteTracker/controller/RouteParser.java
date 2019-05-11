@@ -9,7 +9,7 @@ import RouteTracker.model.exception.*;
 
 public class RouteParser
 {
-    private GeoUtils util;
+    private GeoUtils utils;
     private List<String> contents;
     private Map<List<String>,List<List<String>>> routeTable;
     private Map<String,List<String>> routeNameTable;
@@ -46,20 +46,20 @@ public class RouteParser
         "(,\\s*((\\*?.*)))?"        // Description
     );
 
-    public RouteParser(GeoUtils util)
+    public RouteParser(GeoUtils utils)
     {
-        this.util = util;
+        this.utils = utils;
         contents = new ArrayList<>();
         routeTable = new HashMap<>();
         routeNameTable = new HashMap<>();
     }
 
-    public void readData(String url) throws RouteParserException
+    public void readData() throws RouteParserException
     {
         try
         {
             contents = new ArrayList<>(
-                Arrays.asList(util.retrieveRouteData(url).split("\n"))
+                Arrays.asList(utils.retrieveRouteData().split("\n"))
             );
         }
         catch (IOException e)

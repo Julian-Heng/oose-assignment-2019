@@ -47,7 +47,7 @@ public class Menu
             start = System.nanoTime();
             try
             {
-                o.doOption(input);
+                ui.print(o.doOption(input));
             }
             catch (NullPointerException | OptionException e)
             {

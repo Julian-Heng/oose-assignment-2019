@@ -5,7 +5,11 @@ import java.io.*;
 
 public class GeoUtils
 {
+    private String url;
     private static final int RADIUS = 6371000;
+
+    // Testing purposes
+    public void setUrl(String s) { url = s; }
 
     public double calcMetresDistance(double lat1, double long1,
                                      double lat2, double long2)
@@ -35,7 +39,7 @@ public class GeoUtils
         return result;
     }
 
-    public String retrieveRouteData(String url) throws IOException
+    public String retrieveRouteData() throws IOException
     {
         String line;
         String data = "";

@@ -33,15 +33,18 @@ public class GetRouteData implements Option
     @Override public boolean getRequireInput() { return requireInput; }
 
     @Override
-    public void doOption(String s) throws OptionException
+    public String doOption(String s) throws OptionException
     {
         RouteParser parser = new RouteParser(utils);
         PointFactory pointMaker;
         RouteFactory routeMaker;
 
+        // Testing purposes
+        utils.setUrl(s);
+
         try
         {
-            parser.readData(s);
+            parser.readData();
             parser.makeIndex();
 
             pointMaker = new PointFactory(parser, utils);
@@ -53,5 +56,8 @@ public class GetRouteData implements Option
         {
             throw new OptionException(e.getMessage());
         }
+
+        // This option does not ouput anything
+        return "";
     }
 }
