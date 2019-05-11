@@ -10,9 +10,9 @@ public class Point implements PointNode
     public Point(double latitude, double longitude, double altitude)
     {
         coords = new LinkedHashMap<>();
-        coords.put("Latitude", new Double(latitude));
-        coords.put("Longitude", new Double(longitude));
-        coords.put("Altitude", new Double(altitude));
+        coords.put("Latitude", latitude);
+        coords.put("Longitude", longitude);
+        coords.put("Altitude", altitude);
     }
 
     @Override
