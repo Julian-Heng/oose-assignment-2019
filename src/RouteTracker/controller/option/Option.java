@@ -1,4 +1,4 @@
-package RouteTracker.controller;
+package RouteTracker.controller.option;
 
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
