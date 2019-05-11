@@ -137,6 +137,5 @@ public class Route implements PointNode
         }
 
         return str + "}";
-
     }
 }
