@@ -10,7 +10,6 @@ import RouteTracker.model.exception.*;
 public class GetRouteData implements Option
 {
     // Required Option classfields
-    private int label;
     private String name;
     private boolean requireInput;
 
@@ -18,9 +17,8 @@ public class GetRouteData implements Option
     private GeoUtils utils;
     private Map<String,Route> routes;
 
-    public GetRouteData(int label, GeoUtils utils, Map<String,Route> routes)
+    public GetRouteData(GeoUtils utils, Map<String,Route> routes)
     {
-        this.label = label;
         name = "Get route data";
         requireInput = true;
 
@@ -28,7 +26,6 @@ public class GetRouteData implements Option
         this.routes = routes;
     }
 
-    @Override public int getLabel() { return label; }
     @Override public String getMenuString() { return name; }
     @Override public String getPrompt() { return "Enter url"; }
     @Override public boolean getRequireInput() { return requireInput; }

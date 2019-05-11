@@ -15,9 +15,10 @@ public class RouteTracker
         GeoUtils utils = new GeoUtils();
         UserInterface ui = new ConsoleUI();
         Menu menu = new Menu(ui);
-        menu.addOption(new GetRouteData(1, utils, routes));
-        menu.addOption(new ClearRoute(2, routes));
-        menu.addOption(new PrintRoute(3, routes));
+        menu.addOption(new GetRouteData(utils, routes));
+        menu.addOption(new ClearRoute(routes));
+        menu.addOption(new PrintRoute(routes));
+        menu.addOption(new PrintRouteDetailed(routes));
 
         // Main program loop
         do

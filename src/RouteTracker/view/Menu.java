@@ -21,7 +21,7 @@ public class Menu
 
     public void addOption(Option o)
     {
-        options.put(o.getLabel(), o);
+        options.put(options.size() + 1, o);
         exit++;
     }
 

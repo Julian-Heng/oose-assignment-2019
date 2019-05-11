@@ -5,7 +5,6 @@ import RouteTracker.model.exception.*;
 
 public interface Option
 {
-    int getLabel();
     String getMenuString();
     String getPrompt();
     boolean getRequireInput();
