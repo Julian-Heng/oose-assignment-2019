@@ -10,9 +10,5 @@ public class RouteFactoryException extends Exception
         msg = errMsg;
     }
 
-    @Override
-    public String getMessage()
-    {
-        return msg;
-    }
+    @Override public String getMessage() { return msg; }
 }
