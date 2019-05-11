@@ -20,6 +20,8 @@ public class Segment implements PointNode
     @Override public String getName() { return ""; }
     @Override public String getDescription() { return desc; }
 
+    // Make the get[Coords]() method call the starting node
+    // We aren't expecting to call these methods from segment
     @Override
     public double getLatitude()
     {
