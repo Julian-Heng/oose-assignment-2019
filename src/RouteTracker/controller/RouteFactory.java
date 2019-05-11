@@ -177,7 +177,7 @@ public class RouteFactory
 
     private boolean checkDistance(PointNode n1, PointNode n2)
     {
-        double distance;
+        double distance, deltaAlt;
 
         // Check distance between main route's sub-route and
         // sub-route's starting point
@@ -188,6 +188,11 @@ public class RouteFactory
             n2.getStartPoint().getLongitude()
         );
 
-        return Double.compare(distance, 10) <= 0;
+        // Altitude check
+        deltaAlt = Math.abs(n1.getEndPoint().getAltitude() -
+                            n2.getStartPoint().getAltitude());
+
+        return Double.compare(distance, 10) <= 0 &&
+               Double.compare(deltaAlt, 2) <= 0;
     }
 }
