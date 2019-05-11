@@ -21,7 +21,6 @@ public class GetRouteData implements Option
     {
         name = "Get route data";
         requireInput = true;
-
         this.utils = utils;
         this.routes = routes;
     }

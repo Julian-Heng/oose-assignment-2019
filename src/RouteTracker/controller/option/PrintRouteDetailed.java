@@ -20,7 +20,6 @@ public class PrintRouteDetailed implements Option
     {
         name = "Print detailed route";
         requireInput = true;
-
         this.routes = routes;
     }
 

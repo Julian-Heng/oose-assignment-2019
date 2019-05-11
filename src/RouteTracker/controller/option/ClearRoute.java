@@ -18,7 +18,6 @@ public class ClearRoute implements Option
     {
         name = "Clear routes";
         requireInput = false;
-
         this.routes = routes;
     }
 
