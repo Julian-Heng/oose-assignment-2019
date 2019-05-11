@@ -5,14 +5,15 @@ import RouteTracker.model.*;
 
 public class Point implements PointNode
 {
-    private Map<String,Double> coords;
+    private double latitude;
+    private double longitude;
+    private double altitude;
 
     public Point(double latitude, double longitude, double altitude)
     {
-        coords = new LinkedHashMap<>();
-        coords.put("Latitude", latitude);
-        coords.put("Longitude", longitude);
-        coords.put("Altitude", altitude);
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.altitude = altitude;
     }
 
     @Override
@@ -30,19 +31,19 @@ public class Point implements PointNode
     @Override
     public double getLatitude()
     {
-        return coords.get("Latitude");
+        return latitude;
     }
 
     @Override
     public double getLongitude()
     {
-        return coords.get("Longitude");
+        return longitude;
     }
 
     @Override
     public double getAltitude()
     {
-        return coords.get("Altitude");
+        return altitude;
     }
 
     @Override
@@ -82,8 +83,6 @@ public class Point implements PointNode
 
     public String toString()
     {
-        return coords.get("Latitude") + ", " +
-               coords.get("Longitude") + ", " +
-               coords.get("Altitude");
+        return latitude + ", " + longitude + ", " + altitude;
     }
 }
