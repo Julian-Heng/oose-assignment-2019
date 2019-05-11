@@ -67,7 +67,7 @@ public class RouteFactory
         if (inProgress.contains(routeName))
         {
             throw new RouteFactoryException(
-                "Error while parsing route " + routeName + "\n" +
+                "Error while parsing route \"" + routeName + "\"\n" +
                 "Sub-route is attempting to add a route that " +
                 "depends on itself"
             );
@@ -103,8 +103,8 @@ public class RouteFactory
                     if (! checkDistance(p1, p2))
                     {
                         throw new RouteFactoryException(
-                            "Error while parsing route " +
-                            routeName + "\nDistance betwwen last point " +
+                            "Error while parsing route \"" +
+                            routeName + "\'\nDistance betwwen last point " +
                             "and sub-route is too far away"
                         );
                     }
@@ -143,8 +143,8 @@ public class RouteFactory
                     if (! checkDistance(p1, p2))
                     {
                         throw new RouteFactoryException(
-                            "Error while parsing route " +
-                            routeName + "\nDistance betwwen last point " +
+                            "Error while parsing route \"" +
+                            routeName + "\"\nDistance betwwen last point " +
                             "and sub-route is too far away"
                         );
                     }
