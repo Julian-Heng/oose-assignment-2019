@@ -7,9 +7,9 @@ import RouteTracker.controller.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
-public class PrintRoute extends Option
+public class PrintAllRoute extends Option
 {
-    public PrintRoute(Map<String,Route> routes)
+    public PrintAllRoute(Map<String,Route> routes)
     {
         super("Print route", "", false, routes);
     }
@@ -30,20 +30,24 @@ public class PrintRoute extends Option
 
         for (Route r : routes.values())
         {
-            int max = 0;
             String[] info = new String[8];
+            String fmt = "%-18s:";
+            int max;
+
             info[0] = "";
             info[1] = r.getName() + ": " + r.getDescription();
             info[2] = "";
-            info[3] = "Start.............: " + r.getStartPoint();
-            info[4] = "End...............: " + r.getEndPoint();
-            info[5] = "Distance..........: ";
-            info[6] = "Vertical Climb....: ";
-            info[7] = "Vertical Descent..: ";
+            info[3] = String.format(fmt, "Start").replace(' ', '.');
+            info[4] = String.format(fmt, "End").replace(' ', '.');
+            info[5] = String.format(fmt, "Distance").replace(' ', '.');
+            info[6] = String.format(fmt, "Vertical Climb").replace(' ', '.');
+            info[7] = String.format(fmt, "Vertical Descent").replace(' ', '.');
 
-            info[5] += String.format("%.2fm", r.getDistance());
-            info[6] += String.format("%.2fm", r.getPositiveAltitude());
-            info[7] += String.format("%.2fm", r.getNegativeAltitude());
+            info[3] += " " + r.getStartPoint();
+            info[4] += " " + r.getEndPoint();
+            info[5] += " " + String.format("%.2fm", r.getDistance());
+            info[6] += " " + String.format("%.2fm", r.getPositiveAltitude());
+            info[7] += " " + String.format("%.2fm", r.getNegativeAltitude());
 
             max = maxLength(info);
             info[0] = String.format("%" + max + "s", " ").replace(' ', '=');

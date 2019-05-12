@@ -17,8 +17,9 @@ public class RouteTracker
         Menu menu = new Menu(ui);
         menu.addOption(new GetRouteData(utils, routes));
         menu.addOption(new ClearRoute(routes));
-        menu.addOption(new PrintRoute(routes));
+        menu.addOption(new PrintAllRoute(routes));
         menu.addOption(new PrintRouteDetailed(routes));
+        menu.addOption(new PrintAllRouteDetailed(routes));
 
         // Main program loop
         do
