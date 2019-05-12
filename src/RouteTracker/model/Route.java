@@ -153,10 +153,10 @@ public class Route implements PointNode
             {
                 str += ": " + iter.next().getDescription();
             }
-
             str += "\n";
         }
+        str += "}"
 
-        return str + "}";
+        return str;
     }
 }
