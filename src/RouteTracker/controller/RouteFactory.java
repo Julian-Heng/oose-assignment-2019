@@ -123,7 +123,7 @@ public class RouteFactory
                  * previous iteration and p2 is the next point from the main
                  * route that is exactly the same or very close to the end of
                  * the sub-route. Hence, the getEndPoint() and getStartPoint()
-                 * method calls.
+                 * method calls in checkDistance().
                  **/
                 if (distanceCheckFlag)
                 {
