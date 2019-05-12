@@ -28,6 +28,7 @@ public class RouteTracker
         options.add(new PrintAllRoute(routes));
         options.add(new PrintRouteDetailed(routes));
         options.add(new PrintAllRouteDetailed(routes));
+        options.add(new Track(routes, ui, new GpsStub()));
 
         options.forEach((v)->menu.addOption(v));
 
