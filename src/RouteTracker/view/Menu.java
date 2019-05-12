@@ -46,10 +46,8 @@ public class Menu
             return false;
         }
 
-        // Decrement because of array index
-        opt--;
-
-        if ((o = options.get(opt)) != null)
+        if (opt > 0 && options.size() + 1 > opt &&
+            (o = options.get(opt - 1)) != null)
         {
             long start, end;
 
