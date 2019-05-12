@@ -132,6 +132,22 @@ public class Route implements PointNode
         return getEndNode().getEndPoint();
     }
 
+    /**
+     * Aggregate all points in the points list into a single list, including
+     * all subroutes
+     * @return A list containing of points
+     **/
+    @Override
+    public List<Point> getAllPoints()
+    {
+        List<Point> all = new ArrayList<>();
+        for (PointNode p : points)
+        {
+            all.addAll(p.getAllPoints());
+        }
+        return all;
+    }
+
     public String toString()
     {
         // Iterator to iterate through segments list along side the point list

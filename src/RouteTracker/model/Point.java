@@ -32,6 +32,14 @@ public class Point implements PointNode
     @Override public Point getStartPoint() { return this; }
     @Override public Point getEndPoint() { return this; }
 
+    @Override
+    public List<Point> getAllPoints()
+    {
+        List<Point> all = new ArrayList<>();
+        all.add(this);
+        return all;
+    }
+
     public String toString()
     {
         return latitude + ", " + longitude + ", " + altitude;

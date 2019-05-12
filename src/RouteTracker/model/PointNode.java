@@ -1,4 +1,5 @@
 package RouteTracker.model;
+import java.util.List;
 
 /**
  * PointNode interface for storing anything related to a route
@@ -19,4 +20,5 @@ public interface PointNode
     public PointNode getEndNode();
     public Point getStartPoint();
     public Point getEndPoint();
+    public List<Point> getAllPoints();
 }

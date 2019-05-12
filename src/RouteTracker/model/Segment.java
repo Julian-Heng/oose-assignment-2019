@@ -69,6 +69,15 @@ public class Segment implements PointNode
     @Override public Point getEndPoint() { return end.getEndPoint(); }
 
     @Override
+    public List<Point> getAllPoints()
+    {
+        List<Point> all = new ArrayList<>();
+        all.addAll(start.getAllPoints());
+        all.addAll(end.getAllPoints());
+        return all;
+    }
+
+    @Override
     public String toString()
     {
         return desc + "\n" + start.toString() + "\n" + end.toString();

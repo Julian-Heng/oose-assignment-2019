@@ -60,6 +60,19 @@ public class Track extends Option
         if (! routes.isEmpty())
         {
             // Do A.4
+            //
+            // Details:
+            //   1. Show the GPS location on the screen, whenever it is updated
+            //   2. Show the remaining distance
+            //   3. Determine which waypoint the user is up to
+            //   4. Allow the user to manually indicate that they have reached
+            //      a waypoint
+            //
+            // Discussion:
+            // So we would need to a) update the GPS location by printing the
+            // coordinates, as well as b) show the remaining distance. This
+            // could be remedied by observers, where the action is getting new
+            // coordinates.
 
             r = routes.get(s);
             distance = r.getDistance();
@@ -67,6 +80,10 @@ public class Track extends Option
             negAlt = r.getNegativeAltitude();
             ui.print(String.format("%.2fm, %.2fm, %.2fm\n",
                                    distance, posAlt, negAlt));
+            for (Point p : r.getAllPoints())
+            {
+                System.out.println(p);
+            }
         }
 
         return "";
