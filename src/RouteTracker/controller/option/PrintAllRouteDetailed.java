@@ -17,12 +17,17 @@ public class PrintAllRouteDetailed extends Option
     @Override
     public String doOption(String s) throws OptionException
     {
-        List<String> routeStr = new ArrayList<>();
-        String out;
+        List<String> strLst = new ArrayList<>();
+        Map<String,Route> routes = super.getRoutes();
+        String out = "No routes recorded";
 
-        super.getRoutes().forEach((k, v)->routeStr.add(v.toString()));
-        out = String.join("\n\n", routeStr.stream().toArray(String[]::new));
-        out = out.replaceAll("%", "%%") + "\n\n";
+        if (! routes.isEmpty())
+        {
+            routes.forEach((k, v)->strLst.add(v.toString()));
+            out = String.join("\n\n", strLst.stream().toArray(String[]::new));
+            out = out.replaceAll("%", "%%") + "\n\n";
+        }
+
         return out;
     }
 }

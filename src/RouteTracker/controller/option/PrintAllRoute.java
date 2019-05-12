@@ -11,7 +11,7 @@ public class PrintAllRoute extends Option
 {
     public PrintAllRoute(Map<String,Route> routes)
     {
-        super("Print route", "", false, routes);
+        super("Print all routes", "", false, routes);
     }
 
     @Override
@@ -40,8 +40,13 @@ public class PrintAllRoute extends Option
             info[3] = String.format(fmt, "Start").replace(' ', '.');
             info[4] = String.format(fmt, "End").replace(' ', '.');
             info[5] = String.format(fmt, "Distance").replace(' ', '.');
-            info[6] = String.format(fmt, "Vertical Climb").replace(' ', '.');
-            info[7] = String.format(fmt, "Vertical Descent").replace(' ', '.');
+            info[6] = String.format(fmt, "Vertical_Climb").replace(' ', '.');
+            info[7] = String.format(fmt, "Vertical_Descent").replace(' ', '.');
+
+            // Whitespace gets converted to period, so use '_' as placeholder
+            // for spaces
+            info[6] = info[6].replace('_', ' ');
+            info[7] = info[7].replace('_', ' ');
 
             info[3] += " " + r.getStartPoint();
             info[4] += " " + r.getEndPoint();

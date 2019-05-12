@@ -19,20 +19,39 @@ public class PrintRouteDetailed extends Option
     public String getPrompt()
     {
         Map<String,Route> routes = super.getRoutes();
-        return "\nRoutes:\n    " + String.join("\n    ", routes.keySet()) +
-               "\n\nInput route name";
+        String prompt;
+
+        if (routes.isEmpty())
+        {
+            prompt = "No routes created, press enter to go back to menu";
+        }
+        else
+        {
+            prompt = "\nRoutes:\n    " +
+                     String.join("\n    ", routes.keySet()) +
+                     "\n\nInput route name";
+        }
+
+        return prompt;
     }
 
     @Override
     public String doOption(String s) throws OptionException
     {
         Map<String,Route> routes = super.getRoutes();
-        if (! routes.containsKey(s))
+        String out = "";
+
+        if (! routes.isEmpty())
         {
-            throw new OptionException("\"" + s + "\" does not exist");
+            if (! routes.containsKey(s))
+            {
+                throw new OptionException("\"" + s + "\" does not exist");
+            }
+
+            // replaceAll method to make '%' a literal for String.format()
+            out = routes.get(s).toString().replaceAll("%", "%%") + "\n\n";
         }
 
-        // replaceAll method to make '%' a literal for String.format()
-        return routes.get(s).toString().replaceAll("%", "%%") + "\n\n";
+        return out;
     }
 }
