@@ -237,8 +237,7 @@ public class RouteParser
     public List<String> parseRoute(String line) throws RouteParserException
     {
         String[] result = {
-            parseRouteName(line),
-            parseRouteDescription(line)
+            parseRouteName(line), parseRouteDescription(line)
         };
 
         return Arrays.asList(result);
@@ -247,10 +246,8 @@ public class RouteParser
     public List<String> parsePoint(String line) throws RouteParserException
     {
         String[] result = {
-            parsePointLatitude(line),
-            parsePointLongitude(line),
-            parsePointAltitude(line),
-            parsePointDescription(line)
+            parsePointLatitude(line), parsePointLongitude(line),
+            parsePointAltitude(line), parsePointDescription(line)
         };
 
         return Arrays.asList(result);
@@ -258,118 +255,66 @@ public class RouteParser
 
     public String parseRouteName(String line) throws RouteParserException
     {
-        Matcher match = routeMatch.matcher(line.trim());
-        String result;
-
-        if (match.find())
-        {
-            result = match.group(2);
-        }
-        else
-        {
-            throw new RouteParserException(
-                "Error while parsing line, can't parse route name"
-            );
-        }
-
-        return result;
+        return getRegexGroup(routeMatch, line, "route name", 2);
     }
 
     public String parseRouteDescription(String line) throws
                                                      RouteParserException
     {
-        Matcher match = routeMatch.matcher(line.trim());
-        String result;
-
-        if (match.find())
-        {
-            result = match.group(3);
-        }
-        else
-        {
-            throw new RouteParserException(
-                "Error while parsing line, can't parse route description"
-            );
-        }
-
-        return result;
+        return getRegexGroup(routeMatch, line, "route description", 3);
     }
 
     public String parsePointLatitude(String line) throws RouteParserException
     {
-        Matcher match = pointMatch.matcher(line.trim());
-        String result;
-
-        if (match.find())
-        {
-            result = match.group(1);
-        }
-        else
-        {
-            throw new RouteParserException(
-                "Error while parsing line, can't parse point latitude"
-            );
-        }
-
-        return result;
+        return getRegexGroup(pointMatch, line, "point latitude", 1);
     }
 
     public String parsePointLongitude(String line) throws RouteParserException
     {
-        Matcher match = pointMatch.matcher(line.trim());
-        String result;
-
-        if (match.find())
-        {
-            result = match.group(3);
-        }
-        else
-        {
-            throw new RouteParserException(
-                "Error while parsing line, can't parse point longitude"
-            );
-        }
-
-        return result;
+        return getRegexGroup(pointMatch, line, "point longitude", 3);
     }
 
     public String parsePointAltitude(String line) throws RouteParserException
     {
-        Matcher match = pointMatch.matcher(line.trim());
-        String result;
-
-        if (match.find())
-        {
-            result = match.group(5);
-        }
-        else
-        {
-            throw new RouteParserException(
-                "Error while parsing line, can't parse point altitude"
-            );
-        }
-
-        return result;
+        return getRegexGroup(pointMatch, line, "point altitude", 5);
     }
 
     public String parsePointDescription(String line) throws
                                                      RouteParserException
     {
-        Matcher match = pointMatch.matcher(line.trim());
+        String result;
+        result = getRegexGroup(pointMatch, line, "point description", 8);
+        return result != null ? result : "";
+    }
+
+    /**
+     * Return the regex group of a String using a pattern
+     * @param pat        The Pattern object that contains a compiled regex
+     * @param line       The line to match the regex to
+     * @param identifier A String used for the error message to identify
+     *                   which group we're extracting
+     * @param i          The group number in the regex
+     * @return The string within the regex group
+     **/
+    public String getRegexGroup(Pattern pat, String line,
+                                String identifier,
+                                int i) throws RouteParserException
+    {
+        Matcher match = pat.matcher(line.trim());
         String result;
 
         if (match.find())
         {
-            result = match.group(8);
+            result = match.group(i);
         }
         else
         {
             throw new RouteParserException(
-                "Error while parsing line, can't parse point description"
+                "Error while parsing line, can't parse " + identifier
             );
         }
 
-        return result != null ? result : "";
+        return result;
     }
 
     public boolean isRoute(String line)
