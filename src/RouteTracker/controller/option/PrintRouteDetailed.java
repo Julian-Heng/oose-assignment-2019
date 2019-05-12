@@ -7,35 +7,26 @@ import RouteTracker.controller.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
-public class PrintRouteDetailed implements Option
+public class PrintRouteDetailed extends Option
 {
-    // Required Option classfields
-    private String name;
-    private boolean requireInput;
-
-    // Auxilary classfields
-    private Map<String,Route> routes;
-
     public PrintRouteDetailed(Map<String,Route> routes)
     {
-        name = "Print detailed route";
-        requireInput = true;
-        this.routes = routes;
+        super("Print detailed route", "", true, routes);
     }
 
-    @Override public String getMenuString() { return name; }
-
-    @Override public String getPrompt()
+    // Logic actually needed for printing prompt
+    @Override
+    public String getPrompt()
     {
+        Map<String,Route> routes = super.getRoutes();
         return "\nRoutes:\n    " + String.join("\n    ", routes.keySet()) +
                "\n\nInput route name";
     }
 
-    @Override public boolean getRequireInput() { return requireInput; }
-
     @Override
     public String doOption(String s) throws OptionException
     {
+        Map<String,Route> routes = super.getRoutes();
         if (! routes.containsKey(s))
         {
             throw new OptionException("\"" + s + "\" does not exist");

@@ -7,31 +7,21 @@ import RouteTracker.controller.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
-public class GetRouteData implements Option
+public class GetRouteData extends Option
 {
-    // Required Option classfields
-    private String name;
-    private boolean requireInput;
-
-    // Auxilary classfields
     private GeoUtils utils;
-    private Map<String,Route> routes;
 
     public GetRouteData(GeoUtils utils, Map<String,Route> routes)
     {
-        name = "Get route data";
-        requireInput = true;
+        super("Get route data", "Enter url", true, routes);
         this.utils = utils;
-        this.routes = routes;
     }
 
-    @Override public String getMenuString() { return name; }
-    @Override public String getPrompt() { return "Enter url"; }
-    @Override public boolean getRequireInput() { return requireInput; }
-
+    // This option does not ouput anything
     @Override
     public String doOption(String s) throws OptionException
     {
+        Map<String,Route> routes = super.getRoutes();
         RouteParser parser = new RouteParser(utils);
         PointFactory pointMaker;
         RouteFactory routeMaker;
@@ -54,7 +44,6 @@ public class GetRouteData implements Option
             throw new OptionException(e.getMessage());
         }
 
-        // This option does not ouput anything
         return "";
     }
 }

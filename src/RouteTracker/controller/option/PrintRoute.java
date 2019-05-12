@@ -7,29 +7,17 @@ import RouteTracker.controller.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
-public class PrintRoute implements Option
+public class PrintRoute extends Option
 {
-    // Required Option classfields
-    private String name;
-    private boolean requireInput;
-
-    // Auxilary classfields
-    private Map<String,Route> routes;
-
     public PrintRoute(Map<String,Route> routes)
     {
-        name = "Print route";
-        requireInput = false;
-        this.routes = routes;
+        super("Print route", "", false, routes);
     }
-
-    @Override public String getMenuString() { return name; }
-    @Override public String getPrompt() { return ""; }
-    @Override public boolean getRequireInput() { return requireInput; }
 
     @Override
     public String doOption(String s) throws OptionException
     {
+        Map<String,Route> routes = super.getRoutes();
         String out = "";
 
         if (routes.isEmpty())
