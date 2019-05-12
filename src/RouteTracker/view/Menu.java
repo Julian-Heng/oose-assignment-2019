@@ -13,7 +13,6 @@ import RouteTracker.model.exception.*;
  **/
 public class Menu
 {
-    //private Map<Integer,Option> options;
     private List<Option> options;
     private int exit;
     private UserInterface ui;
