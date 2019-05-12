@@ -6,6 +6,10 @@ import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 import RouteTracker.view.*;
 
+/**
+ * RouteTracker Application
+ * @author Julian Heng (19473701)
+ **/
 public class RouteTracker
 {
     public static void main(String[] args)

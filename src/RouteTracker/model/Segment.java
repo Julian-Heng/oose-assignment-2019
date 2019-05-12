@@ -4,6 +4,10 @@ import java.util.*;
 import RouteTracker.model.*;
 import RouteTracker.controller.GeoUtils;
 
+/**
+ * Segment class for storing 2 PointNodes as well as the description
+ * @author Julian Heng (19473701)
+ **/
 public class Segment implements PointNode
 {
     private PointNode start;
@@ -21,7 +25,9 @@ public class Segment implements PointNode
     @Override public String getDescription() { return desc; }
 
     // Make the get[Coords]() method call the starting node
-    // We aren't expecting to call these methods from segment
+    //
+    // We aren't expecting to call these methods from segment so essentially
+    // they can be treated as stub methods
     @Override
     public double getLatitude()
     {
@@ -43,6 +49,7 @@ public class Segment implements PointNode
     @Override
     public double getDistance()
     {
+        // Questionable
         GeoUtils utils = new GeoUtils();
         return utils.calcMetresDistance(start.getLatitude(),
                                         start.getLongitude(),

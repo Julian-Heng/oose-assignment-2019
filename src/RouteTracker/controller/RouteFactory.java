@@ -4,6 +4,10 @@ import java.util.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
+/**
+ * RouteFactory class that creates Route objects
+ * @author Julian Heng (19473701)
+ **/
 public class RouteFactory
 {
     private PointFactory pointMaker;
@@ -19,6 +23,14 @@ public class RouteFactory
         this.utils = utils;
     }
 
+    /**
+     * Makes multiple Route into a map
+     * @param routes A map to store the routes in
+     * @throws RouteFactoryException Thrown when there's a problem with
+     *                               the route declaration, such as
+     *                               sub-route's not close enough to the
+     *                               point in the route
+     **/
     public void make(Map<String,Route> routes) throws RouteFactoryException
     {
         Map<List<String>,List<List<String>>> routeTable;
@@ -26,6 +38,7 @@ public class RouteFactory
         Set<String> inProgress = new HashSet<>();
 
         // Use clear method because we do not want to lose object reference
+        // for other classes that uses the route map
         routes.clear();
         routeTable = parser.getRouteTable();
         routeNameTable = parser.getRouteNameTable();
@@ -43,6 +56,17 @@ public class RouteFactory
         }
     }
 
+    /**
+     * A recursive method of creating routes/sub-routes
+     * @param route             The name and description of the route
+     * @param routes            The map containing all routes
+     * @param routeTable        The map containing all routes declaration
+     * @param routeNameTable    The map containing only the route name and
+     *                          route description
+     * @param inProgress        The set for checking recursion loop
+     * @return A new Route object
+     * @throws RouteFactoryException
+     **/
     private Route makeRoute(List<String> route,
                            Map<String,Route> routes,
                            Map<List<String>,List<List<String>>> routeTable,
@@ -54,6 +78,7 @@ public class RouteFactory
         PointNode p1 = null;
         PointNode p2 = null;
 
+        // Fetch all point declarations from the routeTable
         List<List<String>> points = routeTable.get(route);
         String routeName = route.get(0);
         String routeDesc = route.get(1);
@@ -89,15 +114,17 @@ public class RouteFactory
                 segDesc2 = point.get(3);
                 p2 = pointMaker.make(point);
 
-                // The distanceCheckFlag flag is set after encountering a
-                // sub-route. Because the sub-route point in the main route can
-                // be very close to the actual route's starting point, we would
-                // have to perform a check to see if it is close or exact.
-                // Thus, we can assume that p1 is the sub-route added from the
-                // previous iteration and p2 is the next point from the main
-                // route that is exactly the same or very close to the end of
-                // the sub-route. Hence, the getEndPoint() and getStartPoint()
-                // method calls.
+                /**
+                 * The distanceCheckFlag flag is set after encountering a
+                 * sub-route. Because the sub-route point in the main route can
+                 * be very close to the actual route's starting point, we would
+                 * have to perform a check to see if it is close or exact.
+                 * Thus, we can assume that p1 is the sub-route added from the
+                 * previous iteration and p2 is the next point from the main
+                 * route that is exactly the same or very close to the end of
+                 * the sub-route. Hence, the getEndPoint() and getStartPoint()
+                 * method calls.
+                 **/
                 if (distanceCheckFlag)
                 {
                     if (! checkDistance(p1, p2))
@@ -154,7 +181,7 @@ public class RouteFactory
                 }
                 else
                 {
-                    // Check if first iteration
+                    // Skip if first iteration
                     if (p1 != null)
                     {
                         r.add(new Segment(p1, p2, segDesc1));
@@ -175,6 +202,13 @@ public class RouteFactory
         return r;
     }
 
+    /**
+     * Check if the distance between 2 points is within 10m horizontally and
+     * 2m vertically
+     * @param n1 The first point
+     * @param n2 The second point
+     * @return True or False
+     **/
     private boolean checkDistance(PointNode n1, PointNode n2)
     {
         double distance, deltaAlt;

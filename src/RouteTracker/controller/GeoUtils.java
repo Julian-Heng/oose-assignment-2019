@@ -3,6 +3,10 @@ package RouteTracker.controller;
 import java.lang.Math;
 import java.io.*;
 
+/**
+ * GeoUtils class acting as a stub
+ * @author Julian Heng (19473701)
+ **/
 public class GeoUtils
 {
     private String url;
@@ -11,6 +15,16 @@ public class GeoUtils
     // Testing purposes
     public void setUrl(String s) { url = s; }
 
+    /**
+     * Calculates the horizontal distances between two coordinates
+     *
+     * @param lat1  the latitude of the first point
+     * @param long1 the longitude of the first point
+     * @param lat2  the latitude of the second point
+     * @param long2 the longitude of the second point
+     *
+     * @return      the horizontal distance
+     **/
     public double calcMetresDistance(double lat1, double long1,
                                      double lat2, double long2)
     {
@@ -39,6 +53,11 @@ public class GeoUtils
         return result;
     }
 
+    /**
+     * Gets the route data from the source url
+     * @return A string representation of the data
+     * @throws IOException If there is an error reading the url
+     **/
     public String retrieveRouteData() throws IOException
     {
         String line;

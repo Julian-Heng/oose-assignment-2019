@@ -5,6 +5,10 @@ import java.util.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
+/**
+ * ClearRoute option that clears the route map
+ * @author Julian Heng (19473701)
+ **/
 public class ClearRoute extends Option
 {
     public ClearRoute(Map<String,Route> routes)

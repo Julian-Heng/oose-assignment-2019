@@ -3,14 +3,22 @@ package RouteTracker.model;
 import java.util.*;
 import RouteTracker.model.*;
 
+/**
+ * Route class that implements PointNode, able to store points and routes as
+ * well as segments
+ *
+ * @author Julian Heng (19473701)
+ **/
 public class Route implements PointNode
 {
     private String name;
     private String desc;
 
+    // Containers for points and segments
     private List<PointNode> points;
     private List<Segment> segments;
 
+    // Route distance statistics
     private double distance;
     private double posAlt;
     private double negAlt;
@@ -30,6 +38,11 @@ public class Route implements PointNode
         deltaAlt = 0.0;
     }
 
+    /**
+     * A route specific method to add a new segment as other implementations
+     * of PointNode does not have a list of segments
+     * @param s The segment to be added
+     **/
     public void add(Segment s)
     {
         double tmpDeltaAlt;
@@ -49,6 +62,7 @@ public class Route implements PointNode
 
         add(s.getEndNode());
 
+        // Update route distance statistics
         distance += s.getDistance();
         tmpDeltaAlt = s.getDeltaAltitude();
         deltaAlt += tmpDeltaAlt;
@@ -63,8 +77,10 @@ public class Route implements PointNode
         }
     }
 
-    // An edge-case for when a route only has one point, thus unable
-    // to create a segment
+    /**
+     * Edge case for adding just a single PointNode
+     * @param n The PointNode to be added
+     **/
     public void add(PointNode n) { points.add(n); }
 
     // Route specific getters
@@ -105,21 +121,25 @@ public class Route implements PointNode
     @Override
     public Point getStartPoint()
     {
+        // Recusive call
         return getStartNode().getStartPoint();
     }
 
     @Override
     public Point getEndPoint()
     {
+        // Recusive call
         return getEndNode().getEndPoint();
     }
 
     public String toString()
     {
+        // Iterator to iterate through segments list along side the point list
         Iterator<Segment> iter = segments.iterator();
         String str;
         String segDesc;
 
+        // Route header
         str = name + " [";
         str += String.format("%.2fm, %.2fm, +%.2fm, -%.2fm]: ",
                              distance, deltaAlt, posAlt, negAlt);
@@ -127,6 +147,7 @@ public class Route implements PointNode
 
         for (PointNode n : points)
         {
+            // Recusive call
             str += "    " + n.toString().replaceAll("\n", "\n    ");
             if (iter.hasNext())
             {

@@ -7,6 +7,11 @@ import RouteTracker.controller.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
+/**
+ * PrintAllRouteDetailed option which prints all the routes including points,
+ * segments and sub-routes
+ * @author Julian Heng (19473701)
+ **/
 public class PrintAllRouteDetailed extends Option
 {
     public PrintAllRouteDetailed(Map<String,Route> routes)

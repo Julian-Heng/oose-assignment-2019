@@ -6,25 +6,36 @@ import RouteTracker.controller.option.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
+/**
+ * Menu class for printing Option classes and inputting and ouputting user
+ * actions
+ * @author Julian Heng (19473701)
+ **/
 public class Menu
 {
-    private Map<Integer,Option> options;
+    //private Map<Integer,Option> options;
+    private List<Option> options;
     private int exit;
     private UserInterface ui;
 
     public Menu(UserInterface ui)
     {
-        options = new TreeMap<>();
-        exit = options.size() + 1;
+        options = new ArrayList<>();
+        exit = 1;
         this.ui = ui;
     }
 
     public void addOption(Option o)
     {
-        options.put(options.size() + 1, o);
+        options.add(o);
         exit++;
     }
 
+    /**
+     * Runs the doOption() method in the Option class within the options list
+     * @param opt The integer of which the Option class is stored
+     * @return Whether or not the exit option is selected
+     **/
     public boolean executeOption(int opt)
     {
         Option o;
@@ -36,6 +47,9 @@ public class Menu
             return false;
         }
 
+        // Decrement because of array index
+        opt--;
+
         if ((o = options.get(opt)) != null)
         {
             long start, end;
@@ -45,6 +59,7 @@ public class Menu
                 input = ui.readString("%s: ", o.getPrompt());
             }
 
+            // Time execution
             start = System.nanoTime();
             try
             {
@@ -66,14 +81,13 @@ public class Menu
         return true;
     }
 
-
     public String toString()
     {
         String out = "Select an option:\n";
         String fmt = "    (%d) %s\n";
         int count = 1;
 
-        for (Option o : options.values())
+        for (Option o : options)
         {
             out += String.format(fmt, count++, o.getMenuString());
         }

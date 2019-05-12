@@ -4,6 +4,10 @@ import java.util.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
+/**
+ * PointFactory class that creates Point objects
+ * @author Julian Heng (19473701)
+ **/
 public class PointFactory
 {
     private RouteParser parser;
@@ -15,6 +19,14 @@ public class PointFactory
         this.utils = utils;
     }
 
+    /**
+     * Makes a Point object
+     * @param pointInfo A list containing a point declaration
+     * @return A new Point object
+     * @throws PointFactoryException Thrown when there's a problem with
+     *                               the point declaration, such as
+     *                               invalid coordinates
+     **/
     public Point make(List<String> pointInfo) throws PointFactoryException
     {
         Point p;
@@ -49,6 +61,13 @@ public class PointFactory
         return p;
     }
 
+    /**
+     * Check if a double is within range of two doubles
+     * @param num The number to check
+     * @param low The lower boundary
+     * @param high The upper boundary
+     * @return True or False
+     **/
     private boolean doubleRange(double num, double low, double high)
     {
         return Double.compare(num, low) >= 0 &&

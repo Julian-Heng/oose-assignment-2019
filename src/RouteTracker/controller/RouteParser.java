@@ -7,6 +7,10 @@ import java.util.regex.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
+/**
+ * RouteParser class for parsing the data from GeoUtils
+ * @author Julian Heng (19473701)
+ **/
 public class RouteParser
 {
     private GeoUtils utils;
@@ -16,27 +20,33 @@ public class RouteParser
 
     // Regex patterns
 
-    // mainRoute Since I was young
-    // Group 1: mainRoute Since I was young
-    // Group 2: mainRoute
-    // Group 3: Since I was young
+    /**
+     * Input: mainRoute Since I was young
+     *
+     * Group 1: mainRoute Since I was young
+     * Group 2: mainRoute
+     * Group 3: Since I was young
+     **/
 
     private static
     Pattern routeMatch = Pattern.compile(
         "(?=^[a-z]+[A-Z][A-Za-z]*)((^\\w+)\\s+([^\\s]+.*))"
     );
 
-    // The worst regex string you've ever seen
-    //
-    // -31.95,115.77,44.8,*theStroll
-    // Group 1: -31.95
-    // Group 2: 31.
-    // Group 3: 115.77
-    // Group 4: 115.
-    // Group 5: 44.8
-    // Group 6: 44.
-    // Group 7: ,*theStroll
-    // Group 8: theStroll
+    /**
+     * The worst regex string you've ever seen
+     *
+     * Input: -31.95,115.77,44.8,*theStroll
+     *
+     * Group 1: -31.95
+     * Group 2: 31.
+     * Group 3: 115.77
+     * Group 4: 115.
+     * Group 5: 44.8
+     * Group 6: 44.
+     * Group 7: ,*theStroll
+     * Group 8: theStroll
+     */
 
     private static
     Pattern pointMatch = Pattern.compile(
@@ -54,6 +64,11 @@ public class RouteParser
         routeNameTable = new HashMap<>();
     }
 
+    /**
+     * Convert the String input from GeoUtils to a list of Strings
+     * @throws RouteParserException If there's an error in GeoUtils, throw
+     *                              it to calling method
+     **/
     public void readData() throws RouteParserException
     {
         try
@@ -68,14 +83,15 @@ public class RouteParser
         }
     }
 
-    // Makes a map of route and it's points and sub-routes declaration
-    // so that we can have O(1) access to the entire route
-    //
-    // Throws RouteParserException when detects duplicate route declarations
-    // and missing sub-route declarations
-    //
-    // Does not detect if the coordinates are valid, that is handled in the
-    // factories
+    /**
+     * Makes a map of route and it's points and sub-routes declaration
+     * so that we can have O(1) access to the entire route
+     *
+     * @throws RouteParserException If detects duplicate route declarations
+     *                              and missing sub-route declarations Does not
+     *                              detect if the coordinates are valid, that
+     *                              is handled in the factories
+     **/
     public void makeIndex() throws RouteParserException
     {
         Set<String> routeSet, subRouteSet;
@@ -147,6 +163,8 @@ public class RouteParser
                             );
                         }
 
+                        // If for some reason the point parser returns an empty
+                        // list
                         if (pointEntry.isEmpty())
                         {
                             throw new RouteParserException(
@@ -191,7 +209,7 @@ public class RouteParser
 
             for (String name : missingSet)
             {
-                errMsg += ! routeSet.contains(name) ? "\n    " + name : "";
+                errMsg += routeSet.contains(name) ? "" : "\n    " + name;
             }
 
             throw new RouteParserException(
@@ -257,7 +275,8 @@ public class RouteParser
         return result;
     }
 
-    public String parseRouteDescription(String line) throws RouteParserException
+    public String parseRouteDescription(String line) throws
+                                                     RouteParserException
     {
         Matcher match = routeMatch.matcher(line.trim());
         String result;
@@ -333,7 +352,8 @@ public class RouteParser
         return result;
     }
 
-    public String parsePointDescription(String line) throws RouteParserException
+    public String parsePointDescription(String line) throws
+                                                     RouteParserException
     {
         Matcher match = pointMatch.matcher(line.trim());
         String result;
@@ -374,12 +394,6 @@ public class RouteParser
     {
         Matcher match = pointMatch.matcher(line.trim());
         return match.find() && match.group(7) == null;
-    }
-
-    public boolean doubleRange(double num, double low, double high)
-    {
-        return Double.compare(num, low) >= 0 &&
-               Double.compare(high, num) >= 0;
     }
 
     public List<String> getContents()

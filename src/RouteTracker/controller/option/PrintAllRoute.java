@@ -7,6 +7,11 @@ import RouteTracker.controller.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
+/**
+ * PrintAllRoute option that prints only the routes in the route map, excluding
+ * points, segments and sub-routes
+ * @author Julian Heng (19473701)
+ **/
 public class PrintAllRoute extends Option
 {
     public PrintAllRoute(Map<String,Route> routes)

@@ -1,5 +1,9 @@
 package RouteTracker.model.exception;
 
+/**
+ * OptionException class thrown by Option objects
+ * @author Julian Heng (19473701)
+ **/
 public class OptionException extends Exception
 {
     private static String msg;

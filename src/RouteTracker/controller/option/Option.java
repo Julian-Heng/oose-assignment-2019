@@ -4,6 +4,10 @@ import java.util.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
+/**
+ * Option abstract class to perform actions on routes
+ * @author Julian Heng (19473701)
+ **/
 public abstract class Option
 {
     private String name;
@@ -27,5 +31,6 @@ public abstract class Option
     public boolean getRequireInput() { return requireInput; }
     public Map<String,Route> getRoutes() { return routes; }
 
+    // To be implemented by other classes
     public abstract String doOption(String s) throws OptionException;
 }

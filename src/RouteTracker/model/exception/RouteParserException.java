@@ -1,5 +1,9 @@
 package RouteTracker.model.exception;
 
+/**
+ * RouteParserException class thrown by RouteParser class
+ * @author Julian Heng (19473701)
+ **/
 public class RouteParserException extends Exception
 {
     private static String msg;

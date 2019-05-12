@@ -1,18 +1,22 @@
 package RouteTracker.model;
 
+/**
+ * PointNode interface for storing anything related to a route
+ * @author Julian Heng (19473701)
+ **/
 public interface PointNode
 {
-    String getName();
-    String getDescription();
+    public String getName();
+    public String getDescription();
 
-    double getLatitude();
-    double getLongitude();
-    double getAltitude();
-    double getDistance();
-    double getDeltaAltitude();
+    public double getLatitude();
+    public double getLongitude();
+    public double getAltitude();
+    public double getDistance();
+    public double getDeltaAltitude();
 
-    PointNode getStartNode();
-    PointNode getEndNode();
-    Point getStartPoint();
-    Point getEndPoint();
+    public PointNode getStartNode();
+    public PointNode getEndNode();
+    public Point getStartPoint();
+    public Point getEndPoint();
 }

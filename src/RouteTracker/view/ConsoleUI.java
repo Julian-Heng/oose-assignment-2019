@@ -1,6 +1,11 @@
 package RouteTracker.view;
 import java.util.*;
 
+/**
+ * ConsoleUI class that implements a UserInterface for outputting and
+ * inputter from the command line
+ * @author Julian Heng (19473701)
+ **/
 public class ConsoleUI implements UserInterface
 {
     private Scanner in = new Scanner(System.in);
@@ -17,6 +22,12 @@ public class ConsoleUI implements UserInterface
         System.err.printf(fmt, args);
     }
 
+    /**
+     * Reads an integer from the command line
+     * @param fmt   The string format akin to calling String.format()
+     * @param args  varargs of Strings
+     * @return User inputted integer
+     **/
     @Override
     public int readInteger(String fmt, Object... args)
     {
@@ -34,6 +45,8 @@ public class ConsoleUI implements UserInterface
             }
             catch (NumberFormatException e)
             {
+                // If user simply press enter, do nothing and return to calling
+                // function
                 if (! strInput.isEmpty())
                 {
                     printError("Enter a number\n");
@@ -44,18 +57,16 @@ public class ConsoleUI implements UserInterface
         return userInput;
     }
 
-    @Override
-    public int readIntegerRange(int low, int high,
-                                String fmt, Object... args)
-    {
-        int userInput = -1;
-        do
-        {
-            userInput = readInteger(fmt, args);
-        } while (userInput < low || high < userInput);
-        return userInput;
-    }
-
+    /**
+     * Reads a string from the command line
+     * @param fmt   The string format akin to calling String.format()
+     * @param args  varargs of Strings
+     * @return User inputted integer
+     *
+     * Bug: Crashed the program when user presses ctrl-d
+     *      (NoSuchElementException) and due to Menu implementation, program
+     *      loops when trying to handle the exception
+     **/
     @Override
     public String readString(String fmt, Object... args)
     {

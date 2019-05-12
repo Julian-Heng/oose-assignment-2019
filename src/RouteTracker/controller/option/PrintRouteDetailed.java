@@ -7,6 +7,11 @@ import RouteTracker.controller.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
+/**
+ * PrintRouteDetailed option for printing a user seleceted route including
+ * points, segemnts and sub-routes
+ * @author Julian Heng (19473701)
+ **/
 public class PrintRouteDetailed extends Option
 {
     public PrintRouteDetailed(Map<String,Route> routes)
@@ -14,7 +19,8 @@ public class PrintRouteDetailed extends Option
         super("Print detailed route", "", true, routes);
     }
 
-    // Logic actually needed for printing prompt
+    // Logic actually needed for printing prompt, thus overring super's
+    // getPrompt()
     @Override
     public String getPrompt()
     {

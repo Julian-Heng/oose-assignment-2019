@@ -3,6 +3,10 @@ package RouteTracker.model;
 import java.util.*;
 import RouteTracker.model.*;
 
+/**
+ * Point class that implements a PointNode, stores the coordinates only
+ * @author Julian Heng (19473701)
+ **/
 public class Point implements PointNode
 {
     private double latitude;

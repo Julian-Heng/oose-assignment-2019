@@ -1,5 +1,9 @@
 package RouteTracker.model.exception;
 
+/**
+ * PointFactoryException class thrown by PointFactory class
+ * @author Julian Heng (19473701)
+ **/
 public class PointFactoryException extends Exception
 {
     private static String msg;

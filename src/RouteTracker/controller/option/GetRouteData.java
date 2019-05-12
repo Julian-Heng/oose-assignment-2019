@@ -7,8 +7,14 @@ import RouteTracker.controller.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
+/**
+ * GetRouteData option that fetches the data using GeoUtils and set up
+ * the route map for the program
+ * @author Julian Heng (19473701)
+ **/
 public class GetRouteData extends Option
 {
+    // This option requires GeoUtils
     private GeoUtils utils;
 
     public GetRouteData(GeoUtils utils, Map<String,Route> routes)
@@ -29,6 +35,7 @@ public class GetRouteData extends Option
         // Testing purposes
         utils.setUrl(s);
 
+        // Construct routes
         try
         {
             parser.readData();
