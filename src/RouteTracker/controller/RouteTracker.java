@@ -31,6 +31,26 @@ public class RouteTracker
 
         options.forEach((v)->menu.addOption(v));
 
+        try
+        {
+            // Testing purpose code {{{
+
+            // Make the routes for either the program arguments or hardcoded
+            // String
+            options.get(0).doOption(
+                args[0] != null ? args[0] : "./dist/valid_1"
+            );
+
+            // Print all the routes as per specification
+            ui.print(options.get(2).doOption(""));
+
+            // }}} End testing code
+        }
+        catch (OptionException e)
+        {
+            ui.printError(e.getMessage() + "\n\n");
+        }
+
         // Main program loop
         do
         {
