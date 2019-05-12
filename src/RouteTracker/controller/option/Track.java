@@ -53,10 +53,20 @@ public class Track extends Option
     {
         Map<String,Route> routes = super.getRoutes();
         String out = "";
+        Route r;
+
+        double distance, posAlt, negAlt;
 
         if (! routes.isEmpty())
         {
-            ui.print("test");
+            // Do A.4
+
+            r = routes.get(s);
+            distance = r.getDistance();
+            posAlt = r.getPositiveAltitude();
+            negAlt = r.getNegativeAltitude();
+            ui.print(String.format("%.2fm, %.2fm, %.2fm\n",
+                                   distance, posAlt, negAlt));
         }
 
         return "";
