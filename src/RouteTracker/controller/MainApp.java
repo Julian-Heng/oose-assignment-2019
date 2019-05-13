@@ -26,6 +26,8 @@ public class MainApp
         app.addOption(new PrintRouteDetailed(app));
         app.addOption(new PrintAllRouteDetailed(app));
         app.addOption(new Track(app, app.getUI(), new GpsStub()));
+
+        // Begin
         app.run();
     }
 }
