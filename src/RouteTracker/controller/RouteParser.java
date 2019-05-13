@@ -199,8 +199,8 @@ public class RouteParser
         // Get all the names of the routes into a set
         routeTable.forEach((k, v)->routeSet.add(k.get(0)));
 
-        // routeSet is a super-set of subRouteSet Therefore, all of
-        // subRouteSet should be in routeSet If not, then there's a route with
+        // routeSet is a super-set of subRouteSet. Therefore, all of
+        // subRouteSet should be in routeSet. If not, then there's a route with
         // a sub-route that does not exist
         if (! routeSet.containsAll(subRouteSet))
         {
