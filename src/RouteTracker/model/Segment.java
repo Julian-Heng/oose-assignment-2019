@@ -10,12 +10,17 @@ import RouteTracker.controller.GeoUtils;
  **/
 public class Segment implements PointNode
 {
+    // For calculating distance
+    private GeoUtils utils;
+
     private PointNode start;
     private PointNode end;
     private String desc;
 
-    public Segment(PointNode start, PointNode end, String desc)
+    public Segment(GeoUtils utils, PointNode start,
+                   PointNode end, String desc)
     {
+        this.utils = utils;
         this.start = start;
         this.end = end;
         this.desc = desc;
@@ -49,8 +54,6 @@ public class Segment implements PointNode
     @Override
     public double getDistance()
     {
-        // Questionable
-        GeoUtils utils = new GeoUtils();
         return utils.calcMetresDistance(start.getLatitude(),
                                         start.getLongitude(),
                                         end.getLatitude(),

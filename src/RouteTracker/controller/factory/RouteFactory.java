@@ -163,7 +163,7 @@ public class RouteFactory
                     // Check if first iteration
                     if (p1 != null)
                     {
-                        r.add(new Segment(p1, p2, segDesc1));
+                        r.add(new Segment(utils, p1, p2, segDesc1));
                     }
 
                     p1 = p2;
@@ -178,7 +178,7 @@ public class RouteFactory
                         );
                     }
 
-                    r.add(new Segment(p1, p2, segDesc2));
+                    r.add(new Segment(utils, p1, p2, segDesc2));
                     distanceCheckFlag = true;
                 }
                 else
@@ -186,7 +186,7 @@ public class RouteFactory
                     // Skip if first iteration
                     if (p1 != null)
                     {
-                        r.add(new Segment(p1, p2, segDesc1));
+                        r.add(new Segment(utils, p1, p2, segDesc1));
                     }
                     // Edge case for routes with only one point
                     else if (points.size() == 1)
