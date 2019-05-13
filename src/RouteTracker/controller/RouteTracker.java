@@ -14,7 +14,7 @@ import RouteTracker.view.*;
  **/
 public class RouteTracker
 {
-    private String[] args;
+    private String inputFile;
     private Map<String,Route> routes;
     private List<Option> options;
     private Menu menu;
@@ -22,7 +22,8 @@ public class RouteTracker
 
     public RouteTracker(String[] args, Menu menu, UserInterface ui)
     {
-        this.args = args;
+        inputFile = args.length != 0 ? args[0] : "./dist/valid_1";
+
         routes = new HashMap<>();
         options = new ArrayList<>();
 
@@ -52,10 +53,7 @@ public class RouteTracker
         // Testing purpose code {{{
         try
         {
-            options.get(0).doOption(
-                args[0] != null ? args[0] : "./dist/valid_1"
-            );
-
+            options.get(0).doOption(inputFile);
             ui.print(options.get(2).doOption(""));
         }
         catch (OptionException e)
