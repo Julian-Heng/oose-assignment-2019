@@ -17,12 +17,14 @@ public class Menu
     private int exit;
     private UserInterface ui;
 
-    public Menu(UserInterface ui)
+    public Menu()
     {
         options = new ArrayList<>();
         exit = 1;
-        this.ui = ui;
     }
+
+    public void setUI(UserInterface ui) { this.ui = ui; }
+    public UserInterface getUI() { return ui; }
 
     public void addOption(Option o)
     {
