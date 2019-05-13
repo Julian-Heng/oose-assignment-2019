@@ -131,7 +131,7 @@ public class RouteFactory
                     {
                         throw new RouteFactoryException(
                             "Error while parsing route \"" +
-                            routeName + "\'\nDistance betwwen last point " +
+                            routeName + "\'\nDistance between last point " +
                             "and sub-route is too far away"
                         );
                     }
@@ -171,7 +171,7 @@ public class RouteFactory
                     {
                         throw new RouteFactoryException(
                             "Error while parsing route \"" +
-                            routeName + "\"\nDistance betwwen last point " +
+                            routeName + "\"\nDistance between last point " +
                             "and sub-route is too far away"
                         );
                     }
