@@ -27,21 +27,19 @@ public class RouteFactory
 
     /**
      * Makes multiple Route into a map
-     * @param routes A map to store the routes in
+     * @return A newly created route map
      * @throws RouteFactoryException Thrown when there's a problem with
      *                               the route declaration, such as
      *                               sub-route's not close enough to the
      *                               point in the route
      **/
-    public void make(Map<String,Route> routes) throws RouteFactoryException
+    public Map<String,Route> make() throws RouteFactoryException
     {
+        Map<String,Route> routes = new HashMap<>();
         Map<List<String>,List<List<String>>> routeTable;
         Map<String,List<String>> routeNameTable;
         Set<String> inProgress = new HashSet<>();
 
-        // Use clear method because we do not want to lose object reference
-        // for other classes that uses the route map
-        routes.clear();
         routeTable = parser.getRouteTable();
         routeNameTable = parser.getRouteNameTable();
 
@@ -56,6 +54,8 @@ public class RouteFactory
                 );
             }
         }
+
+        return routes;
     }
 
     /**

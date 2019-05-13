@@ -2,6 +2,7 @@ package RouteTracker.controller.option;
 
 import java.util.*;
 
+import RouteTracker.controller.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
@@ -11,16 +12,16 @@ import RouteTracker.model.exception.*;
  **/
 public class ClearRoute extends Option
 {
-    public ClearRoute(Map<String,Route> routes)
+    public ClearRoute(RouteTracker app)
     {
-        super("Clear routes", "", false, routes);
+        super("Clear routes", "", false, app);
     }
 
     // This option does not ouput anything
     @Override
     public String doOption(String s) throws OptionException
     {
-        super.getRoutes().clear();
+        super.getApp().getRoutes().clear();
         return "";
     }
 }

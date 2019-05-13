@@ -18,9 +18,9 @@ public class GetRouteData extends Option
     // This option requires GeoUtils
     private GeoUtils utils;
 
-    public GetRouteData(GeoUtils utils, Map<String,Route> routes)
+    public GetRouteData(GeoUtils utils, RouteTracker app)
     {
-        super("Get route data", "Enter url", true, routes);
+        super("Get route data", "Enter url", true, app);
         this.utils = utils;
     }
 
@@ -28,7 +28,6 @@ public class GetRouteData extends Option
     @Override
     public String doOption(String s) throws OptionException
     {
-        Map<String,Route> routes = super.getRoutes();
         RouteParser parser = new RouteParser(utils);
         PointFactory pointMaker;
         RouteFactory routeMaker;
@@ -45,7 +44,7 @@ public class GetRouteData extends Option
             pointMaker = new PointFactory(parser, utils);
             routeMaker = new RouteFactory(pointMaker, parser, utils);
 
-            routeMaker.make(routes);
+            super.getApp().setRoutes(routeMaker.make());
         }
         catch (RouteParserException | RouteFactoryException e)
         {

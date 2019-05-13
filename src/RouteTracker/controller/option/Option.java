@@ -1,6 +1,7 @@
 package RouteTracker.controller.option;
 
 import java.util.*;
+import RouteTracker.controller.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 
@@ -13,23 +14,23 @@ public abstract class Option
     private String name;
     private String prompt;
     private boolean requireInput;
-    private Map<String,Route> routes;
+    private RouteTracker app;
 
     public Option(String name,
                   String prompt,
                   boolean requireInput,
-                  Map<String,Route> routes)
+                  RouteTracker app)
     {
         this.name = name;
         this.prompt = prompt;
         this.requireInput = requireInput;
-        this.routes = routes;
+        this.app = app;
     }
 
     public String getMenuString() { return name; }
     public String getPrompt() { return prompt; }
     public boolean getRequireInput() { return requireInput; }
-    public Map<String,Route> getRoutes() { return routes; }
+    public RouteTracker getApp() { return app; }
 
     // To be implemented by other classes
     public abstract String doOption(String s) throws OptionException;

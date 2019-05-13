@@ -18,9 +18,9 @@ public class Track extends Option
     private UserInterface ui;
     private GpsLocator gps;
 
-    public Track(Map<String,Route> routes, UserInterface ui, GpsLocator gps)
+    public Track(RouteTracker app, UserInterface ui, GpsLocator gps)
     {
-        super("Start tracking", "", true, routes);
+        super("Start tracking", "", true, app);
         this.ui = ui;
         this.gps = gps;
     }
@@ -30,7 +30,7 @@ public class Track extends Option
     @Override
     public String getPrompt()
     {
-        Map<String,Route> routes = super.getRoutes();
+        Map<String,Route> routes = super.getApp().getRoutes();
         String prompt;
 
         if (routes.isEmpty())
@@ -51,7 +51,7 @@ public class Track extends Option
     @Override
     public String doOption(String s) throws OptionException
     {
-        Map<String,Route> routes = super.getRoutes();
+        Map<String,Route> routes = super.getApp().getRoutes();
         String out = "";
         Route r;
 

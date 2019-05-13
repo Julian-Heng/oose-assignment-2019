@@ -14,9 +14,9 @@ import RouteTracker.model.exception.*;
  **/
 public class PrintRouteDetailed extends Option
 {
-    public PrintRouteDetailed(Map<String,Route> routes)
+    public PrintRouteDetailed(RouteTracker app)
     {
-        super("Print detailed route", "", true, routes);
+        super("Print detailed route", "", true, app);
     }
 
     // Logic actually needed for printing prompt, thus overring super's
@@ -24,7 +24,7 @@ public class PrintRouteDetailed extends Option
     @Override
     public String getPrompt()
     {
-        Map<String,Route> routes = super.getRoutes();
+        Map<String,Route> routes = super.getApp().getRoutes();
         String prompt;
 
         if (routes.isEmpty())
@@ -44,7 +44,7 @@ public class PrintRouteDetailed extends Option
     @Override
     public String doOption(String s) throws OptionException
     {
-        Map<String,Route> routes = super.getRoutes();
+        Map<String,Route> routes = super.getApp().getRoutes();
         String out = "";
 
         if (! routes.isEmpty())

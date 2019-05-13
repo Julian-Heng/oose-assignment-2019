@@ -14,15 +14,15 @@ import RouteTracker.model.exception.*;
  **/
 public class PrintAllRoute extends Option
 {
-    public PrintAllRoute(Map<String,Route> routes)
+    public PrintAllRoute(RouteTracker app)
     {
-        super("Print all routes", "", false, routes);
+        super("Print all routes", "", false, app);
     }
 
     @Override
     public String doOption(String s) throws OptionException
     {
-        Map<String,Route> routes = super.getRoutes();
+        Map<String,Route> routes = super.getApp().getRoutes();
         String out = "";
 
         if (routes.isEmpty())
