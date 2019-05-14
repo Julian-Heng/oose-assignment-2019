@@ -206,15 +206,11 @@ public class RouteParser
         if (! routeSet.containsAll(subRouteSet))
         {
             Set<String> missingSet = new HashSet<>(subRouteSet);
-            String errMsg = "";
-
-            for (String name : missingSet)
-            {
-                errMsg += routeSet.contains(name) ? "" : "\n    " + name;
-            }
+            routeSet.forEach((v)->subRouteSet.remove(v));
 
             throw new RouteParserException(
-                "Sub-route(s) declaration not found:" + errMsg
+                "Sub-route(s) declaration not found:\n    " +
+                String.join("\n    ", missingSet)
             );
         }
 
