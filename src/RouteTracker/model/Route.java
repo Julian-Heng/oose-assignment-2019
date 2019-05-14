@@ -141,10 +141,7 @@ public class Route implements PointNode
     public List<Point> getAllPoints()
     {
         List<Point> all = new ArrayList<>();
-        for (PointNode p : points)
-        {
-            all.addAll(p.getAllPoints());
-        }
+        points.forEach((p)->all.addAll(p.getAllPoints()));
         return all;
     }
 
