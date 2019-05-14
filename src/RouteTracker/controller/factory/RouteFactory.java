@@ -163,6 +163,8 @@ public class RouteFactory
                     // Check if first iteration
                     if (p1 != null)
                     {
+                        // Create a new segment because the sub-route
+                        // starting point is not always the same coordinates
                         r.add(new Segment(utils, p1, p2, segDesc1));
                     }
 
