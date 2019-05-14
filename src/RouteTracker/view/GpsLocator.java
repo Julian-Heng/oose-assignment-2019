@@ -1,5 +1,6 @@
-package RouteTracker.controller;
+package RouteTracker.view;
 
+// This is probably an observer class to be implemented
 public abstract class GpsLocator
 {
     /**

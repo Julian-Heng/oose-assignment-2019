@@ -16,13 +16,11 @@ import RouteTracker.view.*;
 public class Track extends Option
 {
     private UserInterface ui;
-    private GpsLocator gps;
 
-    public Track(RouteTracker app, UserInterface ui, GpsLocator gps)
+    public Track(RouteTracker app, UserInterface ui)
     {
         super("Start tracking", "", true, app);
         this.ui = ui;
-        this.gps = gps;
     }
 
     // Logic actually needed for printing prompt, thus overring super's
