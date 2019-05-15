@@ -205,19 +205,17 @@ public class RouteParser
         // a sub-route that does not exist
         if (! routeSet.containsAll(subRouteSet))
         {
-            Set<String> missingSet = new HashSet<>(subRouteSet);
-            missingSet.removeAll(routeSet);
-
+            subRouteSet.removeAll(routeSet);
             throw new RouteParserException(
                 "Sub-route(s) declaration not found:\n    " +
-                String.join("\n    ", missingSet)
+                String.join("\n    ", subRouteSet)
             );
         }
 
         // Begin making the routeNameTable for looking up route's
         // description using the route name
         //
-        // Useful for finding routes an their description for sub-routes
+        // Useful for finding routes and their description for sub-routes
         routeTable.forEach((k, v)->routeNameTable.put(k.get(0), k));
     }
 
