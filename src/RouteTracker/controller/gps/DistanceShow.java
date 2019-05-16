@@ -2,10 +2,13 @@ package RouteTracker.controller.gps;
 
 import java.util.*;
 import RouteTracker.controller.*;
-import RouteTracker.model.*;
-import RouteTracker.model.exception.*;
 import RouteTracker.view.*;
 
+/**
+ * GpsShow class that extends GpsLocator, displays the current coordinates
+ * called
+ * @author Julian Heng (19473701)
+ **/
 public class DistanceShow extends GpsLocator
 {
     protected GeoUtils utils;
@@ -34,21 +37,32 @@ public class DistanceShow extends GpsLocator
         prevAlt = -Double.MAX_VALUE;
     }
 
+    /**
+     * Calculates the distance between the last recorded point and
+     * the new points
+     *
+     * @param latitude new latitude value
+     * @param longitude new longitude value
+     * @param altitude new altitude value
+     **/
     @Override
     protected void locationReceived(double latitude,
                                     double longitude,
                                     double altitude)
     {
+        // If not the first iteration
         if (! (Double.compare(prevLat, -Double.MAX_VALUE) == 0 &&
                Double.compare(prevLong, -Double.MAX_VALUE) == 0 &&
                Double.compare(prevAlt, -Double.MAX_VALUE) == 0))
         {
             double deltaAlt;
 
+            // Get the change in distance and deduct from total distance
             distance -= utils.calcMetresDistance(latitude, longitude,
                                                 prevLat, prevLong);
             deltaAlt = Math.abs(altitude - prevAlt);
 
+            // Check if the distance in altitude is positive or negative
             if (Double.compare(deltaAlt, 0) >= 0)
             {
                 posAlt -= deltaAlt;
@@ -59,10 +73,12 @@ public class DistanceShow extends GpsLocator
             }
         }
 
+        // Save new coordinates for next method call
         prevLat = latitude;
         prevLong = longitude;
         prevAlt = altitude;
 
+        // Notify user for distance remaining
         ui.print("Distance remaining: %.2fm\n", distance);
         ui.print("Vertical climb remaining: %.2fm\n", posAlt);
         ui.print("Vertical descent remaining: %.2fm\n", negAlt);
