@@ -35,8 +35,6 @@ public class RouteParser
     );
 
     /**
-     * The worst regex string you've ever seen
-     *
      * Input: -31.95,115.77,44.8,*theStroll
      *
      * Group 1: -31.95

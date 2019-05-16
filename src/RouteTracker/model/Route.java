@@ -153,10 +153,8 @@ public class Route implements PointNode
         String segDesc;
 
         // Route header
-        str = name + " [";
-        str += String.format("%.2fm, %.2fm, +%.2fm, -%.2fm]: ",
-                             distance, deltaAlt, posAlt, negAlt);
-        str += desc + "\n{\n";
+        str = String.format("%s [%.2fm, %.2fm, +%.2fm, -%.2fm]: \n{\n",
+                            name, distance, deltaAlt, posAlt, negAlt);
 
         for (PointNode n : points)
         {
