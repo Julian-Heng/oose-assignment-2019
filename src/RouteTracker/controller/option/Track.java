@@ -60,13 +60,58 @@ public class Track extends Option
         String out = "";
         Route r;
 
+        double prevLat, prevLong, prevAlt;
+        double nextLat, nextLong, nextAlt;
+        double deltaLat, deltaLong, deltaAlt;
+
+        prevLat = prevLong = prevAlt = -Double.MAX_VALUE;
+        nextLat = nextLong = nextAlt = -Double.MAX_VALUE;
+
         if (! routes.isEmpty())
         {
             r = routes.get(s);
 
+            r.getAllPoints().forEach((v)->ui.print(v.toString() + "\n"));
+            ui.print("\n");
+
             for (Point p : r.getAllPoints())
             {
-                System.out.println(p);
+                nextLat = p.getLatitude();
+                nextLong = p.getLongitude();
+                nextAlt = p.getAltitude();
+
+                // Skip over first iteration or same points
+                if ((Double.compare(prevLat, -Double.MAX_VALUE) == 0 &&
+                     Double.compare(prevLong, -Double.MAX_VALUE) == 0 &&
+                     Double.compare(prevAlt, -Double.MAX_VALUE) == 0) ||
+                    (Double.compare(prevLat, nextLat) == 0 &&
+                     Double.compare(prevLong, nextLong) == 0 &&
+                     Double.compare(prevAlt, nextAlt) == 0))
+                {
+                    prevLat = nextLat;
+                    prevLong = nextLong;
+                    prevAlt = nextAlt;
+
+                    continue;
+                }
+
+                // Fake the next coordinates
+                deltaLat = (nextLat - prevLat) / 5;
+                deltaLong = (nextLong - prevLong) / 5;
+                deltaAlt = (nextAlt - prevAlt) / 5;
+
+                for (int i = 0; i < 5; i++)
+                {
+                    // Begin calling the trackers using the provided
+                    // coordinates
+                    prevLat += deltaLat;
+                    prevLong += deltaLong;
+                    prevAlt += deltaAlt;
+                }
+
+                prevLat = nextLat;
+                prevLong = nextLong;
+                prevAlt = nextAlt;
             }
         }
 
