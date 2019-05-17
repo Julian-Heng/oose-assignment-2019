@@ -64,7 +64,9 @@ public class WaypointShow extends GpsLocator
                 // Notify user
                 ui.print("Reached waypoint: " + next.toString() + "\n");
 
-                // Set the next waypoint in the route
+                // Move next waypoint to current and get the next waypoint
+                // in the list
+                curr = next;
                 next = points.remove(0);
             }
         }

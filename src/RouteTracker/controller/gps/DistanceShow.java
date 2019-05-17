@@ -60,16 +60,16 @@ public class DistanceShow extends GpsLocator
             // Get the change in distance and deduct from total distance
             distance -= utils.calcMetresDistance(latitude, longitude,
                                                 prevLat, prevLong);
-            deltaAlt = Math.abs(altitude - prevAlt);
+            deltaAlt = altitude - prevAlt;
 
             // Check if the distance in altitude is positive or negative
             if (Double.compare(deltaAlt, 0) >= 0)
             {
-                posAlt -= deltaAlt;
+                posAlt -= Math.abs(deltaAlt);
             }
             else
             {
-                negAlt -= deltaAlt;
+                negAlt -= Math.abs(deltaAlt);
             }
         }
 
