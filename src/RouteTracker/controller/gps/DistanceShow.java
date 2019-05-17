@@ -2,39 +2,56 @@ package RouteTracker.controller.gps;
 
 import java.util.*;
 import RouteTracker.controller.*;
+import RouteTracker.model.*;
 import RouteTracker.view.*;
 
 /**
- * GpsShow class that extends GpsLocator, displays the current coordinates
- * called
+ * DistanceShow class that extends the GpsLocator class. Prints the amount of
+ * distance left for the current segment
  * @author Julian Heng (19473701)
  **/
 public class DistanceShow extends GpsLocator
 {
     protected GeoUtils utils;
     protected UserInterface ui;
+    protected Route route;
+    protected Point next;
 
+    // Stats for current route
     protected double distance;
     protected double posAlt;
     protected double negAlt;
 
+    // Stats for previous point
     protected double prevLat;
     protected double prevLong;
     protected double prevAlt;
 
-    public DistanceShow(GeoUtils utils, UserInterface ui,
-                        double distance, double posAlt, double negAlt)
+    // Stats for current segment
+    protected double distLeft;
+    protected double altLeft;
+
+    public DistanceShow(GeoUtils utils, UserInterface ui, Route route)
     {
         this.utils = utils;
-        this.distance = distance;
-        this.posAlt = posAlt;
-        this.negAlt = negAlt;
+        this.ui = ui;
+        this.route = route;
 
-        // Set to the minimum double value to indicate that we have not started
-        // yet
+        // Assuming that the user is already on the first point, thue
+        // get the seconds point in the route
+        next = route.getAllPoints().get(1);
+
+        distance = route.getDistance();
+        posAlt = route.getPositiveAltitude();
+        negAlt = route.getNegativeAltitude();
+
+        // Set to minimum value to indicated that we have not started yet
         prevLat = -Double.MAX_VALUE;
         prevLong = -Double.MAX_VALUE;
         prevAlt = -Double.MAX_VALUE;
+
+        distLeft = -Double.MAX_VALUE;
+        altLeft = -Double.MAX_VALUE;
     }
 
     /**
@@ -50,14 +67,20 @@ public class DistanceShow extends GpsLocator
                                     double longitude,
                                     double altitude)
     {
-        // If not the first iteration
+        double deltaAlt;
+
+        // Get the distance remaining for the current segment
+        distLeft = utils.calcMetresDistance(latitude, longitude,
+                                             next.getLatitude(),
+                                             next.getLongitude());
+        altLeft = next.getAltitude() - altitude;
+
         if (! (Double.compare(prevLat, -Double.MAX_VALUE) == 0 &&
                Double.compare(prevLong, -Double.MAX_VALUE) == 0 &&
                Double.compare(prevAlt, -Double.MAX_VALUE) == 0))
         {
-            double deltaAlt;
 
-            // Get the change in distance and deduct from total distance
+            // Get the distance remaining for the entire route
             distance -= utils.calcMetresDistance(latitude, longitude,
                                                 prevLat, prevLong);
             deltaAlt = altitude - prevAlt;
@@ -78,9 +101,22 @@ public class DistanceShow extends GpsLocator
         prevLong = longitude;
         prevAlt = altitude;
 
-        // Notify user for distance remaining
-        ui.print("Distance remaining: %.2fm\n", distance);
+        // Notify user for distance remaining in segment
+        ui.print("Distance remaining in segment: %.2fm", distLeft);
+        ui.print("Altitude remaining in segment: %.2fm", altLeft);
+
+        // Notify user for distance remaining in route
+        ui.print("Distance remaining in route: %.2fm\n", distance);
         ui.print("Vertical climb remaining: %.2fm\n", posAlt);
         ui.print("Vertical descent remaining: %.2fm\n", negAlt);
     }
+
+    /**
+     * Since WaypointShow class exists, which shows which waypoint the user
+     * is up to and which waypoint is next, we would rather have the next
+     * Point be set externally as we do not want this class to handle that
+     * responsibility of determining which point in the route the user is at
+     * @param p the next point to calculate distance with
+     **/
+    protected void setNext(Point p) { next = p; }
 }

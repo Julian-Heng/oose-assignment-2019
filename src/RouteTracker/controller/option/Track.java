@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import RouteTracker.controller.*;
+import RouteTracker.controller.gps.*;
 import RouteTracker.model.*;
 import RouteTracker.model.exception.*;
 import RouteTracker.view.*;
@@ -45,7 +46,13 @@ public class Track extends Option
         return prompt;
     }
 
-    // Presumably, all output will be done within this option
+    // Presumably, all output will be done within this option as the
+    // device that provides the coordinates in GpsLocator calls the hook
+    // methods which work independently to each other
+    //
+    // Also note: This method is testing code, this option is expected
+    // to be replaced by a proper implementation of an actual Tracking
+    // option
     @Override
     public String doOption(String s) throws OptionException
     {
@@ -53,31 +60,10 @@ public class Track extends Option
         String out = "";
         Route r;
 
-        double distance, posAlt, negAlt;
-
         if (! routes.isEmpty())
         {
-            // Do A.4
-            //
-            // Details:
-            //   1. Show the GPS location on the screen, whenever it is updated
-            //   2. Show the remaining distance
-            //   3. Determine which waypoint the user is up to
-            //   4. Allow the user to manually indicate that they have reached
-            //      a waypoint
-            //
-            // Discussion:
-            // So we would need to a) update the GPS location by printing the
-            // coordinates, as well as b) show the remaining distance. This
-            // could be remedied by observers, where the action is getting new
-            // coordinates.
-
             r = routes.get(s);
-            distance = r.getDistance();
-            posAlt = r.getPositiveAltitude();
-            negAlt = r.getNegativeAltitude();
-            ui.print(String.format("%.2fm, %.2fm, %.2fm\n",
-                                   distance, posAlt, negAlt));
+
             for (Point p : r.getAllPoints())
             {
                 System.out.println(p);
