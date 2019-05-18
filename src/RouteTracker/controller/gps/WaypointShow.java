@@ -11,12 +11,12 @@ import RouteTracker.view.*;
  **/
 public class WaypointShow extends GpsLocator
 {
-    protected GeoUtils utils;
-    protected UserInterface ui;
+    private GeoUtils utils;
+    private UserInterface ui;
 
-    protected List<Point> points;
-    protected Point curr;
-    protected Point next;
+    private List<Point> points;
+    private Point curr;
+    private Point next;
 
     public WaypointShow(GeoUtils utils, UserInterface ui, List<Point> points)
     {
@@ -36,9 +36,9 @@ public class WaypointShow extends GpsLocator
      * @param altitude new altitude value
      **/
     @Override
-    protected void locationReceived(double latitude,
-                                    double longitude,
-                                    double altitude)
+    public void locationReceived(double latitude,
+                                 double longitude,
+                                 double altitude)
     {
         double distance;
         double deltaAlt;

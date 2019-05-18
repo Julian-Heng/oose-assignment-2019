@@ -16,11 +16,13 @@ import RouteTracker.view.*;
  **/
 public class Track extends Option
 {
+    private GeoUtils utils;
     private UserInterface ui;
 
-    public Track(RouteTracker app, UserInterface ui)
+    public Track(RouteTracker app, GeoUtils utils, UserInterface ui)
     {
         super("Start tracking", "", true, app);
+        this.utils = utils;
         this.ui = ui;
     }
 
@@ -57,6 +59,8 @@ public class Track extends Option
     public String doOption(String s) throws OptionException
     {
         Map<String,Route> routes = super.getApp().getRoutes();
+        List<Point> points;
+        List<GpsLocator> trackers = new ArrayList<>();
         String out = "";
         Route r;
 
@@ -69,39 +73,49 @@ public class Track extends Option
 
         if (! routes.isEmpty())
         {
+            boolean first = true;
             r = routes.get(s);
+            points = r.getAllPoints();
 
-            r.getAllPoints().forEach((v)->ui.print(v.toString() + "\n"));
-            ui.print("\n");
+            trackers.add(new DistanceShow(utils, ui, r));
+            trackers.add(new GpsShow(ui));
 
-            for (Point p : r.getAllPoints())
+            // Call getAllPoints() again because it messes with the test
+            // code
+            trackers.add(new WaypointShow(utils, ui, r.getAllPoints()));
+
+            for (Point p : points)
             {
+                if (first)
+                {
+                    prevLat = p.getLatitude();
+                    prevLong = p.getLongitude();
+                    prevAlt = p.getAltitude();
+                    first = false;
+                    continue;
+                }
+
                 nextLat = p.getLatitude();
                 nextLong = p.getLongitude();
                 nextAlt = p.getAltitude();
-
-                // Skip over first iteration or same points
-                if ((Double.compare(prevLat, -Double.MAX_VALUE) == 0 &&
-                     Double.compare(prevLong, -Double.MAX_VALUE) == 0 &&
-                     Double.compare(prevAlt, -Double.MAX_VALUE) == 0) ||
-                    (Double.compare(prevLat, nextLat) == 0 &&
-                     Double.compare(prevLong, nextLong) == 0 &&
-                     Double.compare(prevAlt, nextAlt) == 0))
-                {
-                    prevLat = nextLat;
-                    prevLong = nextLong;
-                    prevAlt = nextAlt;
-
-                    continue;
-                }
 
                 // Fake the next coordinates
                 deltaLat = (nextLat - prevLat) / 5;
                 deltaLong = (nextLong - prevLong) / 5;
                 deltaAlt = (nextAlt - prevAlt) / 5;
 
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 6; i++)
                 {
+                    for (GpsLocator tracker : trackers)
+                    {
+                        ui.print("========================================\n");
+                        ui.print((Object)tracker.getClass().getName() + "\n");
+                        ui.print("========================================\n");
+                        tracker.locationReceived(prevLat,
+                                                 prevLong,
+                                                 prevAlt);
+                        ui.print("\n");
+                    }
                     // Begin calling the trackers using the provided
                     // coordinates
                     prevLat += deltaLat;
@@ -112,6 +126,8 @@ public class Track extends Option
                 prevLat = nextLat;
                 prevLong = nextLong;
                 prevAlt = nextAlt;
+
+                ui.print("\n\n");
             }
         }
 

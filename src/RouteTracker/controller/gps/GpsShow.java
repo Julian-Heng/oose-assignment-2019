@@ -13,7 +13,7 @@ public class GpsShow extends GpsLocator
     // For the GpsShow class, we are simply printing out the coordinates, thus
     // we don't need the context of the points and the current location of the
     // user
-    protected UserInterface ui;
+    private UserInterface ui;
 
     public GpsShow(UserInterface ui)
     {
@@ -21,10 +21,12 @@ public class GpsShow extends GpsLocator
     }
 
     @Override
-    protected void locationReceived(double latitude,
-                                    double longitude,
-                                    double altitude)
+    public void locationReceived(double latitude,
+                                 double longitude,
+                                 double altitude)
     {
-        ui.print(latitude + ", " + longitude + ", " + altitude + "\n");
+        ui.print(String.format("%.2f, %.2f, %.2f\n", latitude,
+                                                     longitude,
+                                                     altitude));
     }
 }

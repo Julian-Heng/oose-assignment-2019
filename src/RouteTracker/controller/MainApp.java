@@ -25,7 +25,7 @@ public class MainApp
         app.addOption(new PrintAllRoute(app));
         app.addOption(new PrintRouteDetailed(app));
         app.addOption(new PrintAllRouteDetailed(app));
-        app.addOption(new Track(app, app.getUI()));
+        app.addOption(new Track(app, utils, app.getUI()));
 
         // Begin
         app.run();
