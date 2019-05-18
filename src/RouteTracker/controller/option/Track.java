@@ -48,87 +48,40 @@ public class Track extends Option
         return prompt;
     }
 
-    // Presumably, all output will be done within this option as the
-    // device that provides the coordinates in GpsLocator calls the hook
-    // methods which work independently to each other
-    //
-    // Also note: This method is testing code, this option is expected
-    // to be replaced by a proper implementation of an actual Tracking
-    // option
+    /**
+     * Presumably, all output will be done within this option as the
+     * device that provides the coordinates in GpsLocator calls the hook
+     * methods which work independently to each other
+     *
+     * Also note: This method is testing code, this option is expected
+     * to be replaced by a proper implementation of an actual Tracking
+     * option
+     *
+     * Also note note: ReachedPoint is not going to be tested because
+     *                 that requires user action and this test is automated
+     *
+     * Also note note note: The data is _not_ shared among the subclasses that
+     *                      extends GpsLocator as it is presumed that they are
+     *                      shared using threads(?) and that constructing them
+     *                      is good enough to make them run on their own
+     *                      threads. So to make this easier on me, all the
+     *                      subclasses have their own copy of their own points
+     *                      and their own local variables like next and curr
+     *                      (both of which is used within DistanceShow and
+     *                      WaypointShow). Yes, more work is needed on the
+     *                      subclasses when properly implementing it, but
+     *                      I need these classes to work with the provided
+     *                      GpsLocator stub, so some compromises is needed
+     **/
     @Override
     public String doOption(String s) throws OptionException
     {
         Map<String,Route> routes = super.getApp().getRoutes();
-        List<Point> points;
-        List<GpsLocator> trackers = new ArrayList<>();
-        String out = "";
-        Route r;
-
-        double prevLat, prevLong, prevAlt;
-        double nextLat, nextLong, nextAlt;
-        double deltaLat, deltaLong, deltaAlt;
-
-        prevLat = prevLong = prevAlt = -Double.MAX_VALUE;
-        nextLat = nextLong = nextAlt = -Double.MAX_VALUE;
 
         if (! routes.isEmpty())
         {
-            boolean first = true;
-            r = routes.get(s);
-            points = r.getAllPoints();
-
-            trackers.add(new DistanceShow(utils, ui, r));
-            trackers.add(new GpsShow(ui));
-
-            // Call getAllPoints() again because it messes with the test
-            // code
-            trackers.add(new WaypointShow(utils, ui, r.getAllPoints()));
-
-            for (Point p : points)
-            {
-                if (first)
-                {
-                    prevLat = p.getLatitude();
-                    prevLong = p.getLongitude();
-                    prevAlt = p.getAltitude();
-                    first = false;
-                    continue;
-                }
-
-                nextLat = p.getLatitude();
-                nextLong = p.getLongitude();
-                nextAlt = p.getAltitude();
-
-                // Fake the next coordinates
-                deltaLat = (nextLat - prevLat) / 5;
-                deltaLong = (nextLong - prevLong) / 5;
-                deltaAlt = (nextAlt - prevAlt) / 5;
-
-                for (int i = 0; i < 6; i++)
-                {
-                    for (GpsLocator tracker : trackers)
-                    {
-                        ui.print("========================================\n");
-                        ui.print((Object)tracker.getClass().getName() + "\n");
-                        ui.print("========================================\n");
-                        tracker.locationReceived(prevLat,
-                                                 prevLong,
-                                                 prevAlt);
-                        ui.print("\n");
-                    }
-                    // Begin calling the trackers using the provided
-                    // coordinates
-                    prevLat += deltaLat;
-                    prevLong += deltaLong;
-                    prevAlt += deltaAlt;
-                }
-
-                prevLat = nextLat;
-                prevLong = nextLong;
-                prevAlt = nextAlt;
-
-                ui.print("\n\n");
-            }
+            TrackTest tracker = new TrackTest(utils, ui, routes.get(s));
+            tracker.run();
         }
 
         return "";
