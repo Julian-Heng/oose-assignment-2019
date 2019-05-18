@@ -289,9 +289,9 @@ public class RouteParser
      * @param i          The group number in the regex
      * @return The string within the regex group
      **/
-    public String getRegexGroup(Pattern pat, String line,
-                                String identifier,
-                                int i) throws RouteParserException
+    private String getRegexGroup(Pattern pat, String line,
+                                 String identifier,
+                                 int i) throws RouteParserException
     {
         Matcher match = pat.matcher(line.trim());
         String result;
@@ -332,10 +332,5 @@ public class RouteParser
     {
         Matcher match = pointMatch.matcher(line.trim());
         return match.find() && match.group(7) == null;
-    }
-
-    public List<String> getContents()
-    {
-        return new ArrayList<String>(this.contents);
     }
 }

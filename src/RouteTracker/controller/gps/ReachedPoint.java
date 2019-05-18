@@ -16,7 +16,7 @@ public class ReachedPoint extends GpsLocator
     private List<Point> points;
     private Map<Point,Boolean> pointTable;
 
-    public ReachedPoint(GeoUtils utils, UserInterface ui, Route route)
+    public ReachedPoint(UserInterface ui, Route route)
     {
         this.ui = ui;
         points = route.getAllPoints();
