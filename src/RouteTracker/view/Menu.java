@@ -64,7 +64,7 @@ public class Menu
             {
                 ui.print(o.doOption(input));
             }
-            catch (NullPointerException | OptionException e)
+            catch (OptionException e)
             {
                 ui.printError("%s\n\n", e.getMessage());
             }

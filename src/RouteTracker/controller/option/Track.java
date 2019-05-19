@@ -80,6 +80,11 @@ public class Track extends Option
 
         if (! routes.isEmpty())
         {
+            if (! routes.containsKey(s))
+            {
+                throw new OptionException("\"" + s + "\" does not exist");
+            }
+
             TrackTest tracker = new TrackTest(utils, ui, routes.get(s));
             tracker.run();
         }
