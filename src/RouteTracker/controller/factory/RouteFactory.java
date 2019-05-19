@@ -35,10 +35,13 @@ public class RouteFactory
      **/
     public Map<String,Route> make() throws RouteFactoryException
     {
+        // Routes in object form
         Map<String,Route> routes = new HashMap<>();
+        Set<String> inProgress = new HashSet<>();
+
+        // Routes in string form
         Map<List<String>,List<List<String>>> routeTable;
         Map<String,List<String>> routeNameTable;
-        Set<String> inProgress = new HashSet<>();
 
         routeTable = parser.getRouteTable();
         routeNameTable = parser.getRouteNameTable();
