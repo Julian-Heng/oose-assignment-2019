@@ -4,7 +4,7 @@ import java.lang.Math;
 import java.io.*;
 
 /**
- * GeoUtils class acting as a stub
+ * GeoUtils class acting as a stub for the real GeoUtils
  * @author Julian Heng (19473701)
  **/
 public class GeoUtils

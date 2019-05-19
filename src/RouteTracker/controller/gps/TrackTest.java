@@ -6,6 +6,10 @@ import RouteTracker.controller.gps.*;
 import RouteTracker.model.*;
 import RouteTracker.view.*;
 
+/**
+ * TrackTest class to test all the trackers in the gps folder
+ * @author Julian Heng (19473701)
+ **/
 public class TrackTest
 {
     private GeoUtils utils;
@@ -60,6 +64,8 @@ public class TrackTest
 
             for (int i = 0; i < 6; i++)
             {
+                // Begin calling the trackers using the provided
+                // coordinates
                 for (GpsLocator tracker : trackers)
                 {
                     ui.print("========================================\n");
@@ -71,8 +77,6 @@ public class TrackTest
                     ui.print("\n");
                 }
 
-                // Begin calling the trackers using the provided
-                // coordinates
                 prevLat += deltaLat;
                 prevLong += deltaLong;
                 prevAlt += deltaAlt;
