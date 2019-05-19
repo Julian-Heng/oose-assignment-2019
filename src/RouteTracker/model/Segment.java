@@ -10,20 +10,22 @@ import RouteTracker.controller.GeoUtils;
  **/
 public class Segment implements PointNode
 {
-    // For calculating distance
-    private GeoUtils utils;
-
     private PointNode start;
     private PointNode end;
     private String desc;
+    private double distance;
 
     public Segment(GeoUtils utils, PointNode start,
                    PointNode end, String desc)
     {
-        this.utils = utils;
         this.start = start;
         this.end = end;
         this.desc = desc;
+
+        distance = utils.calcMetresDistance(this.start.getLatitude(),
+                                            this.start.getLongitude(),
+                                            this.end.getLatitude(),
+                                            this.end.getLongitude());
     }
 
     @Override public String getName() { return ""; }
@@ -52,13 +54,7 @@ public class Segment implements PointNode
     }
 
     @Override
-    public double getDistance()
-    {
-        return utils.calcMetresDistance(start.getLatitude(),
-                                        start.getLongitude(),
-                                        end.getLatitude(),
-                                        end.getLongitude());
-    }
+    public double getDistance() { return distance; }
 
     @Override
     public double getDeltaAltitude()
