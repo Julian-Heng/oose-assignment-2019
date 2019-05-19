@@ -4,11 +4,14 @@
     <property name="resources.dir" value="resources"/>
     <property name="build.dir"     value="build"/>
     <property name="dist.dir"      value="dist"/>
+    <property name="report.dir"    value="docs/report"/>
+    <property name="report.file"    value="docs/AssignmentDoc.tex"/>
     <property name="main-class"    value="MainApp"/>
 
     <target name="clean">
         <delete dir="${build.dir}"/>
         <delete dir="${dist.dir}"/>
+        <delete dir="${report.dir}"/>
     </target>
 
     <target name="compile">
@@ -30,8 +33,18 @@
         </copy>
     </target>
 
-    <target name="run" depends="jar">
-        <java jar="${dist.dir}/${ant.project.name}.jar" fork="true"/>
+    <target name="docs">
+        <mkdir dir="${report.dir}"/>
+        <exec executable="pdflatex">
+            <arg value="-output-directory"/>
+            <arg value="${report.dir}"/>
+            <arg value="${report.file}"/>
+        </exec>
+        <exec executable="pdflatex">
+            <arg value="-output-directory"/>
+            <arg value="${report.dir}"/>
+            <arg value="${report.file}"/>
+        </exec>
     </target>
 
     <target name="clean-build" depends="clean,jar"/>
