@@ -49,10 +49,10 @@ public class RouteParser
 
     private static
     Pattern pointMatch = Pattern.compile(
-        "([-]?(\\d+.)?\\d+),\\s*" + // Latitude
-        "([-]?(\\d+.)?\\d+),\\s*" + // Longitude
-        "([-]?(\\d+.)?\\d+)" +      // Altitude
-        "(,\\s*((\\*?.*)))?"        // Description
+        "([-]?(\\d+.)?\\d+)\\s*,\\s*" + // Latitude
+        "([-]?(\\d+.)?\\d+)\\s*,\\s*" + // Longitude
+        "([-]?(\\d+.)?\\d+)\\s*" +      // Altitude
+        "(,\\s*((\\*?.*)))?"            // Description
     );
 
     public RouteParser(GeoUtils utils)
