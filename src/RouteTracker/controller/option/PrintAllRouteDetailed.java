@@ -23,7 +23,9 @@ public class PrintAllRouteDetailed extends Option
     public String doOption(String s) throws OptionException
     {
         Map<String,Route> routes = super.getApp().getRoutes();
-        StringBuilder out = new StringBuilder("No routes recorded");
+        StringBuilder out = new StringBuilder();
+        out.append("No routes recorded, select \"Get route data\" " +
+                   "to create routes\n\n");
 
         if (! routes.isEmpty())
         {
