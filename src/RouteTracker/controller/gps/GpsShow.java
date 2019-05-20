@@ -1,6 +1,7 @@
 package RouteTracker.controller.gps;
 
 import java.util.*;
+import RouteTracker.model.*;
 import RouteTracker.view.*;
 
 /**
@@ -10,14 +11,11 @@ import RouteTracker.view.*;
  **/
 public class GpsShow extends GpsLocator
 {
-    // For the GpsShow class, we are simply printing out the coordinates, thus
-    // we don't need the context of the points and the current location of the
-    // user
-    private UserInterface ui;
+    private TrackData data;
 
-    public GpsShow(UserInterface ui)
+    public GpsShow(TrackData data)
     {
-        this.ui = ui;
+        this.data = data;
     }
 
     @Override
@@ -25,8 +23,8 @@ public class GpsShow extends GpsLocator
                                  double longitude,
                                  double altitude)
     {
-        ui.print(String.format("%.2f, %.2f, %.2f\n", latitude,
-                                                     longitude,
-                                                     altitude));
+        data.getUI().print(String.format("%.2f, %.2f, %.2f\n", latitude,
+                                                               longitude,
+                                                               altitude));
     }
 }

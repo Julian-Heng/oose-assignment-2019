@@ -12,19 +12,18 @@ import RouteTracker.view.*;
  **/
 public class TrackTest
 {
-    private GeoUtils utils;
-    private UserInterface ui;
-    private Route route;
+    private TrackData data;
 
-    public TrackTest(GeoUtils utils, UserInterface ui, Route route)
+    public TrackTest(TrackData data)
     {
-        this.utils = utils;
-        this.ui = ui;
-        this.route = route;
+        this.data = data;
     }
 
     public void run()
     {
+        GeoUtils utils = data.getUtils();
+        UserInterface ui = data.getUI();
+        Route route = data.getRoute();
         List<Point> points = route.getAllPoints();
         List<GpsLocator> trackers = new ArrayList<>();
 
@@ -36,9 +35,9 @@ public class TrackTest
         prevLat = prevLong = prevAlt = -Double.MAX_VALUE;
         nextLat = nextLong = nextAlt = -Double.MAX_VALUE;
 
-        trackers.add(new DistanceShow(utils, ui, route));
-        trackers.add(new GpsShow(ui));
-        trackers.add(new WaypointShow(utils, ui, route.getAllPoints()));
+        trackers.add(new DistanceShow(data));
+        trackers.add(new GpsShow(data));
+        trackers.add(new WaypointShow(data));
         // Will not be adding manually selecting which waypoint user has been
         // as that is invoked when the user manually selects it whereas this
         // is completely automated

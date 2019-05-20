@@ -12,16 +12,11 @@ import RouteTracker.view.*;
  **/
 public class ReachedPoint extends GpsLocator
 {
-    private UserInterface ui;
-    private List<Point> points;
-    private Map<Point,Boolean> pointTable;
+    private TrackData data;
 
-    public ReachedPoint(UserInterface ui, Route route)
+    public ReachedPoint(TrackData data)
     {
-        this.ui = ui;
-        points = route.getAllPoints();
-        pointTable = new HashMap<>();
-        points.forEach((v)->pointTable.put(v, false));
+        this.data = data;
     }
 
     /**
@@ -40,9 +35,10 @@ public class ReachedPoint extends GpsLocator
                                  double longitude,
                                  double altitude)
     {
+        Map<Point,Boolean> pointTable = data.getPointTable();
         double distance;
 
-        for (Point p : points)
+        for (Point p : data.getPoints())
         {
             if (! pointTable.get(p))
             {

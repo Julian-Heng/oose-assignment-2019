@@ -12,11 +12,7 @@ import RouteTracker.view.*;
  **/
 public class DistanceShow extends GpsLocator
 {
-    private GeoUtils utils;
-    private UserInterface ui;
-    private List<Point> points;
-    private Route route;
-    private Point next;
+    private TrackData data;
 
     // Stats for current route
     private double distance;
@@ -32,21 +28,13 @@ public class DistanceShow extends GpsLocator
     private double distLeft;
     private double altLeft;
 
-    public DistanceShow(GeoUtils utils, UserInterface ui, Route route)
+    public DistanceShow(TrackData data)
     {
-        this.utils = utils;
-        this.ui = ui;
-        this.route = route;
+        this.data = data;
 
-        // Assuming that the user is already on the first point, thue
-        // get the seconds point in the route
-        points = route.getAllPoints();
-        points.remove(0);
-        next = points.remove(0);
-
-        distance = route.getDistance();
-        posAlt = route.getPositiveAltitude();
-        negAlt = route.getNegativeAltitude();
+        distance = this.data.getRoute().getDistance();
+        posAlt = this.data.getRoute().getPositiveAltitude();
+        negAlt = this.data.getRoute().getNegativeAltitude();
 
         // Set to minimum value to indicated that we have not started yet
         prevLat = -Double.MAX_VALUE;
@@ -70,6 +58,9 @@ public class DistanceShow extends GpsLocator
                                  double longitude,
                                  double altitude)
     {
+        GeoUtils utils = data.getUtils();
+        UserInterface ui = data.getUI();
+        Point next = data.getNext();
         double deltaAlt;
 
         // Get the distance remaining for the current segment
@@ -97,13 +88,6 @@ public class DistanceShow extends GpsLocator
             {
                 negAlt -= Math.abs(deltaAlt);
             }
-        }
-
-        if (Double.compare(distLeft, 10) <= 0 &&
-            Double.compare(altLeft, 2) <= 0 &&
-            ! points.isEmpty())
-        {
-            next = points.remove(0);
         }
 
         // Save new coordinates for next method call

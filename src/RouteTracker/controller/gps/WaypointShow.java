@@ -11,21 +11,11 @@ import RouteTracker.view.*;
  **/
 public class WaypointShow extends GpsLocator
 {
-    private GeoUtils utils;
-    private UserInterface ui;
+    private TrackData data;
 
-    private List<Point> points;
-    private Point curr;
-    private Point next;
-
-    public WaypointShow(GeoUtils utils, UserInterface ui, List<Point> points)
+    public WaypointShow(TrackData data)
     {
-        this.utils = utils;
-        this.ui = ui;
-        this.points = points;
-
-        curr = points.remove(0);
-        next = points.remove(0);
+        this.data = data;
     }
 
     /**
@@ -40,6 +30,13 @@ public class WaypointShow extends GpsLocator
                                  double longitude,
                                  double altitude)
     {
+        GeoUtils utils = data.getUtils();
+        UserInterface ui = data.getUI();
+        List<Point> points = data.getPoints();
+
+        Point curr = data.getCurr();
+        Point next = data.getNext();
+
         double distance;
         double deltaAlt;
 
@@ -66,8 +63,8 @@ public class WaypointShow extends GpsLocator
 
                 // Move next waypoint to current and get the next waypoint
                 // in the list
-                curr = next;
-                next = points.remove(0);
+                data.setNext();
+                next = data.getNext();
             }
         }
         else
@@ -75,6 +72,9 @@ public class WaypointShow extends GpsLocator
             ui.print("Current waypoint: " + curr.toString() + "\n");
         }
 
-        ui.print("Next waypoint: " + next.toString() + "\n");
+        if (! points.isEmpty())
+        {
+            ui.print("Next waypoint: " + next.toString() + "\n");
+        }
     }
 }

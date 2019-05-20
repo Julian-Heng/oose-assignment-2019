@@ -59,19 +59,6 @@ public class Track extends Option
      *
      * Also note note: ReachedPoint is not going to be tested because
      *                 that requires user action and this test is automated
-     *
-     * Also note note note: The data is _not_ shared among the subclasses that
-     *                      extends GpsLocator as it is presumed that they are
-     *                      shared using threads(?) and that constructing them
-     *                      is good enough to make them run on their own
-     *                      threads. So to make this easier on me, all the
-     *                      subclasses have their own copy of their own points
-     *                      and their own local variables like next and curr
-     *                      (both of which is used within DistanceShow and
-     *                      WaypointShow). Yes, more work is needed on the
-     *                      subclasses when properly implementing it, but
-     *                      I need these classes to work with the provided
-     *                      GpsLocator stub, so some compromises is needed
      **/
     @Override
     public String doOption(String s) throws OptionException
@@ -85,7 +72,8 @@ public class Track extends Option
                 throw new OptionException("\"" + s + "\" does not exist");
             }
 
-            TrackTest tracker = new TrackTest(utils, ui, routes.get(s));
+            TrackData data = new TrackData(utils, ui, routes.get(s));
+            TrackTest tracker = new TrackTest(data);
             tracker.run();
         }
 
