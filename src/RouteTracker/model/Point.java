@@ -26,6 +26,8 @@ public class Point implements PointNode
     @Override public double getLongitude() { return longitude; }
     @Override public double getAltitude() { return altitude; }
     @Override public double getDistance() { return 0.0; }
+    @Override public double getPositiveAltitude() { return 0.0; }
+    @Override public double getNegativeAltitude() { return 0.0; }
     @Override public double getDeltaAltitude() { return 0.0; }
     @Override public PointNode getStartNode() { return this; }
     @Override public PointNode getEndNode() { return this; }

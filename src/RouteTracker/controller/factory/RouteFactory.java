@@ -72,16 +72,17 @@ public class RouteFactory
      * @return A new Route object
      * @throws RouteFactoryException
      **/
-    private Route makeRoute(List<String> route,
-                           Map<String,Route> routes,
-                           Map<List<String>,List<List<String>>> routeTable,
-                           Map<String,List<String>> routeNameTable,
-                           Set<String> inProgress) throws RouteFactoryException
+    private Route
+    makeRoute(List<String> route, Map<String,Route> routes,
+              Map<List<String>,List<List<String>>> routeTable,
+              Map<String,List<String>> routeNameTable,
+              Set<String> inProgress) throws RouteFactoryException
     {
         Route r;
         Route subRoute = null;
         PointNode p1 = null;
         PointNode p2 = null;
+        double distance;
 
         // Fetch all point declarations from the routeTable
         List<List<String>> points = routeTable.get(route);
@@ -104,10 +105,9 @@ public class RouteFactory
         }
         else
         {
+            r = new Route(routeName, routeDesc);
             inProgress.add(routeName);
         }
-
-        r = new Route(routeName, routeDesc);
 
         try
         {
@@ -168,7 +168,9 @@ public class RouteFactory
                     {
                         // Create a new segment because the sub-route
                         // starting point is not always the same coordinates
-                        r.add(new Segment(utils, p1, p2, segDesc1));
+                        distance = getDistance(p1.getStartPoint(),
+                                               p2.getStartPoint());
+                        r.add(new Segment(p1, p2, segDesc1, distance));
                     }
 
                     p1 = p2;
@@ -183,7 +185,11 @@ public class RouteFactory
                         );
                     }
 
-                    r.add(new Segment(utils, p1, p2, segDesc2));
+                    r.add(new Segment(p1, p2, segDesc2, p2.getDistance()));
+
+                    // Make the next iteration to use sub-route's ending node
+                    // and not the sub-route again
+                    p2 = p2.getEndNode();
                     distanceCheckFlag = true;
                 }
                 else
@@ -191,7 +197,10 @@ public class RouteFactory
                     // Skip if first iteration
                     if (p1 != null)
                     {
-                        r.add(new Segment(utils, p1, p2, segDesc1));
+                        // Start point to get the Point, not PointNode
+                        distance = getDistance(p1.getStartPoint(),
+                                               p2.getStartPoint());
+                        r.add(new Segment(p1, p2, segDesc1, distance));
                     }
                     // Edge case for routes with only one point
                     else if (points.size() == 1)
@@ -219,21 +228,23 @@ public class RouteFactory
     private boolean checkDistance(PointNode n1, PointNode n2)
     {
         double distance, deltaAlt;
+        Point p1 = n1.getEndPoint();
+        Point p2 = n2.getStartPoint();
 
-        // Check distance between main route's sub-route and
-        // sub-route's starting point
-        distance = utils.calcMetresDistance(
-            n1.getEndPoint().getLatitude(),
-            n1.getEndPoint().getLongitude(),
-            n2.getStartPoint().getLatitude(),
-            n2.getStartPoint().getLongitude()
-        );
+        // Check distance between main route's sub-route and sub-route's
+        // starting point
+        distance = getDistance(p1, p2);
 
         // Altitude check
-        deltaAlt = Math.abs(n1.getEndPoint().getAltitude() -
-                            n2.getStartPoint().getAltitude());
+        deltaAlt = Math.abs(p1.getAltitude() - p2.getAltitude());
 
         return Double.compare(distance, 10) <= 0 &&
                Double.compare(deltaAlt, 2) <= 0;
+    }
+
+    private double getDistance(Point p1, Point p2)
+    {
+        return utils.calcMetresDistance(p1.getLatitude(), p1.getLongitude(),
+                                        p2.getLatitude(), p2.getLongitude());
     }
 }

@@ -15,17 +15,13 @@ public class Segment implements PointNode
     private String desc;
     private double distance;
 
-    public Segment(GeoUtils utils, PointNode start,
-                   PointNode end, String desc)
+    public Segment(PointNode start, PointNode end,
+                   String desc, double distance)
     {
         this.start = start;
         this.end = end;
         this.desc = desc;
-
-        distance = utils.calcMetresDistance(this.start.getLatitude(),
-                                            this.start.getLongitude(),
-                                            this.end.getLatitude(),
-                                            this.end.getLongitude());
+        this.distance = distance;
     }
 
     @Override public String getName() { return ""; }
@@ -33,7 +29,7 @@ public class Segment implements PointNode
 
     // Make the get[Coords]() method call the starting node
     //
-    // We aren't expecting to call these methods from segment so essentially
+    // We aren't expecting to call these methods on segment so essentially
     // they can be treated as stub methods
     @Override
     public double getLatitude()
@@ -57,9 +53,39 @@ public class Segment implements PointNode
     public double getDistance() { return distance; }
 
     @Override
+    public double getPositiveAltitude()
+    {
+        double posAlt = start.getPositiveAltitude() +
+                        end.getPositiveAltitude();
+
+        if (Double.compare(posAlt, 0) == 0 &&
+            Double.compare(getDeltaAltitude(), 0) >= 0)
+        {
+            posAlt = Math.abs(getDeltaAltitude());
+        }
+
+        return posAlt;
+    }
+
+    @Override
+    public double getNegativeAltitude()
+    {
+        double negAlt = start.getNegativeAltitude() +
+                        end.getNegativeAltitude();
+
+        if (Double.compare(negAlt, 0) == 0 &&
+            Double.compare(getDeltaAltitude(), 0) <= 0)
+        {
+            negAlt = Math.abs(getDeltaAltitude());
+        }
+
+        return negAlt;
+    }
+
+    @Override
     public double getDeltaAltitude()
     {
-        return getEndNode().getAltitude() - getStartNode().getAltitude();
+        return getEndPoint().getAltitude() - getStartPoint().getAltitude();
     }
 
     @Override public PointNode getStartNode() { return start; }

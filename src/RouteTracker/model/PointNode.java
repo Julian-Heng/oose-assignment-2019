@@ -13,7 +13,10 @@ public interface PointNode
     public double getLatitude();
     public double getLongitude();
     public double getAltitude();
+
     public double getDistance();
+    public double getPositiveAltitude();
+    public double getNegativeAltitude();
     public double getDeltaAltitude();
 
     public PointNode getStartNode();
