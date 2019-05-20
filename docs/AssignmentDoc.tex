@@ -185,29 +185,6 @@ method, with the only difference being the group index.
 
 \subsection{Alternative Designs}
 
-One plausible design is to not stick to a specific pattern and just create a
-\code{Route} class that can hold a collection of both \code{Point} and
-\code{Route}. One advantage to this approach is that it would be easier to
-implement as there would be a total of 2 classes for representing the routes.
-However, this introduces multiple redundancy because polymorphism is not
-utilised. For example, adding a \code{Point} and \code{Route} requires two
-different method signatures. In summary, extendiblity to this design would be
-much harder.
-
-Another plausible design would be to have all the \code{Route} and \code{Point}
-objects stored in a map, with the \code{Route} as the key and the \code{Point}
-objects as the value. Specifically, one \code{Route} as the key and a
-collection, most likely a list, of \code{Point}. Again, one advantage would be
-that it is easier to implement, 2 classes to implement. The disadvantage of
-this approach would be that routes and the points would not be very closely
-connected. A route class does not have any reference to any collection of
-points. Hence, the classes that uses routes might be much more harder to
-implement. For example, a method that takes in a route needs two imports for
-the route as well as the list of points. Another disadvantage would be the
-storing of description, or distance. These fields require two points, so the
-only solution would be to use a \code{Segment} class instead, or have a map to
-reference the description or distance using two \code{Point} objects as the
-key.
 
 
 \end{document}
