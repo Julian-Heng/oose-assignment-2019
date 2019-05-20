@@ -242,6 +242,12 @@ public class RouteFactory
                Double.compare(deltaAlt, 2) <= 0;
     }
 
+    /**
+     * Wrapper function to get the distance between two points
+     * @param p1 The first point
+     * @param p2 The second point
+     * @return The distance between the two points
+     **/
     private double getDistance(Point p1, Point p2)
     {
         return utils.calcMetresDistance(p1.getLatitude(), p1.getLongitude(),
