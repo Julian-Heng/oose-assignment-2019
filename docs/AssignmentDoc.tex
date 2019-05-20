@@ -170,7 +170,8 @@ purpose. There is a total of 30 classes in this program. For example,
 \code{PointFactory} and \code{RouteFactory} are separate classes, even though
 the creation of routes relies heavily on points. \code{RouteTracker} class
 contains the variables needed for the program. \code{RouteParser} only parses
-the input file.
+the input file. Each source file contains a header that fully describes the
+purpose of the source file.
 
 Within the \code{RouteParser} class, there exists methods that extracts the
 different information for a route or point string. In additional to this, there
@@ -185,6 +186,25 @@ method, with the only difference being the group index.
 
 \subsection{Alternative Designs}
 
+In regards to the route structure, one could argue that a Decorator pattern can
+be used to store routes. With a Decorator pattern, we could have \code{Route}
+implementing a common interface. Then, have an abstract class \code{Point} that
+implements same interface and have a sub class that extends the abstract class.
+This allows a new \code{Point} to be added onto a \code{Route} class by
+encapsulating it with the \code{Point}. One advantage with this approach is
+that it would be easy to add new extendibility to \code{Route} by extending the
+\code{Point} abstract class. However, this pattern is falls when adding
+sub-routes to the \code{Route}. \code{Route} cannot extend \code{Point} because
+then it would be too similar to the Composite pattern, thus more logic would be
+needed to represent sub-routes.
+
+In other parts of the program, implementing a State pattern to switch the
+program's state from reading routes to tracking the user can be used instead of
+having the tracking function within an option. By having a State pattern, it
+will make it easy to implement various different state with a completely
+different functionality using the same routes. The downside, at least for this
+instance, would be that given the small scale of this program, a State pattern
+would be unnecessary since there is only two states.
 
 
 \end{document}
