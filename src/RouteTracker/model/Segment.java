@@ -12,7 +12,11 @@ public class Segment implements PointNode
     private PointNode start;
     private PointNode end;
     private String desc;
+
     private double distance;
+    private double posAlt;
+    private double negAlt;
+    private double deltaAlt;
 
     public Segment(PointNode start, PointNode end,
                    String desc, double distance)
@@ -21,6 +25,22 @@ public class Segment implements PointNode
         this.end = end;
         this.desc = desc;
         this.distance = distance;
+
+        posAlt = start.getPositiveAltitude() + end.getPositiveAltitude();
+        negAlt = start.getNegativeAltitude() + end.getNegativeAltitude();
+        deltaAlt = getEndPoint().getAltitude() - getStartPoint().getAltitude();
+
+        if (Double.compare(posAlt, 0) == 0 &&
+            Double.compare(deltaAlt, 0) >= 0)
+        {
+            posAlt = Math.abs(deltaAlt);
+        }
+
+        if (Double.compare(negAlt, 0) == 0 &&
+            Double.compare(deltaAlt, 0) <= 0)
+        {
+            negAlt = Math.abs(deltaAlt);
+        }
     }
 
     @Override public String getName() { return ""; }
@@ -48,45 +68,10 @@ public class Segment implements PointNode
         return getStartNode().getAltitude();
     }
 
-    @Override
-    public double getDistance() { return distance; }
-
-    @Override
-    public double getPositiveAltitude()
-    {
-        double posAlt = start.getPositiveAltitude() +
-                        end.getPositiveAltitude();
-
-        if (Double.compare(posAlt, 0) == 0 &&
-            Double.compare(getDeltaAltitude(), 0) >= 0)
-        {
-            posAlt = Math.abs(getDeltaAltitude());
-        }
-
-        return posAlt;
-    }
-
-    @Override
-    public double getNegativeAltitude()
-    {
-        double negAlt = start.getNegativeAltitude() +
-                        end.getNegativeAltitude();
-
-        if (Double.compare(negAlt, 0) == 0 &&
-            Double.compare(getDeltaAltitude(), 0) <= 0)
-        {
-            negAlt = Math.abs(getDeltaAltitude());
-        }
-
-        return negAlt;
-    }
-
-    @Override
-    public double getDeltaAltitude()
-    {
-        return getEndPoint().getAltitude() - getStartPoint().getAltitude();
-    }
-
+    @Override public double getDistance() { return distance; }
+    @Override public double getPositiveAltitude() { return posAlt; }
+    @Override public double getNegativeAltitude() { return negAlt; }
+    @Override public double getDeltaAltitude() { return deltaAlt; }
     @Override public PointNode getStartNode() { return start; }
     @Override public PointNode getEndNode() { return end; }
     @Override public Point getStartPoint() { return start.getStartPoint(); }
