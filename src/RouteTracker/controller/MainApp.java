@@ -1,7 +1,9 @@
-package RouteTracker.controller;
-
+import RouteTracker.controller.GeoUtils;
+import RouteTracker.controller.RouteTracker;
 import RouteTracker.controller.option.*;
-import RouteTracker.view.*;
+import RouteTracker.view.ConsoleUI;
+import RouteTracker.view.Menu;
+import RouteTracker.view.UserInterface;
 
 /**
  * RouteTracker Application
