@@ -1,12 +1,15 @@
 package RouteTracker.controller;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import RouteTracker.controller.*;
-import RouteTracker.controller.option.*;
-import RouteTracker.model.*;
-import RouteTracker.model.exception.*;
-import RouteTracker.view.*;
+import RouteTracker.controller.option.Option;
+import RouteTracker.model.Route;
+import RouteTracker.model.exception.OptionException;
+import RouteTracker.view.Menu;
+import RouteTracker.view.UserInterface;
 
 /**
  * RouteTracker class to hold the routes in the running app

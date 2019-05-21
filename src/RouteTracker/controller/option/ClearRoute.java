@@ -1,10 +1,7 @@
 package RouteTracker.controller.option;
 
-import java.util.*;
-
-import RouteTracker.controller.*;
-import RouteTracker.model.*;
-import RouteTracker.model.exception.*;
+import RouteTracker.controller.RouteTracker;
+import RouteTracker.model.exception.OptionException;
 
 /**
  * ClearRoute option that clears the route map

@@ -1,8 +1,6 @@
 package RouteTracker.controller.gps;
 
-import java.util.*;
-import RouteTracker.model.*;
-import RouteTracker.view.*;
+import RouteTracker.model.TrackData;
 
 /**
  * GpsShow class that extends GpsLocator, displays the current coordinates

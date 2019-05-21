@@ -1,8 +1,7 @@
 package RouteTracker.model;
 
-import java.util.*;
-import RouteTracker.model.*;
-import RouteTracker.controller.GeoUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Segment class for storing 2 PointNodes as well as the description

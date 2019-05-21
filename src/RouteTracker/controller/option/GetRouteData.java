@@ -1,12 +1,13 @@
 package RouteTracker.controller.option;
 
-import java.io.*;
-import java.util.*;
-
-import RouteTracker.controller.*;
-import RouteTracker.controller.factory.*;
-import RouteTracker.model.*;
-import RouteTracker.model.exception.*;
+import RouteTracker.controller.GeoUtils;
+import RouteTracker.controller.RouteParser;
+import RouteTracker.controller.RouteTracker;
+import RouteTracker.controller.factory.PointFactory;
+import RouteTracker.controller.factory.RouteFactory;
+import RouteTracker.model.exception.OptionException;
+import RouteTracker.model.exception.RouteFactoryException;
+import RouteTracker.model.exception.RouteParserException;
 
 /**
  * GetRouteData option that fetches the data using GeoUtils and set up
@@ -41,7 +42,7 @@ public class GetRouteData extends Option
             parser.readData();
             parser.makeIndex();
 
-            pointMaker = new PointFactory(parser, utils);
+            pointMaker = new PointFactory();
             routeMaker = new RouteFactory(pointMaker, parser, utils);
 
             super.getApp().setRoutes(routeMaker.make());

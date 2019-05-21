@@ -1,7 +1,7 @@
 package RouteTracker.model;
 
-import java.util.*;
-import RouteTracker.model.*;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Point class that implements a PointNode, stores the coordinates only

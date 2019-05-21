@@ -1,10 +1,10 @@
 package RouteTracker.view;
 
-import java.util.*;
-import RouteTracker.controller.*;
-import RouteTracker.controller.option.*;
-import RouteTracker.model.*;
-import RouteTracker.model.exception.*;
+import java.util.List;
+import java.util.ArrayList;
+
+import RouteTracker.controller.option.Option;
+import RouteTracker.model.exception.OptionException;
 
 /**
  * Menu class for printing Option classes and inputting and ouputting user
@@ -51,7 +51,8 @@ public class Menu
         if (opt > 0 && options.size() + 1 > opt &&
             (o = options.get(opt - 1)) != null)
         {
-            long start, end;
+            long start;
+            long end;
 
             if (o.getRequireInput())
             {

@@ -1,10 +1,19 @@
 package RouteTracker.controller.factory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import RouteTracker.controller.*;
-import RouteTracker.model.*;
-import RouteTracker.model.exception.*;
+import RouteTracker.controller.GeoUtils;
+import RouteTracker.controller.RouteParser;
+import RouteTracker.model.Point;
+import RouteTracker.model.PointNode;
+import RouteTracker.model.Route;
+import RouteTracker.model.Segment;
+import RouteTracker.model.exception.PointFactoryException;
+import RouteTracker.model.exception.RouteFactoryException;
 
 /**
  * RouteFactory class that creates Route objects
@@ -227,7 +236,9 @@ public class RouteFactory
      **/
     private boolean checkDistance(PointNode n1, PointNode n2)
     {
-        double distance, deltaAlt;
+        double distance;
+        double deltaAlt;
+
         Point p1 = n1.getEndPoint();
         Point p2 = n2.getStartPoint();
 

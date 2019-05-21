@@ -1,7 +1,8 @@
 package RouteTracker.controller;
 
-import java.lang.Math;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * GeoUtils class acting as a stub for the real GeoUtils

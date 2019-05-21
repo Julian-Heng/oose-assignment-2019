@@ -1,7 +1,8 @@
 package RouteTracker.model;
 
-import java.util.*;
-import RouteTracker.model.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Route class that implements PointNode, able to store points and routes as
@@ -139,7 +140,6 @@ public class Route implements PointNode
         // Iterator to iterate through segments list along side the point list
         Iterator<Segment> iter = segments.iterator();
         String str;
-        String segDesc;
 
         // Route header
         str = String.format("%s [%.2fm, %.2fm, +%.2fm, -%.2fm]: \n{\n",

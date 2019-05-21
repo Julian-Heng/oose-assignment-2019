@@ -1,10 +1,9 @@
 package RouteTracker.controller.factory;
 
-import java.util.*;
+import java.util.List;
 
-import RouteTracker.controller.*;
-import RouteTracker.model.*;
-import RouteTracker.model.exception.*;
+import RouteTracker.model.Point;
+import RouteTracker.model.exception.PointFactoryException;
 
 /**
  * PointFactory class that creates Point objects
@@ -12,15 +11,6 @@ import RouteTracker.model.exception.*;
  **/
 public class PointFactory
 {
-    private RouteParser parser;
-    private GeoUtils utils;
-
-    public PointFactory(RouteParser parser, GeoUtils utils)
-    {
-        this.parser = parser;
-        this.utils = utils;
-    }
-
     /**
      * Makes a Point object
      * @param pointInfo A list containing a point declaration

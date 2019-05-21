@@ -1,11 +1,10 @@
 package RouteTracker.controller.option;
 
-import java.io.*;
-import java.util.*;
+import java.util.Map;
 
-import RouteTracker.controller.*;
-import RouteTracker.model.*;
-import RouteTracker.model.exception.*;
+import RouteTracker.controller.RouteTracker;
+import RouteTracker.model.Route;
+import RouteTracker.model.exception.OptionException;
 
 /**
  * PrintRouteDetailed option for printing a user seleceted route including

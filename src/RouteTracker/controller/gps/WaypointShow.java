@@ -1,9 +1,10 @@
 package RouteTracker.controller.gps;
 
 import java.util.*;
-import RouteTracker.controller.*;
-import RouteTracker.model.*;
-import RouteTracker.view.*;
+import RouteTracker.controller.GeoUtils;
+import RouteTracker.model.Point;
+import RouteTracker.model.TrackData;
+import RouteTracker.view.UserInterface;
 
 /**
  * WaypointShow class to show the current and next waypoint locations

@@ -1,10 +1,12 @@
 package RouteTracker.controller.gps;
 
-import java.util.*;
-import RouteTracker.controller.*;
-import RouteTracker.controller.gps.*;
-import RouteTracker.model.*;
-import RouteTracker.view.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import RouteTracker.model.Point;
+import RouteTracker.model.Route;
+import RouteTracker.model.TrackData;
+import RouteTracker.view.UserInterface;
 
 /**
  * TrackTest class to test all the trackers in the gps folder
@@ -21,16 +23,24 @@ public class TrackTest
 
     public void run()
     {
-        GeoUtils utils = data.getUtils();
         UserInterface ui = data.getUI();
         Route route = data.getRoute();
         List<Point> points = route.getAllPoints();
         List<GpsLocator> trackers = new ArrayList<>();
 
         boolean first = true;
-        double prevLat, prevLong, prevAlt;
-        double nextLat, nextLong, nextAlt;
-        double deltaLat, deltaLong, deltaAlt;
+
+        double prevLat;
+        double prevLong;
+        double prevAlt;
+
+        double nextLat;
+        double nextLong;
+        double nextAlt;
+
+        double deltaLat;
+        double deltaLong;
+        double deltaAlt;
 
         prevLat = prevLong = prevAlt = -Double.MAX_VALUE;
         nextLat = nextLong = nextAlt = -Double.MAX_VALUE;

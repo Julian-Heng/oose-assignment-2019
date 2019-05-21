@@ -7,21 +7,21 @@ import java.util.List;
  **/
 public interface PointNode
 {
-    public String getName();
-    public String getDescription();
+    String getName();
+    String getDescription();
 
-    public double getLatitude();
-    public double getLongitude();
-    public double getAltitude();
+    double getLatitude();
+    double getLongitude();
+    double getAltitude();
 
-    public double getDistance();
-    public double getPositiveAltitude();
-    public double getNegativeAltitude();
-    public double getDeltaAltitude();
+    double getDistance();
+    double getPositiveAltitude();
+    double getNegativeAltitude();
+    double getDeltaAltitude();
 
-    public PointNode getStartNode();
-    public PointNode getEndNode();
-    public Point getStartPoint();
-    public Point getEndPoint();
-    public List<Point> getAllPoints();
+    PointNode getStartNode();
+    PointNode getEndNode();
+    Point getStartPoint();
+    Point getEndPoint();
+    List<Point> getAllPoints();
 }

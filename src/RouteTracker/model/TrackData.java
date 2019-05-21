@@ -1,10 +1,11 @@
 package RouteTracker.model;
 
-import java.util.*;
-import RouteTracker.controller.*;
-import RouteTracker.controller.gps.*;
-import RouteTracker.model.*;
-import RouteTracker.view.*;
+import java.util.Map;
+import java.util.List;
+import java.util.HashMap;
+
+import RouteTracker.controller.GeoUtils;
+import RouteTracker.view.UserInterface;
 
 /**
  * TrackData class to hold shared information relating to the gps trackers

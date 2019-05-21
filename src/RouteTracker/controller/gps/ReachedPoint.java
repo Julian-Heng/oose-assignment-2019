@@ -1,9 +1,9 @@
 package RouteTracker.controller.gps;
 
-import java.util.*;
-import RouteTracker.controller.*;
-import RouteTracker.model.*;
-import RouteTracker.view.*;
+import java.util.Map;
+
+import RouteTracker.model.Point;
+import RouteTracker.model.TrackData;
 
 /**
  * ReachedPoint class that extends the GpsLocator class. Takes in coordinates
@@ -36,7 +36,6 @@ public class ReachedPoint extends GpsLocator
                                  double altitude)
     {
         Map<Point,Boolean> pointTable = data.getPointTable();
-        double distance;
 
         for (Point p : data.getPoints())
         {

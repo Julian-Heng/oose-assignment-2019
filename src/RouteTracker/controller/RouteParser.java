@@ -1,12 +1,18 @@
 package RouteTracker.controller;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.regex.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import RouteTracker.controller.factory.*;
-import RouteTracker.model.*;
-import RouteTracker.model.exception.*;
+import RouteTracker.model.exception.RouteParserException;
 
 /**
  * RouteParser class for parsing the data from GeoUtils
@@ -93,7 +99,8 @@ public class RouteParser
      **/
     public void makeIndex() throws RouteParserException
     {
-        Set<String> routeSet, subRouteSet;
+        Set<String> routeSet;
+        Set<String> subRouteSet;
         Iterator<String> iter = contents.iterator();
         String line;
 
@@ -112,6 +119,7 @@ public class RouteParser
             if (line.trim().isEmpty())
             {
                 // Skip empty/newline lines
+                continue;
             }
             else if (isRoute(line))
             {

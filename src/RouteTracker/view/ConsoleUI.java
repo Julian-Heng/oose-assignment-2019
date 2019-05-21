@@ -1,5 +1,6 @@
 package RouteTracker.view;
-import java.util.*;
+
+import java.util.Scanner;
 
 /**
  * ConsoleUI class that implements a UserInterface for outputting and
