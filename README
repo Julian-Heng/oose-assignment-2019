@@ -1,0 +1,18 @@
+Making the program:
+  $ ant
+
+Running the program:
+  $ java8 -jar ./dist/RouteTracker.jar
+  $ java8 -jar ./dist/RouteTracker.jar ./dist/valid_1
+
+Making report:
+  $ ant docs
+
+Report location:
+  ./docs/report/AssignmentDoc.pdf
+
+UML location:
+  ./docs/OOSE-Assignment-UML.png
+
+Declaration of Originality
+  
