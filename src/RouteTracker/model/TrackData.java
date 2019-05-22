@@ -52,5 +52,9 @@ public class TrackData
         {
             next = points.remove(0);
         }
+        else
+        {
+            next = null;
+        }
     }
 }

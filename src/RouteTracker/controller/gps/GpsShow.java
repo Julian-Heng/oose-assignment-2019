@@ -9,17 +9,17 @@ import RouteTracker.model.TrackData;
  **/
 public class GpsShow extends GpsLocator
 {
-    private TrackData data;
+    protected TrackData data;
 
-    public GpsShow(TrackData data)
+    protected GpsShow(TrackData data)
     {
         this.data = data;
     }
 
     @Override
-    public void locationReceived(double latitude,
-                                 double longitude,
-                                 double altitude)
+    protected void locationReceived(double latitude,
+                                    double longitude,
+                                    double altitude)
     {
         data.getUI().print(String.format("%.2f, %.2f, %.2f\n", latitude,
                                                                longitude,

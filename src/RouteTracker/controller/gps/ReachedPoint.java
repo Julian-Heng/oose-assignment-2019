@@ -12,9 +12,9 @@ import RouteTracker.model.TrackData;
  **/
 public class ReachedPoint extends GpsLocator
 {
-    private TrackData data;
+    protected TrackData data;
 
-    public ReachedPoint(TrackData data)
+    protected ReachedPoint(TrackData data)
     {
         this.data = data;
     }
@@ -31,9 +31,9 @@ public class ReachedPoint extends GpsLocator
      * @param altitude user's current altitude
      **/
     @Override
-    public void locationReceived(double latitude,
-                                 double longitude,
-                                 double altitude)
+    protected void locationReceived(double latitude,
+                                    double longitude,
+                                    double altitude)
     {
         Map<Point,Boolean> pointTable = data.getPointTable();
 

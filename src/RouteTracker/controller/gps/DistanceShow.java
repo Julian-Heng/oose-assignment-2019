@@ -15,20 +15,20 @@ public class DistanceShow extends GpsLocator
     private TrackData data;
 
     // Stats for current route
-    private double distance;
-    private double posAlt;
-    private double negAlt;
+    protected double distance;
+    protected double posAlt;
+    protected double negAlt;
 
     // Stats for previous point
-    private double prevLat;
-    private double prevLong;
-    private double prevAlt;
+    protected double prevLat;
+    protected double prevLong;
+    protected double prevAlt;
 
     // Stats for current segment
-    private double distLeft;
-    private double altLeft;
+    protected double distLeft;
+    protected double altLeft;
 
-    public DistanceShow(TrackData data)
+    protected DistanceShow(TrackData data)
     {
         this.data = data;
 
@@ -54,9 +54,9 @@ public class DistanceShow extends GpsLocator
      * @param altitude new altitude value
      **/
     @Override
-    public void locationReceived(double latitude,
-                                 double longitude,
-                                 double altitude)
+    protected void locationReceived(double latitude,
+                                    double longitude,
+                                    double altitude)
     {
         GeoUtils utils = data.getUtils();
         UserInterface ui = data.getUI();

@@ -12,9 +12,9 @@ import RouteTracker.view.UserInterface;
  **/
 public class WaypointShow extends GpsLocator
 {
-    private TrackData data;
+    protected TrackData data;
 
-    public WaypointShow(TrackData data)
+    protected WaypointShow(TrackData data)
     {
         this.data = data;
     }
@@ -27,9 +27,9 @@ public class WaypointShow extends GpsLocator
      * @param altitude new altitude value
      **/
     @Override
-    public void locationReceived(double latitude,
-                                 double longitude,
-                                 double altitude)
+    protected void locationReceived(double latitude,
+                                    double longitude,
+                                    double altitude)
     {
         GeoUtils utils = data.getUtils();
         UserInterface ui = data.getUI();
@@ -62,18 +62,20 @@ public class WaypointShow extends GpsLocator
                 // Notify user
                 ui.print("Reached waypoint: " + next.toString() + "\n");
 
-                // Move next waypoint to current and get the next waypoint
-                // in the list
-                data.setNext();
-                next = data.getNext();
             }
+
+            // Move next waypoint to current and get the next waypoint
+            // in the list
+            data.setNext();
+            next = data.getNext();
         }
         else
         {
             ui.print("Current waypoint: " + curr.toString() + "\n");
         }
 
-        if (! points.isEmpty())
+        // next will be null when reached end of route
+        if (next != null)
         {
             ui.print("Next waypoint: " + next.toString() + "\n");
         }
