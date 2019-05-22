@@ -92,7 +92,7 @@
 A route is defined as multiple points. A segment is within 2 points and routes
 themselves can contain other routes, known as sub-routes. These sub-routes can
 also contain sub-routes. Hence the sensible choice to represent routes is to
-use a composite pattern. Composite pattern is useful for showing a hierachy of
+use a composite pattern. Composite pattern is useful for showing a hierarchy of
 objects, like a tree. In this case, we have an interface called
 \code{PointNode}. \code{Point}, \code{Segment} and \code{Route} all implements
 \code{PointNode} while \code{Route} can contain a collection of
@@ -103,7 +103,7 @@ list of \code{Point} as well as a separate list of \code{Segment}. This is
 needed because the description is tied to a segment. One solution would be to
 have a map containing two points as a key and a string as a value. However,
 this would require \code{Point} to have an implementation for \code{equals()}
-and \code{hashCode()}. Additionally, more infomation such as distance between
+and \code{hashCode()}. Additionally, more information such as distance between
 the two points also needs to be stored. Thus, it would make more sense to have
 a separate \code{Segment} class.
 
@@ -119,23 +119,24 @@ Thus, we get the distance for the current route, including it's sub-routes.
 
 \subsubsection{Options}
 
-To be able to quickly add more functionality to the program, the Strategy
-pattern is used. The \code{Menu} class holds a collection of \code{Option},
-which is an abstract class that only has \code{doOption()} as the abstract
-method. When the user selects an option, \code{Menu} fetches the option from a
-list and calls the \code{doOption()} method. \code{Menu} does not know what
-kind of \code{Option} it is, it just knows that it contains a \code{doOption()}
-method which it calls. \code{doOption()} takes in a string and returns a
-string. The imported string is the user's input, which could be an empty
-string. The returned string is the output of the option, displayed by the
-\code{Menu}.
+To be able to add more functionality to the program easily, the Strategy
+pattern is used for options. The \code{Menu} class holds a collection of
+\code{Option}, which is an abstract class that only has \code{doOption()} as
+the abstract method. When the user selects an option, \code{Menu} fetches the
+option from a list and calls the \code{doOption()} method. \code{Menu} does not
+know what kind of \code{Option} it is, it just knows that it contains a
+\code{doOption()} method which it calls. \code{doOption()} takes in a string
+and returns a string. The imported string, which can be empty, is the user's
+input, and the returned string is the output of the option displayed by the
+\code{Menu}. All of the logic is done within the \code{doOption()} overridden
+by the classes that extends \code{Option}.
 
 
 \subsubsection{GpsLocator}
 
-With the GpsLocator and tracking the user's location, some compromises are
+With \code{GpsLocator} and tracking the user's location, some compromises are
 made. The assignment specifications state that the actual implementation of the
-\code{GpsLocator}'s template method is yet to be done. Thus it is not clear
+\code{GpsLocator}'s Template method is yet to be done. Thus it is not clear
 whether GpsLocator contains the context of the program, such as the current
 route selected, the user's last position, and which points on the route has
 already been visited. Thus, in order to make this specific program to work,
@@ -178,7 +179,7 @@ different information for a route or point string. In additional to this, there
 also exist a method that gets all the route information and all the point
 information. Originally, each method matches the line to the pattern, then
 return the group index of the regex. The only line that is different to each is
-the group index, thus to make use of code reuse, have a method called
+the group index, thus leading to reusing code byhave a method called
 \code{getRegexGroup()} which takes in an integer and returns the matched
 string. Now the methods simply act as a wrapper of the \code{getRegexGroup()}
 method, with the only difference being the group index.
@@ -192,11 +193,11 @@ implementing a common interface. Then, have an abstract class \code{Point} that
 implements same interface and have a sub class that extends the abstract class.
 This allows a new \code{Point} to be added onto a \code{Route} class by
 encapsulating it with the \code{Point}. One advantage with this approach is
-that it would be easy to add new extendibility to \code{Route} by extending the
-\code{Point} abstract class. However, this pattern is falls when adding
-sub-routes to the \code{Route}. \code{Route} cannot extend \code{Point} because
-then it would be too similar to the Composite pattern, thus more logic would be
-needed to represent sub-routes.
+that it would be easy to add new features to \code{Route} by extending the
+\code{Point} abstract class. However, this pattern has the disadvantage when
+adding sub-routes to the \code{Route}. \code{Route} cannot extend \code{Point}
+because then it would be too similar to the Composite pattern, thus more logic
+would be needed to represent sub-routes.
 
 In other parts of the program, implementing a State pattern to switch the
 program's state from reading routes to tracking the user can be used instead of
