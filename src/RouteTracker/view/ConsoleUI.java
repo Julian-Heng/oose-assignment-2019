@@ -46,8 +46,8 @@ public class ConsoleUI implements UserInterface
             }
             catch (NumberFormatException e)
             {
-                // If user simply press enter, do nothing and return to calling
-                // function
+                // If user simply press enter, do nothing else print error
+                // message
                 if (! strInput.isEmpty())
                 {
                     printError("Enter a number\n");
@@ -64,7 +64,7 @@ public class ConsoleUI implements UserInterface
      * @param args  varargs of Strings
      * @return User inputted integer
      *
-     * Bug: Crashed the program when user presses ctrl-d
+     * Bug: Crashes the program when user presses ctrl-d
      *      (NoSuchElementException) and due to Menu implementation, program
      *      loops when trying to handle the exception
      **/
