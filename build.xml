@@ -47,14 +47,14 @@
         </exec>
     </target>
 
-    <target name="dist" depends="docs">
+    <target name="dist" depends="clean,docs">
         <exec executable="tar">
             <arg value="-czvf"/>
             <arg value="../19473701_OOSE_Assignment.tar.gz"/>
             <arg value="--exclude=*.swp"/>
             <arg value="--exclude=*.log"/>
-            <arg value="--exclude=*.toc"/>
             <arg value="--exclude=*.aux"/>
+            <arg value="--exclude=*.toc"/>
             <arg value="../assignment"/>
         </exec>
     </target>
