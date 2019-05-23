@@ -47,14 +47,6 @@ public class TrackData
     public void setNext()
     {
         curr = next;
-
-        if (! points.isEmpty())
-        {
-            next = points.remove(0);
-        }
-        else
-        {
-            next = null;
-        }
+        next = points.isEmpty() ? null : points.remove(0);
     }
 }
