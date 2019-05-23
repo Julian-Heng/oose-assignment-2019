@@ -92,7 +92,7 @@
 A route is defined as multiple points. A segment is within 2 points and routes
 themselves can contain other routes, known as sub-routes. These sub-routes can
 also contain sub-routes. Hence the sensible choice to represent routes is to
-use a composite pattern. Composite pattern is useful for showing a hierarchy of
+use a Composite pattern. Composite pattern is useful for showing a hierarchy of
 objects, like a tree. In this case, we have an interface called
 \code{PointNode}. \code{Point}, \code{Segment} and \code{Route} all implements
 \code{PointNode} while \code{Route} can contain a collection of
@@ -114,7 +114,8 @@ implementing the \code{PointNode} interface, they would have to override the
 \code{getDistance()} method. So when \code{getDistance()} is called within a
 route, we would get the distance for every element in the collection of
 \code{PointNode} objects, which can be either a \code{Point} or a \code{Route}.
-Thus, we get the distance for the current route, including it's sub-routes.
+Thus, we get the distance for the current route, including the sub-routes
+within the route.
 
 
 \subsubsection{Options}
