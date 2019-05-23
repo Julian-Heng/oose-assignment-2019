@@ -14,7 +14,7 @@ public class ClearRoute extends Option
         super("Clear routes", "", false, app);
     }
 
-    // This option does not ouput anything
+    // This option does not output anything
     @Override
     public String doOption(String s) throws OptionException
     {

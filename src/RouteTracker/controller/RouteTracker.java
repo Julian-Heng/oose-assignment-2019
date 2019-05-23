@@ -56,6 +56,7 @@ public class RouteTracker
         // Testing purpose code {{{
         try
         {
+            // By default, load up the file from the "server" automatically
             options.get(0).doOption(inputFile);
             ui.print(options.get(2).doOption(""));
         }

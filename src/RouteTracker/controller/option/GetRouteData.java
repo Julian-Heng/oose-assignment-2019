@@ -25,7 +25,7 @@ public class GetRouteData extends Option
         this.utils = utils;
     }
 
-    // This option does not ouput anything
+    // This option does not output anything
     @Override
     public String doOption(String s) throws OptionException
     {

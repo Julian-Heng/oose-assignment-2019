@@ -141,6 +141,7 @@ public class RouteParser
                     line = iter.next();
                     isEnd = isEndPoint(line);
 
+                    // Skip empty/newline lines
                     if (! line.trim().isEmpty())
                     {
                         // We should not be expecting a route declaration
